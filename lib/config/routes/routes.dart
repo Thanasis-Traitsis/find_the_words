@@ -1,4 +1,5 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:find_the_words/features/stage/presentation/pages/stage_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -35,6 +36,14 @@ class AppRouter {
         name: PAGES.home.name,
         builder: (context, state) {
           return HomeScreen();
+        },
+      ),
+      GoRoute(
+        parentNavigatorKey: rootNavigatorKey,
+        path: PAGES.stage.screenPath,
+        name: PAGES.stage.name,
+        builder: (context, state) {
+          return StageScreen();
         },
       ),
     ],

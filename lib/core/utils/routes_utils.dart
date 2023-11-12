@@ -1,6 +1,7 @@
 enum PAGES {
   auth,
   home,
+  stage,
 }
 
 extension AppPageExtension on PAGES {
@@ -10,6 +11,8 @@ extension AppPageExtension on PAGES {
         return "/auth";
       case PAGES.home:
         return "/";
+      case PAGES.stage:
+        return "/stage";
       default:
         return "/auth";
     }
@@ -21,6 +24,8 @@ extension AppPageExtension on PAGES {
         return "auth";
       case PAGES.home:
         return "home";
+      case PAGES.stage:
+        return "stage";
       default:
         return "home";
     }

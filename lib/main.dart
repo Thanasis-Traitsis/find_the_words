@@ -1,10 +1,12 @@
 import 'package:find_the_words/features/auth/presentation/auth_bloc/auth_bloc.dart';
+import 'package:find_the_words/features/stage/presentation/stage_bloc/stage_bloc.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'config/routes/routes.dart';
 import 'features/auth/data/repositories/auth_repositories_impl.dart';
+import 'features/stage/data/repositories/stage_repositories_impl.dart';
 import 'firebase_options.dart';
 
 Future<void> main() async {
@@ -15,6 +17,7 @@ Future<void> main() async {
   );
 
   final authRepositoriesImpl = AuthRepositoriesImpl();
+  final stageRepositoriesImpl = StageRepositoriesImpl();
 
   runApp(
     MultiBlocProvider(
@@ -23,7 +26,12 @@ Future<void> main() async {
           create: (context) {
             return AuthBloc(authRepo: authRepositoriesImpl)..add(AppStarted());
           },
-        )
+        ),
+        BlocProvider<StageBloc>(
+          create: (context) {
+            return StageBloc(stageRepo: stageRepositoriesImpl);
+          },
+        ),
       ],
       child: const MyApp(),
     ),
