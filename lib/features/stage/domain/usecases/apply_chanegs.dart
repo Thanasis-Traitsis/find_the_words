@@ -15,7 +15,6 @@ Future<List<Widget>> applyChanges({
     } else if (tbList[i] == 'XX') {
       // wdtList[i] = UnavailableNeighbor(text: i.toString());
     } else if (positions.any((sublist) => sublist.contains(i))) {
-      print('object');
       wdtList[i] = CorrectBox(text: tbList[i]);
     }
   }

@@ -7,17 +7,45 @@ List listDirectionSmall({
   required int dir,
 }) {
   int counter = 0;
-
-  for (var i = 0; i < rowLength; i++) {
-    if (isEmptyBox(tableList[i])) {
-      counter += 1;
-    } else {
-      counter = 0;
+  if (dir == 0) {
+    for (var i = 0; i < rowLength; i++) {
+      if (isEmptyBox(tableList[i])) {
+        counter += 1;
+      } else {
+        counter = 0;
+      }
     }
-
-    if (counter == rowLength) {
-      tableDirections[dir] = 1;
+  }
+  if (dir == 1) {
+    for (var i = 0; i < rowLength; i++) {
+      if (isEmptyBox(tableList[(rowLength - 1) + (rowLength * i)])) {
+        counter += 1;
+      } else {
+        counter = 0;
+      }
     }
+  }
+  if (dir == 2) {
+    for (var i = 0; i < rowLength; i++) {
+      if (isEmptyBox(tableList[(tableList.length - 1) - i])) {
+        counter += 1;
+      } else {
+        counter = 0;
+      }
+    }
+  }
+  if (dir == 3) {
+    for (var i = 0; i < rowLength; i++) {
+      if (isEmptyBox(tableList[rowLength * i])) {
+        counter += 1;
+      } else {
+        counter = 0;
+      }
+    }
+  }
+
+  if (counter == rowLength) {
+    tableDirections[dir] = 1;
   }
 
   return tableDirections;
