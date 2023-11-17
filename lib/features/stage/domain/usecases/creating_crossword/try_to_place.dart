@@ -1,9 +1,10 @@
-import 'package:find_the_words/features/stage/domain/usecases/check_direction.dart';
-import 'package:find_the_words/features/stage/domain/usecases/new_word_positions_and_neighbors.dart';
-import 'package:find_the_words/features/stage/domain/usecases/place_neighbors.dart';
+
 import 'package:flutter/material.dart';
 
-import 'apply_chanegs.dart';
+import 'apply_changes.dart';
+import 'check_direction.dart';
+import 'new_word_positions_and_neighbors.dart';
+import 'place_neighbors.dart';
 
 bool tryToPlace({
   required List previousWordPosition,

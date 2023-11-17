@@ -1,5 +1,5 @@
 abstract class StageRepositories {
-  Future createStage();
+  Future createStage(List wordsList);
 
   Future createCrossword();
 

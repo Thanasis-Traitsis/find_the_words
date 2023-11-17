@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'apply_chanegs.dart';
+import 'apply_changes.dart';
 import 'generate_table_list.dart';
 import 'generate_widget_table.dart';
 

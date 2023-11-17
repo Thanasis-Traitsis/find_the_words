@@ -1,6 +1,6 @@
-import 'package:find_the_words/features/stage/domain/usecases/check_rows_columns.dart';
 
 import 'add_x_for_neighbors.dart';
+import 'check_rows_columns.dart';
 
 void placeNeighbors({
   required List positions,

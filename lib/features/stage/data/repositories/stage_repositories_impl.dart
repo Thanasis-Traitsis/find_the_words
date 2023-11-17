@@ -1,59 +1,119 @@
 import 'package:find_the_words/features/stage/data/repositories/crossword_repositories_impl.dart';
-import 'package:find_the_words/features/stage/domain/usecases/check_if_table_can_be_smaller.dart';
-import 'package:find_the_words/features/stage/domain/usecases/count_available_rows.dart';
-import 'package:find_the_words/features/stage/domain/usecases/generate_table_list.dart';
-import 'package:find_the_words/features/stage/domain/usecases/list_direction_small.dart';
-import 'package:find_the_words/features/stage/domain/usecases/move_table_to_center.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../core/constants/crossword_values.dart';
 import '../../domain/repositories/stage_repositories.dart';
-import '../../domain/usecases/apply_chanegs.dart';
-import '../../domain/usecases/count_available_columns.dart';
-import '../../domain/usecases/generate_widget_table.dart';
-import '../../domain/usecases/is_empty_box.dart';
-import '../../domain/usecases/make_table_smaller_by_two.dart';
+import '../../domain/usecases/creating_crossword/apply_changes.dart';
+import '../../domain/usecases/creating_crossword/check_if_table_can_be_smaller.dart';
+import '../../domain/usecases/creating_crossword/count_available_columns.dart';
+import '../../domain/usecases/creating_crossword/count_available_rows.dart';
+import '../../domain/usecases/creating_crossword/generate_table_list.dart';
+import '../../domain/usecases/creating_crossword/generate_widget_table.dart';
+import '../../domain/usecases/creating_crossword/list_direction_small.dart';
+import '../../domain/usecases/creating_crossword/move_table_to_center.dart';
 
 class StageRepositoriesImpl extends StageRepositories {
   List<Widget> widgetList = [];
   List<String> tableList = [];
   List wordPositions = [];
+  List<String> finalWordsList = [];
 
   // Edw tha ginontai oi elegxoi twn leksewn, kai an einai ola entaksei tha proxoraei sto createCrossword
   @override
-  Future createStage() async {
+  Future createStage(List wordsList) async {
+    for (var i = 0; i < wordsList.length; i++) {
+      finalWordsList.add(wordsList[i].toString());
+    }
+
+    print(finalWordsList);
+
     return true;
   }
 
   // Edw tha ginetai oi arxikopoihsh twn pinakwn kai tha ksekinaei h diadikasia dhmioyrgias toy crossword
   @override
   Future createCrossword() async {
+    List errorWords = [];
+
     int tableBoxes = tableLength;
     int tableRnC = tableRowsAndColumns;
 
     widgetList = generateWidgetTable(tableBoxes);
     tableList = generateTableList(tableBoxes);
 
+    List<int> listOfStartingPositions =
+        List.generate(finalWordsList.length, (index) => 0);
+
     var returnList = await CrosswordRepositoriesImpl().placeWords(
       widgetList: widgetList,
       tableList: tableList,
       numberOfRowsAndColumns: tableRnC,
-      wordsList: ["ΡΕΚΤΟ", "ΚΟΡΤΕ", "ΡΟΚΕ", "ΚΟΤ", "ΟΤΕ", "ΡΟΚ"],
+      wordsList: finalWordsList,
+      listOfStartingPositions: listOfStartingPositions,
     );
+
+    bool shouldContinueLoop = true;
+
+    while (shouldContinueLoop && !returnList[2]) {
+      bool tooManyErrors = false;
+      shouldContinueLoop = false;
+
+      errorWords.add(returnList[3]);
+
+      for (var i = 0; i < errorWords.length; i++) {
+        int occurrences =
+            errorWords.where((str) => str == errorWords[i]).length;
+
+        if (occurrences >= 5) {
+          print('ΔΕΝ ΠΑΛΕΥΕΤΑΙ ΑΛΛΟ ΑΥΤΗ Η ΛΕΞΗ : ${errorWords[i]}');
+          tooManyErrors = true;
+          break;
+        }
+      }
+
+      if (!tooManyErrors) {
+        for (int i = 0; i < finalWordsList.length; i++) {
+          if (listOfStartingPositions[i] < finalWordsList[i].length - 1) {
+            listOfStartingPositions[i] += 1;
+            shouldContinueLoop = true;
+            break;
+          } else {
+            listOfStartingPositions[i] = 0;
+          }
+        }
+
+        print(listOfStartingPositions);
+
+        widgetList = generateWidgetTable(tableBoxes);
+        tableList = generateTableList(tableBoxes);
+
+        returnList = await CrosswordRepositoriesImpl().placeWords(
+          widgetList: widgetList,
+          tableList: tableList,
+          numberOfRowsAndColumns: tableRnC,
+          wordsList: finalWordsList,
+          listOfStartingPositions: listOfStartingPositions,
+        );
+      }
+    }
+
+    if (!shouldContinueLoop) {
+      print("ΔΕ ΓΙΝΕΤΑΙ ΝΑ ΦΤΙΑΧΤΕΙ ΕΠΙΠΕΔΟ ΜΕ ΑΥΤΕΣ ΤΙΣ ΛΕΞΕΙΣ ΡΕ ΦΙΛΕ");
+    }
 
     widgetList = returnList[0];
     wordPositions = returnList[1];
 
     // UNCOMMENT THIS PART FOR THE WHOLE EXPERIENCE
-    await centerTable();
-    widgetList = await makeTableSmaller(tableRnC);
+    // await centerTable();
+    // widgetList = await makeTableSmaller(tableRnC);
 
     // UNCOMMENT THIS PART WHEN YOU WANT TO SEE THE RESULT WITHOUT CENTER AND SMALLERTABLE
-    // widgetList = await applyChanges(
-    //   positions: wordPositions,
-    //   tbList: tableList,
-    //   wdtList: widgetList,
-    // );
+    widgetList = await applyChanges(
+      positions: wordPositions,
+      tbList: tableList,
+      wdtList: widgetList,
+    );
   }
 
   @override
@@ -136,20 +196,44 @@ class StageRepositoriesImpl extends StageRepositories {
     );
 
     if (smallTable == 1) {
+      var oldRowLength = rowLength;
+      rowLength = rowLength - 1;
+
+      var newBoxes = rowLength * rowLength;
+
+      var newTbList = generateTableList(newBoxes);
+      var newWidgetList = generateWidgetTable(newBoxes);
+
+      var count = 0;
+
       if (tableDirections[0] == 1 && tableDirections[1] == 1) {
-        print('PANW DEKSIA');
+        // PANW DEKSIA
+        for (var i = 1; i <= rowLength; i++) {
+          for (var j = 0; j < rowLength; j++) {
+            newTbList[count] = tableList[j + (i * oldRowLength)];
+            count++;
+          }
+        }
+
+        for (var i = 0; i < wordPositions.length; i++) {
+          for (var j = 0; j < wordPositions[i].length; j++) {
+            wordPositions[i][j] -=
+                (oldRowLength + (wordPositions[i][j] ~/ oldRowLength) - 1);
+          }
+        }
+
+        widgetList = await applyChanges(
+          positions: wordPositions,
+          tbList: newTbList,
+          wdtList: newWidgetList,
+        );
+
+        tableList = newTbList;
+
+        return widgetList;
       }
       if (tableDirections[1] == 1 && tableDirections[2] == 1) {
-        var oldRowLength = rowLength;
-        rowLength = rowLength - 1;
-
-        var newBoxes = rowLength * rowLength;
-
-        var newTbList = generateTableList(newBoxes);
-        var newWidgetList = generateWidgetTable(newBoxes);
-
-        var count = 0;
-
+        // DEKSIA KATW
         for (var i = 0; i < rowLength; i++) {
           for (var j = 0; j < rowLength; j++) {
             newTbList[count] = tableList[j + (i * oldRowLength)];
@@ -159,9 +243,6 @@ class StageRepositoriesImpl extends StageRepositories {
 
         for (var i = 0; i < wordPositions.length; i++) {
           for (var j = 0; j < wordPositions[i].length; j++) {
-            // wordPositions[i][j] -= (oldRowLength +
-            //     1 +
-            //     (2 * ((wordPositions[i][j] ~/ oldRowLength) - 1)));
             wordPositions[i][j] -= (wordPositions[i][j] ~/ oldRowLength);
           }
         }
@@ -173,11 +254,35 @@ class StageRepositoriesImpl extends StageRepositories {
         );
 
         tableList = newTbList;
+
+        return widgetList;
       }
       if (tableDirections[2] == 1 && tableDirections[3] == 1) {
-        print('KATW ARISTERA');
+        // KATW ARISTERA
+        for (var i = 0; i < rowLength; i++) {
+          for (var j = 1; j <= rowLength; j++) {
+            newTbList[count] = tableList[j + (i * oldRowLength)];
+            count++;
+          }
+        }
+
+        for (var i = 0; i < wordPositions.length; i++) {
+          for (var j = 0; j < wordPositions[i].length; j++) {
+            wordPositions[i][j] -= (wordPositions[i][j] ~/ oldRowLength) + 1;
+          }
+        }
+
+        widgetList = await applyChanges(
+          positions: wordPositions,
+          tbList: newTbList,
+          wdtList: newWidgetList,
+        );
+
+        tableList = newTbList;
+
+        return widgetList;
       }
-      if (tableDirections[1] == 1 && tableDirections[3] == 1) {
+      if (tableDirections[0] == 1 && tableDirections[3] == 1) {
         print('PANW ARISTERA');
       }
     }

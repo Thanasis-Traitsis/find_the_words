@@ -11,5 +11,5 @@ bool checkAvailableCol({
   required int col,
   required int colsAndRows,
 }) {
-  return col >= 0 && col < ((colsAndRows * colsAndRows) - 1);
+  return col >= 0 && col < (colsAndRows * colsAndRows);
 }

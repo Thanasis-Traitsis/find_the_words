@@ -23,7 +23,11 @@ class StageBloc extends Bloc<StageEvent, StageState> {
 
     bool readyForCrossword;
 
-    readyForCrossword = await stageRepo.createStage();
+    // Extract the key and the value
+    String key = event.stageList.keys.first;
+    List values = event.stageList[key];
+
+    readyForCrossword = await stageRepo.createStage(values);
 
     if (readyForCrossword) {
       await stageRepo.createCrossword();

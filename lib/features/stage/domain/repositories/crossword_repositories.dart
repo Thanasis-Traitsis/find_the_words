@@ -6,7 +6,8 @@ abstract class CrosswordRepositories {
     required List<String> tableList,
     required int numberOfRowsAndColumns,
     required List<String> wordsList,
+    required List listOfStartingPositions,
   });
 
-  Future fillTableWithWords();
+  Future fillTableWithWords(List listOfStartingPositions);
 }

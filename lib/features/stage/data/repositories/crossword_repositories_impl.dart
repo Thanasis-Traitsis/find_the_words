@@ -1,11 +1,10 @@
-import 'package:find_the_words/features/stage/domain/usecases/place_first_word.dart';
-import 'package:find_the_words/features/stage/domain/usecases/place_neighbors.dart';
 import 'package:flutter/widgets.dart';
 
 import '../../domain/repositories/crossword_repositories.dart';
-import '../../domain/usecases/apply_chanegs.dart';
-import '../../domain/usecases/check_common_letter.dart';
-import '../../domain/usecases/position_word_center.dart';
+import '../../domain/usecases/creating_crossword/check_common_letter.dart';
+import '../../domain/usecases/creating_crossword/place_first_word.dart';
+import '../../domain/usecases/creating_crossword/place_neighbors.dart';
+import '../../domain/usecases/creating_crossword/position_word_center.dart';
 
 class CrosswordRepositoriesImpl extends CrosswordRepositories {
   bool firstIsHotizontal = true;
@@ -17,28 +16,43 @@ class CrosswordRepositoriesImpl extends CrosswordRepositories {
   List<String> stageWords = [];
   int numRowsAndColumns = 0;
 
+  String errorWord = '';
+
   @override
   Future placeWords({
     required List<String> tableList,
     required List<Widget> widgetList,
     required int numberOfRowsAndColumns,
     required List<String> wordsList,
+    required List listOfStartingPositions,
   }) async {
+    firstIsHotizontal = true;
+    wordsPositionList = [];
+    firstWord = '';
+    tbList = [];
+    wdtList = [];
+    stageWords = [];
+    numRowsAndColumns = 0;
+
     tbList = tableList;
     wdtList = widgetList;
     numRowsAndColumns = numberOfRowsAndColumns;
     firstWord = wordsList[0];
     stageWords = wordsList;
 
-    await fillTableWithWords();
+    bool completeCrossword = await fillTableWithWords(listOfStartingPositions);
 
-    return [wdtList, wordsPositionList];
+    return [
+      wdtList,
+      wordsPositionList,
+      completeCrossword,
+      errorWord,
+    ];
   }
 
   @override
-  Future fillTableWithWords() async {
+  Future fillTableWithWords(List listOfStartingPositions) async {
     // VALE TIN PROTI LEKSI STO KENTRO TOY CROSSWORD
-
     int centerPosition = firstIsHotizontal
         ? positionWordCenterHorizontaly(
             tableLength: tbList.length,
@@ -83,6 +97,9 @@ class CrosswordRepositoriesImpl extends CrosswordRepositories {
           tbList: tbList,
           wdtList: wdtList,
           wordsPositionList: wordsPositionList,
+          startingPositions: listOfStartingPositions,
+          theWordThatShouldChangeStartingPosition: i - availableWord,
+          isPrevious: (i - (i - availableWord)) == 1,
         );
 
         if (!stopSearch) availableWord++;
@@ -90,7 +107,12 @@ class CrosswordRepositoriesImpl extends CrosswordRepositories {
 
       if (!((i - availableWord) >= 0)) {
         print('EXOUME THEMA ME MIA LEKSI : ${stageWords[i]}');
+        errorWord = stageWords[i];
+
+        return false;
       }
     }
+
+    return true;
   }
 }

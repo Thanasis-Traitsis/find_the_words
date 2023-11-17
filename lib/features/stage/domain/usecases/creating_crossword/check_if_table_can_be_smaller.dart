@@ -11,7 +11,7 @@ int checkIfTableCanBeSmaller({
 
   if (count == tableDirections.length) return 2;
 
-  if (count == 2) {
+  if (count == 2 || count == 3) {
     return 1;
   }
 

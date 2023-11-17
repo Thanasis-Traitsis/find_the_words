@@ -8,8 +8,25 @@ bool checkIfSpotsAvailable({
   required String newWord,
   required int numRowsAndColumns,
 }) {
+  // ELEGXOS GIA NA TO AN TO POSITIONS EINAI EKTOS TOY TABLE
+  for (var i = 0; i < positions.length; i++) {
+    if (positions[i] >= copyTbList.length || positions[i] < 0) {
+      return false;
+    }
+  }
+
   // KRATAEI COUNTER GIA NA APOTREPSEI MIA LEKSI NA KOLLISEI OLOKLIRI PANW APO MIA ALLI
   List countCommonLetters = [];
+
+  if (checkDirection(positions)) {
+    int sameRow = positions[0] ~/ numRowsAndColumns;
+
+    for (var i = 0; i < positions.length; i++) {
+      if ((positions[i] ~/ numRowsAndColumns) != sameRow) {
+        return false;
+      }
+    }
+  }
 
   for (var i = 0; i < positions.length; i++) {
     if (i != commonPositionNew) {

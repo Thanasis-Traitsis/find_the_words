@@ -10,8 +10,16 @@ bool checkCommonLetter({
   required List<String> tbList,
   required List<Widget> wdtList,
   required List wordsPositionList,
+  // Apo edw kai katw tha ta xrhsimopoihsw gia na ksanaftiaxnw to crossword otan mia leksi den xwrese
+  required List startingPositions,
+  required int theWordThatShouldChangeStartingPosition,
+  required bool isPrevious,
 }) {
-  for (var i = 0; i < previousWord.length; i++) {
+  for (var i = isPrevious
+          ? startingPositions[theWordThatShouldChangeStartingPosition]
+          : 0;
+      i < previousWord.length;
+      i++) {
     for (var j = 0; j < newWord.length; j++) {
       if (previousWord[i] == newWord[j]) {
         bool successfulPlacement = tryToPlace(

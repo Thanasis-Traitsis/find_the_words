@@ -2,7 +2,6 @@ import 'package:find_the_words/features/stage/presentation/widgets/table_contain
 import 'package:find_the_words/features/stage/presentation/widgets/table_container/correct_box.dart';
 import 'package:flutter/material.dart';
 
-import '../../presentation/widgets/table_container/unavailable_neighbor.dart';
 
 Future<List<Widget>> applyChanges({
   required List positions,
