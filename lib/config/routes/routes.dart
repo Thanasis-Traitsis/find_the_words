@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../core/utils/routes_utils.dart';
 import '../../error_screen.dart';
+import '../../features/auth/data/models/user_model.dart';
 import '../../features/auth/presentation/pages/auth_screen.dart';
 import '../../features/auth/presentation/pages/home_screen.dart';
 
@@ -35,7 +36,10 @@ class AppRouter {
         path: PAGES.home.screenPath,
         name: PAGES.home.name,
         builder: (context, state) {
-          return HomeScreen();
+          UserModel user = state.extra as UserModel;
+          return HomeScreen(
+            user: user,
+          );
         },
       ),
       GoRoute(
@@ -43,7 +47,12 @@ class AppRouter {
         path: PAGES.stage.screenPath,
         name: PAGES.stage.name,
         builder: (context, state) {
-          return StageScreen();
+          List stageVariables = state.extra as List;
+          return StageScreen(
+            stage: stageVariables[0],
+            stageMap: stageVariables[1],
+            answeredPositions: stageVariables[2],
+          );
         },
       ),
     ],

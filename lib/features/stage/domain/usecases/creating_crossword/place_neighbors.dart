@@ -1,4 +1,3 @@
-
 import 'add_x_for_neighbors.dart';
 import 'check_rows_columns.dart';
 
@@ -37,14 +36,16 @@ void placeNeighbors({
         col: positions[i] + colsAndRows,
         colsAndRows: colsAndRows,
       )
-          ? tbList[(positions[i] + colsAndRows)] = addXForNeighbor(tbList[(positions[i] + colsAndRows)])
+          ? tbList[(positions[i] + colsAndRows)] =
+              addXForNeighbor(tbList[(positions[i] + colsAndRows)])
           : null;
 
       checkAvailableCol(
         col: positions[i] - colsAndRows,
         colsAndRows: colsAndRows,
       )
-          ? tbList[(positions[i] - colsAndRows)] = addXForNeighbor(tbList[(positions[i] - colsAndRows)])
+          ? tbList[(positions[i] - colsAndRows)] =
+              addXForNeighbor(tbList[(positions[i] - colsAndRows)])
           : null;
     }
   } else {
@@ -63,8 +64,20 @@ void placeNeighbors({
         tbList[(positions[i] + colsAndRows)] = 'XX';
       }
 
-      tbList[(positions[i] + 1)] = addXForNeighbor(tbList[(positions[i] + 1)]);
-      tbList[(positions[i] - 1)] = addXForNeighbor(tbList[(positions[i] - 1)]);
+      if ((positions[i] + 1) >= 0 &&
+          (positions[i] + 1) < tbList.length &&
+          (positions[i] ~/ colsAndRows) ==
+              ((positions[i] + 1) ~/ colsAndRows)) {
+        tbList[(positions[i] + 1)] =
+            addXForNeighbor(tbList[(positions[i] + 1)]);
+      }
+      if ((positions[i] - 1) >= 0 &&
+          (positions[i] - 1) < tbList.length &&
+          (positions[i] ~/ colsAndRows) ==
+              ((positions[i] - 1) ~/ colsAndRows)) {
+        tbList[(positions[i] - 1)] =
+            addXForNeighbor(tbList[(positions[i] - 1)]);
+      }
     }
   }
 }

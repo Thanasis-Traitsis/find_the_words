@@ -1,0 +1,37 @@
+import 'package:flutter/material.dart';
+
+import '../../../../../core/constants/sizes.dart';
+import '../../../../../core/usecases/calculate_size.dart';
+
+Widget GameButton({
+  required BuildContext context,
+  required IconData icon,
+  required Function function,
+  bool isBox = false,
+}) {
+  return SizedBox(
+    width: calculateSize(context, AppValuesMain().gameButton),
+    height: calculateSize(context, AppValuesMain().gameButton),
+    child: FilledButton(
+      onPressed: () {
+        function();
+      },
+      style: ButtonStyle(
+        padding: MaterialStateProperty.all<EdgeInsets>(
+          const EdgeInsets.all(0),
+        ),
+      ),
+      child: Padding(
+        padding: EdgeInsets.only(right: isBox ? 5.0 : 0),
+        child: Icon(
+          icon,
+          color: Theme.of(context).colorScheme.surface,
+          size: calculateSize(
+            context,
+            Theme.of(context).primaryIconTheme.size! * .7,
+          ),
+        ),
+      ),
+    ),
+  );
+}

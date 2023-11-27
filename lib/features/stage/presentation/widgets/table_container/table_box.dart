@@ -14,19 +14,19 @@ class TableBox extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      alignment: Alignment.center,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(borderRadius),
-        color: Colors.grey,
-      ),
-      margin: const EdgeInsets.all(1),
-      child: Center(
-        child: Text(
-          text,
-          textAlign: TextAlign.center,
-          overflow: TextOverflow.ellipsis,
-        ),
-      ),
+      // alignment: Alignment.center,
+      // decoration: BoxDecoration(
+      //   borderRadius: BorderRadius.circular(borderRadius),
+      //   color: Colors.grey,
+      // ),
+      // margin: const EdgeInsets.all(1),
+      // child: Center(
+      //   child: Text(
+      //     text,
+      //     textAlign: TextAlign.center,
+      //     overflow: TextOverflow.ellipsis,
+      //   ),
+      // ),
     );
   }
 }

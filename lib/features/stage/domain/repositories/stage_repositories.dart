@@ -1,5 +1,9 @@
 abstract class StageRepositories {
-  Future createStage(List wordsList);
+  Future createStage({
+    required List wordsList,
+    required int level,
+    required double progress,
+  });
 
   Future createCrossword();
 

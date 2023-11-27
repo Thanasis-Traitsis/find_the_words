@@ -4,4 +4,6 @@ const int points = 0;
 const double progress = 0.0;
 const List words = [];
 const List extraWords = [];
+const List usedStages = [];
+const Map currentStage = {};
 DateTime time = DateTime.now();

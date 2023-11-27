@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 
 import 'apply_changes.dart';
@@ -17,7 +16,6 @@ bool tryToPlace({
   required List wordsPositionList,
 }) {
   // DES TA VIMATA KSANA ENA ENA KIA PRINTARE TA APOTELESMATA GIA NA DEIS SE TI FASI EISAI
-
   // check the direction of the previous word
   bool previousIsHorizontal = false;
   previousIsHorizontal = checkDirection(previousWordPosition);
@@ -47,12 +45,6 @@ bool tryToPlace({
     for (var i = 0; i < positions.length; i++) {
       tbList[positions[i]] = newWord[i];
     }
-
-    // applyChanges(
-    //   positions: positions,
-    //   tbList: tbList,
-    //   wdtList: wdtList,
-    // );
 
     wordsPositionList.add(positions);
 

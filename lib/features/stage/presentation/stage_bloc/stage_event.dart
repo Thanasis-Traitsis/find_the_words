@@ -10,9 +10,13 @@ sealed class StageEvent extends Equatable {
 
 class StageButtonPressed extends StageEvent {
   final Map stageList;
+  final int level;
+  final double progress;
 
   const StageButtonPressed({
     required this.stageList,
+    required this.level,
+    required this.progress,
   });
 
   @override

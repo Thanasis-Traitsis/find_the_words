@@ -9,6 +9,8 @@ class UserEntity extends Equatable {
   final List? extraWords;
   final int? points;
   final double? progress;
+  final List? usedStages;
+  final Map? currentStage;
 
   const UserEntity({
     this.id,
@@ -18,6 +20,8 @@ class UserEntity extends Equatable {
     this.extraWords,
     this.points,
     this.progress,
+    this.usedStages,
+    this.currentStage,
   });
 
   @override
@@ -29,5 +33,7 @@ class UserEntity extends Equatable {
         extraWords,
         points,
         progress,
+        usedStages,
+        currentStage,
       ];
 }

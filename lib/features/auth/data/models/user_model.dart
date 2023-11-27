@@ -9,6 +9,8 @@ class UserModel extends UserEntity {
     List? extraWords,
     int? points,
     double? progress,
+    List? usedStages,
+    Map? currentStage,
   }) : super(
           id: id,
           level: level,
@@ -17,5 +19,7 @@ class UserModel extends UserEntity {
           extraWords: extraWords,
           points: points,
           progress: progress,
+          usedStages: usedStages,
+          currentStage: currentStage,
         );
 }

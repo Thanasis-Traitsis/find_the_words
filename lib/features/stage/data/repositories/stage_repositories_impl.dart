@@ -1,7 +1,12 @@
+import 'dart:developer';
+
+import 'package:find_the_words/features/auth/domain/usecases/check_if_list_meets_requirements.dart';
 import 'package:find_the_words/features/stage/data/repositories/crossword_repositories_impl.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../core/constants/crossword_values.dart';
+import '../../../auth/domain/usecases/filter_stage_words.dart';
+import '../../../auth/domain/usecases/stage_requirements_based_on_level.dart';
 import '../../domain/repositories/stage_repositories.dart';
 import '../../domain/usecases/creating_crossword/apply_changes.dart';
 import '../../domain/usecases/creating_crossword/check_if_table_can_be_smaller.dart';
@@ -18,14 +23,47 @@ class StageRepositoriesImpl extends StageRepositories {
   List wordPositions = [];
   List<String> finalWordsList = [];
 
+  bool ready = false;
+
   // Edw tha ginontai oi elegxoi twn leksewn, kai an einai ola entaksei tha proxoraei sto createCrossword
   @override
-  Future createStage(List wordsList) async {
-    for (var i = 0; i < wordsList.length; i++) {
-      finalWordsList.add(wordsList[i].toString());
+  Future createStage({
+    required List wordsList,
+    required int level,
+    required double progress,
+  }) async {
+    finalWordsList = [];
+    List filterList;
+    // check if the words are ideal for the level
+    var requirements = stageRequirementsBasedOnLevel(
+      level: level,
+      progress: progress,
+    );
+
+    List? firstFilterList = checkIfListMeetsRequirements(
+      req: requirements,
+      list: wordsList,
+    );
+
+    if (firstFilterList == null) return false;
+
+    if (firstFilterList.length > requirements['maxStageLength']) {
+      filterList = filterStageWords(
+        list: firstFilterList,
+        maxLength: requirements['maxStageLength'],
+        minBigWords: requirements['amountOfBigWords'],
+      );
+    } else {
+      filterList = firstFilterList;
     }
 
-    print(finalWordsList);
+    for (var i = 0; i < filterList.length; i++) {
+      finalWordsList.add(filterList[i].toString());
+    }
+
+    finalWordsList.sort((a, b) => b.length.compareTo(a.length));
+
+    print('THE FINAL LIST IS : $finalWordsList');
 
     return true;
   }
@@ -33,6 +71,9 @@ class StageRepositoriesImpl extends StageRepositories {
   // Edw tha ginetai oi arxikopoihsh twn pinakwn kai tha ksekinaei h diadikasia dhmioyrgias toy crossword
   @override
   Future createCrossword() async {
+    print(
+        '========================= START OF THE CREATION OF CROSSWORD =========================');
+    ready = false;
     List errorWords = [];
 
     int tableBoxes = tableLength;
@@ -55,6 +96,7 @@ class StageRepositoriesImpl extends StageRepositories {
     bool shouldContinueLoop = true;
 
     while (shouldContinueLoop && !returnList[2]) {
+      print('loop again');
       bool tooManyErrors = false;
       shouldContinueLoop = false;
 
@@ -94,26 +136,32 @@ class StageRepositoriesImpl extends StageRepositories {
           wordsList: finalWordsList,
           listOfStartingPositions: listOfStartingPositions,
         );
+
+        widgetList = returnList[0];
+        wordPositions = returnList[1];
       }
     }
 
     if (!shouldContinueLoop) {
+      ready = false;
       print("ΔΕ ΓΙΝΕΤΑΙ ΝΑ ΦΤΙΑΧΤΕΙ ΕΠΙΠΕΔΟ ΜΕ ΑΥΤΕΣ ΤΙΣ ΛΕΞΕΙΣ ΡΕ ΦΙΛΕ");
+    } else {
+      ready = true;
     }
 
     widgetList = returnList[0];
     wordPositions = returnList[1];
 
     // UNCOMMENT THIS PART FOR THE WHOLE EXPERIENCE
-    // await centerTable();
-    // widgetList = await makeTableSmaller(tableRnC);
+    await centerTable();
+    widgetList = await makeTableSmaller(tableRnC);
 
     // UNCOMMENT THIS PART WHEN YOU WANT TO SEE THE RESULT WITHOUT CENTER AND SMALLERTABLE
-    widgetList = await applyChanges(
-      positions: wordPositions,
-      tbList: tableList,
-      wdtList: widgetList,
-    );
+    // widgetList = await applyChanges(
+    //   positions: wordPositions,
+    //   tbList: tableList,
+    //   wdtList: widgetList,
+    // );
   }
 
   @override
@@ -194,6 +242,14 @@ class StageRepositoriesImpl extends StageRepositories {
       tableDirections: tableDirections,
       tableRowsAndColumns: rowLength,
     );
+
+    if (smallTable == 0) {
+      widgetList = await applyChanges(
+        positions: wordPositions,
+        tbList: tableList,
+        wdtList: widgetList,
+      );
+    }
 
     if (smallTable == 1) {
       var oldRowLength = rowLength;
@@ -283,8 +339,37 @@ class StageRepositoriesImpl extends StageRepositories {
         return widgetList;
       }
       if (tableDirections[0] == 1 && tableDirections[3] == 1) {
-        print('PANW ARISTERA');
+        // PANW ARISTERA
+        for (var i = 1; i <= rowLength; i++) {
+          for (var j = 1; j <= rowLength; j++) {
+            newTbList[count] = tableList[j + (i * oldRowLength)];
+            count++;
+          }
+        }
+
+        for (var i = 0; i < wordPositions.length; i++) {
+          for (var j = 0; j < wordPositions[i].length; j++) {
+            wordPositions[i][j] -=
+                (oldRowLength + (wordPositions[i][j] ~/ oldRowLength));
+          }
+        }
+
+        widgetList = await applyChanges(
+          positions: wordPositions,
+          tbList: newTbList,
+          wdtList: newWidgetList,
+        );
+
+        tableList = newTbList;
+
+        return widgetList;
       }
+
+      widgetList = await applyChanges(
+        positions: wordPositions,
+        tbList: tableList,
+        wdtList: widgetList,
+      );
     }
 
     if (smallTable == 2) {

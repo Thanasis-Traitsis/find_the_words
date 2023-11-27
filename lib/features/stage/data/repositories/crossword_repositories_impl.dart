@@ -107,6 +107,7 @@ class CrosswordRepositoriesImpl extends CrosswordRepositories {
 
       if (!((i - availableWord) >= 0)) {
         print('EXOUME THEMA ME MIA LEKSI : ${stageWords[i]}');
+
         errorWord = stageWords[i];
 
         return false;

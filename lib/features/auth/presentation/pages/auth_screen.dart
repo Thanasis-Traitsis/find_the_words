@@ -19,7 +19,9 @@ class AuthScreen extends StatelessWidget {
       child: BlocBuilder<AuthBloc, AuthState>(
         builder: (context, state) {
           if (state is AuthAuthenticated) {
-            return const HomeScreen();
+            return HomeScreen(
+              user: state.user,
+            );
           }
           return const Scaffold(
             body: Center(

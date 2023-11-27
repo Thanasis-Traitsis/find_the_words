@@ -32,6 +32,8 @@ class AuthRepositoriesImpl extends AuthRepositories {
         'progress': progress,
         'words': words,
         'extraWords': extraWords,
+        'usedStages': usedStages,
+        'currentStage': currentStage,
       });
 
       user = await updateUser(
@@ -45,15 +47,17 @@ class AuthRepositoriesImpl extends AuthRepositories {
       userId = FirebaseAuth.instance.currentUser!.uid;
       usersCollection = FirebaseFirestore.instance.collection('users');
 
-      // // Update the user data fields instead of setting them again
+      // Update the user data fields instead of setting them again
       // usersCollection!.doc(userId).update({
-      //   'updatedAt': DateTime.now(),
-      //   'level': 1,
-      //   'stage': 0,
-      //   'words': [],
-      //   'extraWords': [],
-      //   'points': 0,
-      //   'progress': 0.0,
+      //   'createdAt': time,
+      //   'level': level,
+      //   'stage': stage,
+      //   'points': points,
+      //   'progress': progress,
+      //   'words': words,
+      //   'extraWords': extraWords,
+      //   'usedStages': usedStages,
+      //   'currentStage': currentStage,
       // });
 
       user = await updateUser(
