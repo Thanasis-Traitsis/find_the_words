@@ -1,16 +1,19 @@
 import 'package:find_the_words/core/constants/styles.dart';
 import 'package:find_the_words/features/stage/domain/usecases/game_usecases/answer_repositories.dart';
+import 'package:find_the_words/features/stage/domain/usecases/game_usecases/clear_stage_after_completion.dart';
 import 'package:find_the_words/features/stage/presentation/answer_bloc/answer_bloc.dart';
 import 'package:flutter/material.dart';
 
 import 'package:find_the_words/features/stage/presentation/widgets/shuffle_answer_hint_container.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../../config/theme/colors.dart';
 import '../../../../core/constants/circle_positions.dart';
 import '../../../../core/constants/constants.dart';
 import '../../../../core/constants/sizes.dart';
 import '../../../../core/usecases/calculate_size.dart';
+import '../../domain/usecases/game_usecases/all_words_repositories.dart';
 import '../../domain/usecases/game_usecases/extra_words_repositories.dart';
 import '../../domain/usecases/game_usecases/shuffle_letters.dart';
 import '../letters_bloc/letters_bloc.dart';
@@ -151,11 +154,12 @@ class _ButtonsWithCircleLettersSectionState
             },
             // THIS FUNCTION RUNS WHEN WE FIND A CORRECT ANSWER
             addWord: (positions, word) {
-              
               setState(() {
                 if (positions.length > 1) {
                   widget.answeredPositions[answeredPositions].add(positions);
                   widget.answeredPositions[answeredWords].add(word);
+
+                  addAllWordsRepository(word);
                 }
 
                 for (var i = 0; i < positions.length; i++) {
@@ -172,9 +176,20 @@ class _ButtonsWithCircleLettersSectionState
                 ansWord: widget.answeredPositions[answeredWords],
                 unavaPos: widget.answeredPositions[unavailablePositions],
               );
+
+              if (widget.stageMap['wordPositions'].length ==
+                  widget.answeredPositions[answeredPositions].length) {
+                Future.delayed(const Duration(seconds: 3), () {
+                  // This block will be executed after a delay of 3 seconds
+                  clearStageAfterCompletion(
+                    context: context,
+                    key: widget.answeredPositions['key'],
+                  );
+                });
+              }
             },
             // THIS FUNCTION RUNS WHEN WE TAP THE HINT BUTTON
-            hintFunction: () {
+            hintFunction: () async {
               BlocProvider.of<AnswerBloc>(context).add(
                 HintCalled(
                   stageMap: widget.stageMap,
@@ -187,6 +202,8 @@ class _ButtonsWithCircleLettersSectionState
               await addExtraWordRepository(extraWord);
 
               togglePositionedAnimation();
+
+              addAllWordsRepository(extraWord);
             },
           ),
           const SizedBox(

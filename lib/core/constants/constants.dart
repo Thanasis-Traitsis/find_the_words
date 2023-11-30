@@ -14,3 +14,6 @@ const String key = 'key';
 
 // Extra Words List
 const String extraWordsList = 'extraWords';
+
+// All Words List
+const String allWords = 'allWords';

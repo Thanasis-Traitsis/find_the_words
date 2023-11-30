@@ -72,7 +72,11 @@ class StageRepositoriesImpl extends StageRepositories {
   @override
   Future createCrossword() async {
     print(
+        '======================================================================================');
+    print(
         '========================= START OF THE CREATION OF CROSSWORD =========================');
+    print(
+        '======================================================================================');
     ready = false;
     List errorWords = [];
 

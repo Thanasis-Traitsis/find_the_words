@@ -46,15 +46,15 @@ class AuthRepositoriesImpl extends AuthRepositories {
       usersCollection = FirebaseFirestore.instance.collection('users');
 
       // Update the user data fields instead of setting them again
-      // usersCollection!.doc(userId).update({
-      //   'createdAt': time,
-      //   'level': level,
-      //   'stage': stage,
-      //   'points': points,
-      //   'progress': progress,
-      //   'words': words,
-      //   'usedStages': usedStages,
-      // });
+      usersCollection!.doc(userId).update({
+        'createdAt': time,
+        'level': level,
+        'stage': stage,
+        'points': points,
+        'progress': progress,
+        'words': words,
+        'usedStages': usedStages,
+      });
 
       user = await updateUser(
         usersCollection: usersCollection!,
@@ -63,5 +63,30 @@ class AuthRepositoriesImpl extends AuthRepositories {
 
       print(user);
     }
+  }
+
+  @override
+  Future updateUserAfterStage({
+    required UserModel userStage,
+    required String stageKey,
+    required List<String> allTheWords,
+  }) async {
+    usersCollection = FirebaseFirestore.instance.collection('users');
+
+    List newUsedStages = userStage.usedStages!;
+    newUsedStages.add(stageKey);
+
+    usersCollection!.doc(userId).update({
+      'stage': userStage.stage! + 1,
+      'usedStages': newUsedStages,
+      'words': allTheWords,
+    });
+
+    print(user);
+
+    user = await updateUser(
+      usersCollection: usersCollection!,
+      userId: userId!,
+    );
   }
 }

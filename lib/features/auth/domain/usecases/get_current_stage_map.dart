@@ -8,7 +8,7 @@ Future getCurrentStageMap() async {
   var stageBox = Hive.box<CurrentStage>(currentStageBox);
   Map currentStage = {};
 
-  // stageBox.delete(currentStageBox);
+  // await stageBox.delete(currentStageBox);
 
   var stage = stageBox.get(currentStageBox);
 

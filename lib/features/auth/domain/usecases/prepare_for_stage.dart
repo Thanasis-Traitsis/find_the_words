@@ -12,7 +12,6 @@ void prepareForStage({
   required UserModel user,
   required Map current,
 }) async {
-
   if (current[key] == null || current[key] == '') {
     String stageWordLength = translateLevelToStage(user.level!);
 

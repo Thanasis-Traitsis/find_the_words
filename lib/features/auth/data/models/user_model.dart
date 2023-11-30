@@ -5,7 +5,7 @@ class UserModel extends UserEntity {
     String? id,
     int? level,
     int? stage,
-    List? words,
+    List<String>? words,
     int? points,
     double? progress,
     List? usedStages,

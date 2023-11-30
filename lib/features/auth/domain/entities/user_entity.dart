@@ -5,7 +5,7 @@ class UserEntity extends Equatable {
   final String? id;
   final int? level;
   final int? stage;
-  final List? words;
+  final List<String>? words;
   final int? points;
   final double? progress;
   final List? usedStages;

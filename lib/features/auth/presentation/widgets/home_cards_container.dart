@@ -9,7 +9,6 @@ import 'pink_home_card.dart';
 Widget HomeCardsContainer({
   required BuildContext context,
   required String points,
-  required List words,
   required String level,
 }) {
   return Column(
@@ -25,9 +24,7 @@ Widget HomeCardsContainer({
             const SizedBox(
               width: gap / 2,
             ),
-            BlueHomeCard(
-              words: words,
-            ),
+            BlueHomeCard(),
           ],
         ),
       ),

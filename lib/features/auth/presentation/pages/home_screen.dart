@@ -1,3 +1,8 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
+
 import 'package:find_the_words/core/constants/initial_values.dart';
 import 'package:find_the_words/features/auth/domain/usecases/get_current_stage_map.dart';
 import 'package:find_the_words/features/auth/domain/usecases/prepare_for_stage.dart';
@@ -9,9 +14,6 @@ import 'package:find_the_words/features/auth/presentation/widgets/home_landscape
 import 'package:find_the_words/features/stage/presentation/answer_bloc/answer_bloc.dart';
 import 'package:find_the_words/features/stage/presentation/crossword_table_bloc/crossword_table_bloc.dart';
 import 'package:find_the_words/features/stage/presentation/letters_bloc/letters_bloc.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
 
 import '../../../../core/constants/styles.dart';
 import '../../../../core/utils/breakpoints_utils.dart';
@@ -61,15 +63,23 @@ class HomeScreen extends StatelessWidget {
           BlocProvider.of<LettersBloc>(context)
               .add(SetLetters(letters: state.letters));
 
+          Map stageMap = {
+            "allStageWords": state.allStageWords,
+            "tableList": state.tableList,
+            "wordPositions": state.wordPostition,
+          };
+
+          currentStage['key'] = state.letters;
+
+          print(user);
+          print(stageMap);
+          print(currentStage);
+
           context.pushNamed(
             PAGES.stage.screenName,
             extra: [
               user.stage.toString(),
-              {
-                "allStageWords": state.allStageWords,
-                "tableList": state.tableList,
-                "wordPositions": state.wordPostition,
-              },
+              stageMap,
               currentStage,
             ],
           );
@@ -91,7 +101,6 @@ class HomeScreen extends StatelessWidget {
                     HomeCardsContainer(
                       context: context,
                       points: user.points.toString(),
-                      words: user.words!,
                       level: user.level.toString(),
                     ),
                     HomeButton(
@@ -117,7 +126,6 @@ class HomeScreen extends StatelessWidget {
                           height: gap / 2,
                         ),
                         BlueHomeCard(
-                          words: user.words!,
                           isPorttrait: false,
                         ),
                         const SizedBox(

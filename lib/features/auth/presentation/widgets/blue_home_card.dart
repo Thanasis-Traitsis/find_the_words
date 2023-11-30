@@ -1,24 +1,24 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../../../core/constants/constants.dart';
 import '../../../../core/usecases/calculate_size.dart';
 import '../../../../core/widgets/card_with_outline.dart';
 import 'card_text.dart';
 import 'words_alert_dialog.dart';
 
 class BlueHomeCard extends StatelessWidget {
-  final List words;
   bool isPorttrait;
 
   BlueHomeCard({
     Key? key,
-    required this.words,
     this.isPorttrait = true,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    void openDialogFunction() {
+    void openDialogFunction(List<String> words) {
       showDialog<void>(
         context: context,
         builder: (BuildContext context) {
@@ -40,8 +40,15 @@ class BlueHomeCard extends StatelessWidget {
             child: Material(
               color: Colors.transparent,
               child: GestureDetector(
-                onTap: () {
-                  openDialogFunction();
+                onTap: () async {
+                  final SharedPreferences prefs =
+                      await SharedPreferences.getInstance();
+
+                  // Try reading data from the 'items' key. If it doesn't exist, returns null.
+                  List<String>? words = prefs.getStringList(allWords);
+
+                  words ??= [];
+                  openDialogFunction(words);
                 },
                 child: CardWithOutline(
                   context: context,
@@ -55,7 +62,7 @@ class BlueHomeCard extends StatelessWidget {
                         color: Theme.of(context).colorScheme.outline,
                       ),
                       Text(
-                        words.length.toString(),
+                        '',
                         style: TextStyle(
                           fontSize: calculateSize(
                             context,
@@ -90,8 +97,15 @@ class BlueHomeCard extends StatelessWidget {
             child: Material(
               color: Colors.transparent,
               child: GestureDetector(
-                onTap: () {
-                  openDialogFunction();
+                onTap: () async {
+                  final SharedPreferences prefs =
+                      await SharedPreferences.getInstance();
+
+                  // Try reading data from the 'items' key. If it doesn't exist, returns null.
+                  List<String>? words = prefs.getStringList(allWords);
+
+                  words ??= [];
+                  openDialogFunction(words);
                 },
                 child: CardWithOutline(
                   context: context,
@@ -108,7 +122,7 @@ class BlueHomeCard extends StatelessWidget {
                       ),
                       Expanded(
                         child: Text(
-                          words.length.toString(),
+                          '',
                           style: TextStyle(
                             fontSize: calculateSize(
                               context,
