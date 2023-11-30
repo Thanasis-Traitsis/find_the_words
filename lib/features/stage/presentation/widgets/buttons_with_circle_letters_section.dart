@@ -1,16 +1,17 @@
 import 'package:find_the_words/core/constants/styles.dart';
+import 'package:find_the_words/features/stage/domain/usecases/game_usecases/answer_repositories.dart';
 import 'package:find_the_words/features/stage/presentation/answer_bloc/answer_bloc.dart';
-import 'package:find_the_words/features/stage/presentation/widgets/game_buttons/game_button.dart';
 import 'package:flutter/material.dart';
 
 import 'package:find_the_words/features/stage/presentation/widgets/shuffle_answer_hint_container.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../../../../config/theme/colors.dart';
 import '../../../../core/constants/circle_positions.dart';
+import '../../../../core/constants/constants.dart';
 import '../../../../core/constants/sizes.dart';
 import '../../../../core/usecases/calculate_size.dart';
+import '../../domain/usecases/game_usecases/extra_words_repositories.dart';
 import '../../domain/usecases/game_usecases/shuffle_letters.dart';
 import '../letters_bloc/letters_bloc.dart';
 import 'circle_container_with_letters/circle_container.dart';
@@ -133,6 +134,7 @@ class _ButtonsWithCircleLettersSectionState
           ShuffleAnswerHintContainer(
             letters: widget.letters,
             answer: widget.answer,
+            // THIS FUNCTION IS FOR SHUFFLING THE LETTERS INSIDE THE CIRCLE
             shuffleFunction: () async {
               String mixedLetters = await shuffleLetters(
                 letters: widget.letters,
@@ -147,24 +149,31 @@ class _ButtonsWithCircleLettersSectionState
 
               positionLettersCircle(widget.letters);
             },
+            // THIS FUNCTION RUNS WHEN WE FIND A CORRECT ANSWER
             addWord: (positions, word) {
-              togglePositionedAnimation();
-
+              
               setState(() {
                 if (positions.length > 1) {
-                  widget.answeredPositions['answeredPositions'].add(positions);
-                  widget.answeredPositions['answeredWords'].add(word);
+                  widget.answeredPositions[answeredPositions].add(positions);
+                  widget.answeredPositions[answeredWords].add(word);
                 }
 
                 for (var i = 0; i < positions.length; i++) {
-                  if (!widget.answeredPositions['unavailablePositions']
+                  if (!widget.answeredPositions[unavailablePositions]
                       .contains(positions[i])) {
-                    widget.answeredPositions['unavailablePositions']
+                    widget.answeredPositions[unavailablePositions]
                         .add(positions[i]);
                   }
                 }
               });
+
+              saveAnswerWord(
+                ansPos: widget.answeredPositions[answeredPositions],
+                ansWord: widget.answeredPositions[answeredWords],
+                unavaPos: widget.answeredPositions[unavailablePositions],
+              );
             },
+            // THIS FUNCTION RUNS WHEN WE TAP THE HINT BUTTON
             hintFunction: () {
               BlocProvider.of<AnswerBloc>(context).add(
                 HintCalled(
@@ -172,6 +181,12 @@ class _ButtonsWithCircleLettersSectionState
                   answeredPositions: widget.answeredPositions,
                 ),
               );
+            },
+            // THIS FUNCTION RUNS WHEN WE FIND AN EXTRA WORD
+            callAnimation: (extraWord) async {
+              await addExtraWordRepository(extraWord);
+
+              togglePositionedAnimation();
             },
           ),
           const SizedBox(

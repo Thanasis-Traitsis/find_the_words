@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:collection/collection.dart';
 import 'package:find_the_words/features/stage/domain/usecases/answer_usecases/get_common_positions.dart';
 
 import '../../domain/repositories/answer_repositories.dart';
@@ -55,7 +56,7 @@ class AnswerRepositoriesImpl extends AnswerRepositories {
               return availableLists[i];
             } else {
               // This is where we can check, if its possible to set another word in this position
-              if (count == availableLists.length) {
+              if (count <= availableLists.length) {
                 bool isPossible = true;
                 if (allStageWords.contains(answer)) {
                   for (var p = 0; p < availableLists[i].length; p++) {
@@ -74,8 +75,17 @@ class AnswerRepositoriesImpl extends AnswerRepositories {
                   print("Match found in available list: ${availableLists[i]}");
                   return availableLists[i];
                 } else {
-                  print(
-                      "No match found in available list: ${availableLists[i]}");
+                  if (count == availableLists.length) {
+                    // This is where we need to check for extra words
+                    print(
+                        "No match found in available list: ${availableLists[i]}");
+                    print("All the words from stage are: $allStageWords");
+
+                    if (await searchForExtraWords(
+                        allStageWords: allStageWords, word: answer)) {
+                      return [];
+                    }
+                  }
                 }
               }
             }
@@ -83,9 +93,20 @@ class AnswerRepositoriesImpl extends AnswerRepositories {
         } else {
           // This is where we need to check for extra words
           print("No available lists found.");
+          print("All the words from stage are: $allStageWords");
+
+          if (await searchForExtraWords(
+              allStageWords: allStageWords, word: answer)) {
+            return [];
+          }
         }
       } else {
-        print('The answer word is too small for this stage');
+        print(
+            'The answers word length is not equal with any of the words in stage');
+        if (await searchForExtraWords(
+            allStageWords: allStageWords, word: answer)) {
+          return [];
+        }
       }
     } else {
       print('You have already used this word');
@@ -106,7 +127,8 @@ class AnswerRepositoriesImpl extends AnswerRepositories {
 
     // Filter out positions that are already used in answeredPositions
     List availablePositions = wordPositions
-        .where((positions) => !answeredPositions.contains(positions))
+        .where((positions) => !answeredPositions.any(
+            (answered) => const ListEquality().equals(positions, answered)))
         .toList();
 
     // Sort availablePositions by length in descending order to get the biggest list first
@@ -139,5 +161,13 @@ class AnswerRepositoriesImpl extends AnswerRepositories {
     }
 
     return [randomPosition, word];
+  }
+
+  @override
+  Future searchForExtraWords({
+    required List allStageWords,
+    required String word,
+  }) async {
+    return allStageWords.contains(word);
   }
 }

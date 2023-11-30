@@ -14,6 +14,7 @@ class AnswerBloc extends Bloc<AnswerEvent, AnswerState> {
     on<AnswerLetterHover>(onAnswerLetterHover);
     on<AnswerCompleted>(onAnswerCompleted);
     on<HintCalled>(onHintCalled);
+    on<AnswerInitialize>(onAnswerInitialize);
   }
 
   String answerWord = '';
@@ -43,12 +44,20 @@ class AnswerBloc extends Bloc<AnswerEvent, AnswerState> {
     );
 
     if (correctAnswer != null) {
-      emit(
-        AnswerCorrect(
-          positions: correctAnswer,
-          word: answerWord,
-        ),
-      );
+      if (correctAnswer.isEmpty) {
+        emit(
+          AnswerIsExtraWord(
+            word: answerWord,
+          ),
+        );
+      } else {
+        emit(
+          AnswerCorrect(
+            positions: correctAnswer,
+            word: answerWord,
+          ),
+        );
+      }
 
       answerWord = '';
     } else {
@@ -79,5 +88,10 @@ class AnswerBloc extends Bloc<AnswerEvent, AnswerState> {
         );
       }
     }
+  }
+
+  void onAnswerInitialize(
+      AnswerInitialize event, Emitter<AnswerState> emit) async {
+    emit(AnswerInitial());
   }
 }

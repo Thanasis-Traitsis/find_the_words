@@ -14,4 +14,9 @@ abstract class AnswerRepositories {
     required List answeredPositions,
     required List unavailablePositions,
   });
+
+  Future searchForExtraWords({
+    required List allStageWords,
+    required String word,
+  });
 }

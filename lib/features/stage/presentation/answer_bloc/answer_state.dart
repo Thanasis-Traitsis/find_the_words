@@ -41,6 +41,21 @@ final class AnswerCorrect extends AnswerState {
       ];
 
   @override
-  String toString() =>
-      'LettersCircleShuffle(positions: $positions, word: $word)';
+  String toString() => 'AnswerCorrect(positions: $positions, word: $word)';
+}
+
+final class AnswerIsExtraWord extends AnswerState {
+  final String word;
+
+  const AnswerIsExtraWord({
+    required this.word,
+  });
+
+  @override
+  List<Object> get props => [
+        word,
+      ];
+
+  @override
+  String toString() => 'AnswerIsExtraWord(word: $word)';
 }

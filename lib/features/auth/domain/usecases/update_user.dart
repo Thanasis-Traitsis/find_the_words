@@ -13,7 +13,6 @@ Future<UserModel?> updateUser({
     int userLevel = userDataSnapshot['level'];
     int userStage = userDataSnapshot['stage'];
     List userWords = userDataSnapshot['words'];
-    List userExtraWords = userDataSnapshot['extraWords'];
     int points = userDataSnapshot['points'];
     double progress = userDataSnapshot['progress'];
     List usedStages = userDataSnapshot['usedStages'];
@@ -23,7 +22,6 @@ Future<UserModel?> updateUser({
       level: userLevel,
       stage: userStage,
       words: userWords,
-      extraWords: userExtraWords,
       points: points,
       progress: progress,
       usedStages: usedStages,

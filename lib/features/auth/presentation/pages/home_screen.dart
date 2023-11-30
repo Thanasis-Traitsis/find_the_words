@@ -1,8 +1,12 @@
+import 'package:find_the_words/core/constants/initial_values.dart';
+import 'package:find_the_words/features/auth/domain/usecases/get_current_stage_map.dart';
+import 'package:find_the_words/features/auth/domain/usecases/prepare_for_stage.dart';
 import 'package:find_the_words/features/auth/domain/usecases/translate_level_to_stage.dart';
 import 'package:find_the_words/features/auth/presentation/widgets/blue_home_card.dart';
 import 'package:find_the_words/features/auth/presentation/widgets/green_home_card.dart';
 import 'package:find_the_words/features/auth/presentation/widgets/home_button.dart';
 import 'package:find_the_words/features/auth/presentation/widgets/home_landscape_container.dart';
+import 'package:find_the_words/features/stage/presentation/answer_bloc/answer_bloc.dart';
 import 'package:find_the_words/features/stage/presentation/crossword_table_bloc/crossword_table_bloc.dart';
 import 'package:find_the_words/features/stage/presentation/letters_bloc/letters_bloc.dart';
 import 'package:flutter/material.dart';
@@ -22,9 +26,9 @@ import '../widgets/logo_container.dart';
 import '../widgets/pink_home_card.dart';
 
 class HomeScreen extends StatelessWidget {
-  final UserModel user;
+  UserModel user;
 
-  const HomeScreen({
+  HomeScreen({
     Key? key,
     required this.user,
   }) : super(key: key);
@@ -33,31 +37,24 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final deviceOrientation = getDeviceOrientation(context);
 
+    Map currentStage = {};
+
     onStageButtonPressed() async {
-      String stageWordLength = translateLevelToStage(user.level!);
+      // Get current stage lists
+      currentStage = await getCurrentStageMap();
 
-      List usedStages = user.usedStages!;
-
-      var returnStageList;
-
-      do {
-        returnStageList = await navigateToStage(context, stageWordLength);
-      } while (usedStages.contains(returnStageList.keys.first));
-
-      print(returnStageList);
-
-      BlocProvider.of<StageBloc>(context).add(
-        StageButtonPressed(
-          stageList: returnStageList,
-          level: user.level!,
-          progress: user.progress!,
-        ),
+      prepareForStage(
+        context: context,
+        user: user,
+        current: currentStage,
       );
     }
 
     return BlocListener<StageBloc, StageState>(
       listener: (context, state) {
         if (state is StageStarted) {
+          BlocProvider.of<AnswerBloc>(context).add(AnswerInitialize());
+
           BlocProvider.of<CrosswordTableBloc>(context)
               .add(UpdateWidgetList(list: state.widgetList));
 
@@ -73,11 +70,7 @@ class HomeScreen extends StatelessWidget {
                 "tableList": state.tableList,
                 "wordPositions": state.wordPostition,
               },
-              {
-                "answeredWords": [],
-                "answeredPositions": [],
-                "unavailablePositions": [],
-              }
+              currentStage,
             ],
           );
         }

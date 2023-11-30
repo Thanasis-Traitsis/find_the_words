@@ -31,9 +31,7 @@ class AuthRepositoriesImpl extends AuthRepositories {
         'points': points,
         'progress': progress,
         'words': words,
-        'extraWords': extraWords,
         'usedStages': usedStages,
-        'currentStage': currentStage,
       });
 
       user = await updateUser(
@@ -55,9 +53,7 @@ class AuthRepositoriesImpl extends AuthRepositories {
       //   'points': points,
       //   'progress': progress,
       //   'words': words,
-      //   'extraWords': extraWords,
       //   'usedStages': usedStages,
-      //   'currentStage': currentStage,
       // });
 
       user = await updateUser(

@@ -8,6 +8,8 @@ sealed class AnswerEvent extends Equatable {
   List<Object> get props => [];
 }
 
+class AnswerInitialize extends AnswerEvent {}
+
 class AnswerLetterHover extends AnswerEvent {
   final String letter;
 

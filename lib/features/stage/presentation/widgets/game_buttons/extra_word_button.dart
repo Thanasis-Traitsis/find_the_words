@@ -1,8 +1,12 @@
+import 'package:find_the_words/features/stage/domain/usecases/game_usecases/extra_words_repositories.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../../../../core/constants/constants.dart';
 import '../../../../../core/constants/sizes.dart';
 import '../../../../../core/usecases/calculate_size.dart';
+import '../extra_words/extra_words_alert_dialog.dart';
 import 'game_button.dart';
 
 Widget ExtraWordButton({
@@ -70,7 +74,20 @@ Widget ExtraWordButton({
         child: GameButton(
           context: context,
           icon: FontAwesomeIcons.boxOpen,
-          function: () {},
+          function: () async {
+            List extraWords = await getExtraWordsRepository();
+
+            // ignore: use_build_context_synchronously
+            showDialog<void>(
+              context: context,
+              builder: (BuildContext context) {
+                return ExtraWordsAlertDialog(
+                  context: context,
+                  extra: extraWords,
+                );
+              },
+            );
+          },
           isBox: true,
         ),
       ),

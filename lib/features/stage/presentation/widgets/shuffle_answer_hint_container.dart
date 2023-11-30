@@ -16,6 +16,7 @@ class ShuffleAnswerHintContainer extends StatefulWidget {
     String word,
   ) addWord;
   final Function hintFunction;
+  final Function(String extra) callAnimation;
 
   ShuffleAnswerHintContainer({
     Key? key,
@@ -24,6 +25,7 @@ class ShuffleAnswerHintContainer extends StatefulWidget {
     required this.shuffleFunction,
     required this.addWord,
     required this.hintFunction,
+    required this.callAnimation,
   }) : super(key: key);
 
   @override
@@ -50,6 +52,9 @@ class _ShuffleAnswerHintContainerState
           listener: (context, state) {
             if (state is AnswerCorrect) {
               widget.addWord(state.positions, state.word);
+            }
+            if(state is AnswerIsExtraWord) {
+              widget.callAnimation(state.word);
             }
           },
           builder: (context, state) {

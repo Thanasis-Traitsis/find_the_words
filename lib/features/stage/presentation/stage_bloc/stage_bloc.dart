@@ -1,9 +1,15 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:find_the_words/features/stage/presentation/widgets/table_container/table_box.dart';
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
 
+import '../../../../core/constants/constants.dart';
+import '../../../../current_stage.dart';
 import '../../data/repositories/stage_repositories_impl.dart';
+import '../../domain/usecases/creating_crossword/apply_changes.dart';
+import '../../domain/usecases/creating_crossword/generate_widget_table.dart';
 
 part 'stage_event.dart';
 part 'stage_state.dart';
@@ -24,17 +30,25 @@ class StageBloc extends Bloc<StageEvent, StageState> {
       StageButtonPressed event, Emitter<StageState> emit) async {
     emit(StageLoading());
 
-    var count = 0;
+    var stageBox = Hive.box<CurrentStage>(currentStageBox);
 
-    bool readyForCrossword;
+    var stage = stageBox.get(currentStageBox);
 
-    bool readyForStageScreen = false;
+    key = stage!.key;
 
-    // Extract the key and the value
-    String newKey = event.stageList.keys.first;
-    List values = event.stageList[newKey];
+    print('KEY : $key');
 
-    if (newKey != key) {
+    if (key == null || key == '') {
+      var count = 0;
+
+      bool readyForCrossword;
+
+      bool readyForStageScreen = false;
+
+      // Extract the key and the value
+      String newKey = event.stageList.keys.first;
+      List values = event.stageList[newKey];
+
       while (!readyForStageScreen && count < 5) {
         count++;
 
@@ -54,6 +68,19 @@ class StageBloc extends Bloc<StageEvent, StageState> {
           if (readyForStageScreen) {
             widgetList = stageRepo.widgetList;
 
+            stageBox.put(
+              currentStageBox,
+              CurrentStage(
+                answeredPositions: stage.answeredPositions,
+                answeredWords: stage.answeredWords,
+                unavailablePositions: stage.unavailablePositions,
+                key: key,
+                allStageWords: values,
+                tableList: stageRepo.tableList,
+                wordPositions: stageRepo.wordPositions,
+              ),
+            );
+
             emit(StageStarted(
               widgetList: widgetList,
               letters: key!,
@@ -70,12 +97,21 @@ class StageBloc extends Bloc<StageEvent, StageState> {
         emit(StageFailedCreation());
       }
     } else {
+      widgetList = generateWidgetTable(stage.tableList!.length);
+
+      widgetList = await getCurrentWidgetList(
+        allUnavailablePositions: stage.unavailablePositions,
+        positions: stage.wordPositions!,
+        tbList: stage.tableList!,
+        wdtList: widgetList,
+      );
+
       emit(StageStarted(
         widgetList: widgetList,
         letters: key!,
-        wordPostition: stageRepo.wordPositions,
-        tableList: stageRepo.tableList,
-        allStageWords: values,
+        wordPostition: stage.wordPositions!,
+        tableList: stage.tableList!,
+        allStageWords: stage.allStageWords!,
       ));
     }
   }
