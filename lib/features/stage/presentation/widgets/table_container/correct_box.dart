@@ -91,7 +91,9 @@ class _CorrectBoxState extends State<CorrectBox> {
           child: Text(
             widget.text,
             style: TextStyle(
-              color: Colors.white,
+              color: widget.isCorrect
+                  ? Theme.of(context).colorScheme.outline
+                  : Colors.white,
               fontSize: calculateSize(
                 context,
                 30 - widget.tableRowLength,

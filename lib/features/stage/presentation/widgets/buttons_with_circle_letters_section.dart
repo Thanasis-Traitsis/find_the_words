@@ -1,4 +1,6 @@
+import 'package:find_the_words/core/constants/game_values.dart';
 import 'package:find_the_words/core/constants/styles.dart';
+import 'package:find_the_words/features/auth/presentation/points_bloc/points_bloc.dart';
 import 'package:find_the_words/features/stage/domain/usecases/game_usecases/answer_repositories.dart';
 import 'package:find_the_words/features/stage/domain/usecases/game_usecases/clear_stage_after_completion.dart';
 import 'package:find_the_words/features/stage/presentation/answer_bloc/answer_bloc.dart';
@@ -6,7 +8,6 @@ import 'package:flutter/material.dart';
 
 import 'package:find_the_words/features/stage/presentation/widgets/shuffle_answer_hint_container.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../../config/theme/colors.dart';
 import '../../../../core/constants/circle_positions.dart';
@@ -21,6 +22,7 @@ import 'circle_container_with_letters/circle_container.dart';
 import 'circle_container_with_letters/line_painter.dart';
 import 'circle_container_with_letters/render_object_widget.dart';
 import 'game_buttons/extra_word_button.dart';
+import 'game_buttons/hint_button_alert_dialog.dart';
 
 class ButtonsWithCircleLettersSection extends StatefulWidget {
   String answer;
@@ -190,12 +192,30 @@ class _ButtonsWithCircleLettersSectionState
             },
             // THIS FUNCTION RUNS WHEN WE TAP THE HINT BUTTON
             hintFunction: () async {
-              BlocProvider.of<AnswerBloc>(context).add(
-                HintCalled(
-                  stageMap: widget.stageMap,
-                  answeredPositions: widget.answeredPositions,
-                ),
+              bool useHint = await showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return HintButtonAlertDialog(context: context);
+                },
               );
+
+              if (useHint) {
+                Future.delayed(const Duration(milliseconds: 300), () {
+                  BlocProvider.of<AnswerBloc>(context).add(
+                    HintCalled(
+                      stageMap: widget.stageMap,
+                      answeredPositions: widget.answeredPositions,
+                    ),
+                  );
+
+                  BlocProvider.of<PointsBloc>(context).add(
+                    const ChangePoints(
+                      points: hintCost,
+                      isMinus: true,
+                    ),
+                  );
+                });
+              }
             },
             // THIS FUNCTION RUNS WHEN WE FIND AN EXTRA WORD
             callAnimation: (extraWord) async {
@@ -204,6 +224,13 @@ class _ButtonsWithCircleLettersSectionState
               togglePositionedAnimation();
 
               addAllWordsRepository(extraWord);
+
+              BlocProvider.of<PointsBloc>(context).add(
+                ChangePoints(
+                  points: calculateExtraWordPoints(extraWord),
+                  isMinus: false,
+                ),
+              );
             },
           ),
           const SizedBox(

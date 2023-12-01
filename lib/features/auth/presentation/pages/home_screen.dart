@@ -3,10 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
-import 'package:find_the_words/core/constants/initial_values.dart';
 import 'package:find_the_words/features/auth/domain/usecases/get_current_stage_map.dart';
 import 'package:find_the_words/features/auth/domain/usecases/prepare_for_stage.dart';
-import 'package:find_the_words/features/auth/domain/usecases/translate_level_to_stage.dart';
 import 'package:find_the_words/features/auth/presentation/widgets/blue_home_card.dart';
 import 'package:find_the_words/features/auth/presentation/widgets/green_home_card.dart';
 import 'package:find_the_words/features/auth/presentation/widgets/home_button.dart';
@@ -20,7 +18,6 @@ import '../../../../core/utils/breakpoints_utils.dart';
 import '../../../../core/utils/routes_utils.dart';
 import '../../../stage/presentation/stage_bloc/stage_bloc.dart';
 import '../../data/models/user_model.dart';
-import '../../domain/usecases/navigate_to_stage.dart';
 import '../widgets/home_background.dart';
 import '../widgets/home_cards_container.dart';
 import '../widgets/home_landscape_background.dart';
@@ -81,6 +78,7 @@ class HomeScreen extends StatelessWidget {
               user.stage.toString(),
               stageMap,
               currentStage,
+              user,
             ],
           );
         }
@@ -100,7 +98,6 @@ class HomeScreen extends StatelessWidget {
                     ),
                     HomeCardsContainer(
                       context: context,
-                      points: user.points.toString(),
                       level: user.level.toString(),
                     ),
                     HomeButton(
@@ -119,7 +116,6 @@ class HomeScreen extends StatelessWidget {
                       children: [
                         PinkHomeCard(
                           context: context,
-                          points: user.points.toString(),
                           isPorttrait: false,
                         ),
                         const SizedBox(

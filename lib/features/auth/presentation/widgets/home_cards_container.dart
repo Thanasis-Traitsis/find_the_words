@@ -8,7 +8,6 @@ import 'pink_home_card.dart';
 
 Widget HomeCardsContainer({
   required BuildContext context,
-  required String points,
   required String level,
 }) {
   return Column(
@@ -19,7 +18,6 @@ Widget HomeCardsContainer({
           children: [
             PinkHomeCard(
               context: context,
-              points: points,
             ),
             const SizedBox(
               width: gap / 2,

@@ -2,6 +2,7 @@
 import 'dart:math';
 
 import 'package:find_the_words/features/stage/domain/usecases/answer_usecases/calculate_margin.dart';
+import 'package:find_the_words/features/stage/domain/usecases/answer_usecases/change_crossword.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -13,7 +14,7 @@ import '../../answer_bloc/answer_bloc.dart';
 import '../../crossword_table_bloc/crossword_table_bloc.dart';
 
 class CrosswordContainer extends StatelessWidget {
-  final List tableList;
+  final List<String> tableList;
 
   const CrosswordContainer({
     Key? key,
@@ -28,6 +29,8 @@ class CrosswordContainer extends StatelessWidget {
 
         return BlocBuilder<AnswerBloc, AnswerState>(
           builder: (context, state) {
+            changeCrossword(tableList);
+
             if (state is AnswerCorrect) {
               for (var i = 0; i < state.positions.length; i++) {
                 wgtList[state.positions[i]] = CorrectBox(

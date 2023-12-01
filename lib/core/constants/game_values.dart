@@ -1,0 +1,1 @@
+const int hintCost = 10;

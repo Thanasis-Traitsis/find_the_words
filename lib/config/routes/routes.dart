@@ -1,4 +1,5 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:find_the_words/features/complete/presentation/pages/complete_stage_screen.dart';
 import 'package:find_the_words/features/stage/presentation/pages/stage_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -52,6 +53,18 @@ class AppRouter {
             stage: stageVariables[0],
             stageMap: stageVariables[1],
             answeredPositions: stageVariables[2],
+            user: stageVariables[3],
+          );
+        },
+      ),
+      GoRoute(
+        parentNavigatorKey: rootNavigatorKey,
+        path: PAGES.complete.screenPath,
+        name: PAGES.complete.name,
+        builder: (context, state) {
+          Map complete = state.extra as Map;
+          return CompleteStageScreen(
+            completeValues: complete,
           );
         },
       ),

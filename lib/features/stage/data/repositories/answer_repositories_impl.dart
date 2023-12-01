@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:collection/collection.dart';
 import 'package:find_the_words/features/stage/domain/usecases/answer_usecases/get_common_positions.dart';
+import 'package:find_the_words/features/stage/domain/usecases/answer_usecases/update_stage_and_tablelist.dart';
 
 import '../../domain/repositories/answer_repositories.dart';
 
@@ -34,31 +35,54 @@ class AnswerRepositoriesImpl extends AnswerRepositories {
 
         // Check if any list in filteredLists is not in usedLists
         List availableLists = posiblePositions
-            .where((filteredList) => !answeredPositions.contains(filteredList))
+            .where((positions) => !answeredPositions.any(
+                (answered) => const ListEquality().equals(positions, answered)))
             .toList();
 
         if (availableLists.isNotEmpty) {
-          var count = 0;
           print("Available Lists: $availableLists");
 
+          // Check if the word is inside the crossword
+          bool wordInsideCrossword = false;
+          List list = [];
+
           for (var i = 0; i < availableLists.length; i++) {
-            bool isMatch = true;
-            count++;
+            wordInsideCrossword = true;
             for (var j = 0; j < availableLists[i].length; j++) {
               if (tableList[availableLists[i][j]] != answer[j]) {
-                isMatch = false;
-                break;
+                wordInsideCrossword = false;
               }
             }
+            if (wordInsideCrossword) {
+              list = availableLists[i];
+              break;
+            }
+          }
 
-            if (isMatch) {
-              print("Match found in available list: ${availableLists[i]}");
-              return availableLists[i];
-            } else {
-              // This is where we can check, if its possible to set another word in this position
-              if (count <= availableLists.length) {
-                bool isPossible = true;
-                if (allStageWords.contains(answer)) {
+          if (wordInsideCrossword) {
+            print("Match found in available list: ${list}");
+            return list;
+          } else {
+            var count = 0;
+
+            for (var i = 0; i < availableLists.length; i++) {
+              bool isMatch = true;
+              count++;
+              for (var j = 0; j < availableLists[i].length; j++) {
+                if (tableList[availableLists[i][j]] != answer[j]) {
+                  isMatch = false;
+                  break;
+                }
+              }
+
+              if (isMatch) {
+                print("Match found in available list: ${availableLists[i]}");
+                return availableLists[i];
+              } else {
+                // This is where we can check, if its possible to set another word in this position
+                if (count <= availableLists.length &&
+                    allStageWords.contains(answer)) {
+                  bool isPossible = true;
                   for (var p = 0; p < availableLists[i].length; p++) {
                     if (commonPositions.contains(availableLists[i][p])) {
                       if (tableList[availableLists[i][p]] != answer[p]) {
@@ -67,23 +91,27 @@ class AnswerRepositoriesImpl extends AnswerRepositories {
                       }
                     }
                   }
-                } else {
-                  isPossible = false;
-                }
 
-                if (isPossible) {
-                  print("Match found in available list: ${availableLists[i]}");
-                  return availableLists[i];
-                } else {
-                  if (count == availableLists.length) {
-                    // This is where we need to check for extra words
+                  if (isPossible) {
                     print(
-                        "No match found in available list: ${availableLists[i]}");
-                    print("All the words from stage are: $allStageWords");
+                        "Match found in available list: ${availableLists[i]}");
+                    updateStageAndTablelist(
+                      tblList: tableList,
+                      positionsForChange: availableLists[i],
+                      newWord: answer,
+                    );
+                    return availableLists[i];
+                  } else {
+                    if (count == availableLists.length) {
+                      // This is where we need to check for extra words
+                      print(
+                          "No match found in available list: ${availableLists[i]}");
+                      print("All the words from stage are: $allStageWords");
 
-                    if (await searchForExtraWords(
-                        allStageWords: allStageWords, word: answer)) {
-                      return [];
+                      if (await searchForExtraWords(
+                          allStageWords: allStageWords, word: answer)) {
+                        return [];
+                      }
                     }
                   }
                 }

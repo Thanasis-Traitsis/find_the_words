@@ -32,3 +32,7 @@ Future clearExtraWord() async {
   // Save an list of strings to 'items' key.
   await prefs.setStringList(extraWordsList, []);
 }
+
+int calculateExtraWordPoints(String extraWord) {
+  return 2;
+}

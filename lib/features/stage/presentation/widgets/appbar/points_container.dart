@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../../core/constants/styles.dart';
 import '../../../../../core/usecases/calculate_size.dart';
 import '../../../../auth/presentation/auth_bloc/auth_bloc.dart';
+import '../../../../auth/presentation/points_bloc/points_bloc.dart';
 
 Widget PointsContainer({
   required BuildContext context,
@@ -48,10 +49,10 @@ Widget PointsContainer({
       ),
       child: Row(
         children: [
-          BlocBuilder<AuthBloc, AuthState>(
+          BlocBuilder<PointsBloc, PointsState>(
             builder: (context, state) {
               return Text(
-                state is AuthAuthenticated ? state.user.points.toString() : '0',
+                state.points.toString(),
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: calculateSize(

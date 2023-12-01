@@ -3,6 +3,8 @@ const String fontName = 'Manrope';
 const double midProgress = 0.4;
 const double highProgress = 0.8;
 
+const int maxLevel = 8;
+
 // Hive box value
 const String currentStageBox = 'currentStageBox';
 
@@ -12,8 +14,17 @@ const String answeredPositions = 'answeredPositions';
 const String unavailablePositions = 'unavailablePositions';
 const String key = 'key';
 
-// Extra Words List
+// SharedPreferences Values
 const String extraWordsList = 'extraWords';
-
-// All Words List
 const String allWords = 'allWords';
+const String userPoints = 'userPoints';
+
+// Complete Stage Map Keys
+const String completeStageLevel = 'level';
+const String completeStageStage = 'stage';
+const String completeStageProgress = 'progress';
+const String completeStageWordsUsedInStage = 'wordsUsedInStage';
+const String completeStageExtraWordsFound = 'extraWordsFound';
+const String completeStageStageCompletion = 'stageCompletion';
+const String completeStageSumOfPoints = 'sumOfPoints';
+const String completeStageUser = 'user';

@@ -3,6 +3,7 @@ import 'package:find_the_words/config/theme/theme.dart';
 import 'package:find_the_words/core/constants/sizes.dart';
 import 'package:find_the_words/current_stage.dart';
 import 'package:find_the_words/features/auth/presentation/auth_bloc/auth_bloc.dart';
+import 'package:find_the_words/features/auth/presentation/points_bloc/points_bloc.dart';
 import 'package:find_the_words/features/stage/presentation/letters_circle_bloc/letters_circle_bloc.dart';
 import 'package:find_the_words/features/stage/presentation/scrollable_bloc/scrollable_bloc.dart';
 import 'package:find_the_words/features/stage/presentation/stage_bloc/stage_bloc.dart';
@@ -42,7 +43,11 @@ Future<void> main() async {
       providers: [
         BlocProvider<AuthBloc>(
           create: (context) {
-            return AuthBloc(authRepo: authRepositoriesImpl)..add(AppStarted());
+            return AuthBloc(
+              authRepo: authRepositoriesImpl,
+            )..add(
+                AppStarted(),
+              );
           },
         ),
         BlocProvider<StageBloc>(
@@ -63,6 +68,11 @@ Future<void> main() async {
         BlocProvider<CrosswordTableBloc>(
           create: (context) {
             return CrosswordTableBloc();
+          },
+        ),
+        BlocProvider<PointsBloc>(
+          create: (context) {
+            return PointsBloc()..add(GetPoints());
           },
         ),
         BlocProvider<LettersCircleBloc>(

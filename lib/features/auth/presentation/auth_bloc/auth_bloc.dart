@@ -1,6 +1,9 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import 'package:find_the_words/features/auth/presentation/points_bloc/points_bloc.dart';
 
 import '../../../../core/constants/constants.dart';
 import '../../data/models/user_model.dart';
@@ -24,10 +27,11 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     await authRepo.getUser();
 
     if (authRepo.user != null) {
-      final SharedPreferences prefs = await SharedPreferences.getInstance();
+      // final SharedPreferences prefs = await SharedPreferences.getInstance();
 
       // Save an list of strings to 'items' key.
-      await prefs.setStringList(allWords, authRepo.user!.words!);
+      // await prefs.setStringList(allWords, authRepo.user!.words!);
+      // await prefs.setInt(userPoints, authRepo.user!.points!);
 
       emit(
         AuthAuthenticated(

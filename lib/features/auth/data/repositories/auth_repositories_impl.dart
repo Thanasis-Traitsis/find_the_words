@@ -1,7 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:find_the_words/features/auth/domain/usecases/update_user.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../../../core/constants/constants.dart';
 import '../../../../core/constants/initial_values.dart';
 import '../../domain/repositories/auth_repositories.dart';
 import '../models/user_model.dart';
@@ -39,6 +41,12 @@ class AuthRepositoriesImpl extends AuthRepositories {
         userId: userId!,
       );
 
+      final SharedPreferences prefs = await SharedPreferences.getInstance();
+
+      // Save an list of strings to 'items' key.
+      await prefs.setStringList(allWords, user!.words!);
+      await prefs.setInt(userPoints, user!.points!);
+
       print(user);
     } else {
       // User is already logged in, retrieve the user ID
@@ -46,15 +54,15 @@ class AuthRepositoriesImpl extends AuthRepositories {
       usersCollection = FirebaseFirestore.instance.collection('users');
 
       // Update the user data fields instead of setting them again
-      usersCollection!.doc(userId).update({
-        'createdAt': time,
-        'level': level,
-        'stage': stage,
-        'points': points,
-        'progress': progress,
-        'words': words,
-        'usedStages': usedStages,
-      });
+      // usersCollection!.doc(userId).update({
+      //   'createdAt': time,
+      //   'level': level,
+      //   'stage': stage,
+      //   'points': points,
+      //   'progress': progress,
+      //   'words': words,
+      //   'usedStages': usedStages,
+      // });
 
       user = await updateUser(
         usersCollection: usersCollection!,
@@ -70,19 +78,26 @@ class AuthRepositoriesImpl extends AuthRepositories {
     required UserModel userStage,
     required String stageKey,
     required List<String> allTheWords,
+    required int userPoints,
+    required double progress,
+    required bool levelUp,
   }) async {
     usersCollection = FirebaseFirestore.instance.collection('users');
 
     List newUsedStages = userStage.usedStages!;
     newUsedStages.add(stageKey);
 
+    double prog = levelUp ? 0 : progress;
+    int lvl = levelUp ? userStage.level! + 1 : userStage.level!;
+
     usersCollection!.doc(userId).update({
       'stage': userStage.stage! + 1,
       'usedStages': newUsedStages,
       'words': allTheWords,
+      'points': userPoints,
+      'progress': prog,
+      'level': lvl,
     });
-
-    print(user);
 
     user = await updateUser(
       usersCollection: usersCollection!,

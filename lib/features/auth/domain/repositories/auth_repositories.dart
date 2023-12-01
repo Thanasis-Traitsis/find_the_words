@@ -7,5 +7,8 @@ abstract class AuthRepositories {
     required UserModel userStage,
     required String stageKey,
     required List<String> allTheWords,
+    required int userPoints,
+    required double progress,
+    required bool levelUp,
   });
 }

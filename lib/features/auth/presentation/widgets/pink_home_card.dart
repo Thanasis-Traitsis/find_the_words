@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../core/constants/styles.dart';
 import '../../../../core/usecases/calculate_size.dart';
 import '../../../../core/widgets/card_with_outline.dart';
+import '../points_bloc/points_bloc.dart';
 import 'card_text.dart';
 
 Widget PinkHomeCard({
   required BuildContext context,
-  required String points,
   bool isPorttrait = true,
 }) {
   return CardWithOutline(
@@ -66,20 +67,25 @@ Widget PinkHomeCard({
                             ),
                           ),
                         ),
-                        Text(
-                          points,
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            color:
-                                Theme.of(context).colorScheme.primaryContainer,
-                            fontSize: calculateSize(
-                              context,
-                              Theme.of(context)
-                                  .textTheme
-                                  .headlineLarge!
-                                  .fontSize!,
-                            ),
-                          ),
+                        BlocBuilder<PointsBloc, PointsState>(
+                          builder: (context, state) {
+                            return Text(
+                              state.points.toString(),
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .primaryContainer,
+                                fontSize: calculateSize(
+                                  context,
+                                  Theme.of(context)
+                                      .textTheme
+                                      .headlineLarge!
+                                      .fontSize!,
+                                ),
+                              ),
+                            );
+                          },
                         ),
                       ],
                     ),
@@ -99,21 +105,25 @@ Widget PinkHomeCard({
                 child: Row(
                   children: [
                     Expanded(
-                      child: Text(
-                        points,
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: Theme.of(context).colorScheme.surface,
-                          fontSize: calculateSize(
-                            context,
-                            Theme.of(context)
-                                .textTheme
-                                .headlineLarge!
-                                .fontSize!,
-                          ),
-                        ),
-                        overflow: TextOverflow.ellipsis,
-                        textAlign: TextAlign.right,
+                      child: BlocBuilder<PointsBloc, PointsState>(
+                        builder: (context, state) {
+                          return Text(
+                            state.points.toString(),
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: Theme.of(context).colorScheme.surface,
+                              fontSize: calculateSize(
+                                context,
+                                Theme.of(context)
+                                    .textTheme
+                                    .headlineLarge!
+                                    .fontSize!,
+                              ),
+                            ),
+                            overflow: TextOverflow.ellipsis,
+                            textAlign: TextAlign.right,
+                          );
+                        },
                       ),
                     ),
                     Icon(

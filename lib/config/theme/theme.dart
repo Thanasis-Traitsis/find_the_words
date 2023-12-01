@@ -48,9 +48,13 @@ class MainAppTheme {
     primaryIconTheme: IconThemeData(
       size: values.normalIcon,
     ),
+    iconTheme: IconThemeData(
+      size: values.normalIcon - 15,
+    ),
     filledButtonTheme: FilledButtonThemeData(
       style: ButtonStyle(
-        backgroundColor: MaterialStateProperty.all<Color>(colorTheme.highlightColor),
+        backgroundColor:
+            MaterialStateProperty.all<Color>(colorTheme.highlightColor),
         foregroundColor: MaterialStateProperty.all<Color>(colorTheme.white),
         padding: MaterialStateProperty.all<EdgeInsets>(
           buttonSpacing,
