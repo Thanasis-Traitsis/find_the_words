@@ -1,10 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:find_the_words/features/auth/domain/usecases/update_user.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:hive/hive.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../../core/constants/constants.dart';
 import '../../../../core/constants/initial_values.dart';
+import '../../../../current_stage.dart';
 import '../../domain/repositories/auth_repositories.dart';
 import '../models/user_model.dart';
 
@@ -68,6 +70,12 @@ class AuthRepositoriesImpl extends AuthRepositories {
         usersCollection: usersCollection!,
         userId: userId!,
       );
+
+      // final SharedPreferences prefs = await SharedPreferences.getInstance();
+
+      // // Save an list of strings to 'items' key.
+      // await prefs.setStringList(allWords, user!.words!);
+      // await prefs.setInt(userPoints, user!.points!);
 
       print(user);
     }

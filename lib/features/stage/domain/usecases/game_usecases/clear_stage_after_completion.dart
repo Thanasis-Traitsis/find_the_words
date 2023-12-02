@@ -1,6 +1,7 @@
 import 'package:find_the_words/core/utils/routes_utils.dart';
 import 'package:find_the_words/features/auth/data/repositories/auth_repositories_impl.dart';
-import 'package:find_the_words/features/complete/domain/usecases/calculating_the_progress.dart';
+import 'package:find_the_words/features/complete/domain/usecases/calculating_progress/calculating_the_progress.dart';
+import 'package:find_the_words/features/complete/domain/usecases/calculating_progress/find_smaller_and_bigger_word.dart';
 import 'package:find_the_words/features/complete/domain/usecases/convert_extra_words_to_points.dart';
 import 'package:find_the_words/features/stage/data/repositories/answer_repositories_impl.dart';
 import 'package:flutter/material.dart';
@@ -44,8 +45,22 @@ Future clearStageAfterCompletion({
   int wordsUsedInStage = stage!.wordPositions!.length;
   int extraWordsFound = extraWords.length;
 
+  List smallAndBigResult = findSmallerAndBiggerWord(stage.wordPositions!);
+  int smallest = smallAndBigResult[0];
+  int biggest = smallAndBigResult[1];
+
+  double calcProg = await calculatingTheProgress(
+    context: context,
+    stageWordsLength: stage.allStageWords!.length,
+    biggestWordLength: biggest,
+    crosswordLength: wordsUsedInStage,
+    extraWordsLength: extraWordsFound,
+    smallestWordLength: smallest,
+    letters: key,
+  );
+
   // Calculating the progress
-  double prog = user.progress! + calculatingTheProgress();
+  double prog = user.progress! + calcProg;
   int levelUpPoints = 0;
 
   if (prog >= 1 && (oldLevel < maxLevel)) {
