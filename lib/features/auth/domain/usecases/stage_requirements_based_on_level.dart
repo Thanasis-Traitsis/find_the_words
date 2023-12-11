@@ -4,117 +4,64 @@ Map stageRequirementsBasedOnLevel({
   required int level,
   required double progress,
 }) {
-  // For Stage Length
-  var minStageLength = 2;
-  var maxStageLength = 3;
+  const Map<int, Map<String, dynamic>> levelRules = {
+    1: {
+      "high": [2, 3],
+      "mid": [2, 3],
+      "low": [2, 3]
+    },
+    2: {
+      "high": [5, 7],
+      "mid": [4, 6],
+      "low": [3, 5]
+    },
+    3: {
+      "high": [5, 8],
+      "mid": [5, 7],
+      "low": [4, 6]
+    },
+    4: {
+      "high": [6, 9, 2],
+      "mid": [6, 8],
+      "low": [5, 6]
+    },
+    5: {
+      "high": [7, 10, 2],
+      "mid": [6, 9],
+      "low": [5, 7]
+    },
+    6: {
+      "high": [7, 10, 2, 4],
+      "mid": [7, 9],
+      "low": [6, 8]
+    },
+    7: {
+      "high": [8, 11, 2, 4],
+      "mid": [7, 10, 2],
+      "low": [7, 8, 2]
+    },
+    8: {
+      "high": [9, 12, 3, 5],
+      "mid": [8, 11, 2, 4],
+      "low": [7, 10, 2, 4]
+    },
+  };
 
-  // Amount of big words
-  var amountOfBigWords = 1;
+  var rules = levelRules[level];
+  rules ??= levelRules[2]!;
 
-  // Length of small words
-  var smallWordsLength = 3;
-
-  if (level == 2) {
-    if (progress > highProgress) {
-      minStageLength = 5;
-      maxStageLength = 7;
-    } else if (progress > midProgress) {
-      minStageLength = 4;
-      maxStageLength = 6;
-    } else {
-      minStageLength = 3;
-      maxStageLength = 5;
-    }
-  }
-  if (level == 3) {
-    if (progress > highProgress) {
-      minStageLength = 5;
-      maxStageLength = 8;
-    } else if (progress > midProgress) {
-      minStageLength = 5;
-      maxStageLength = 7;
-    } else {
-      minStageLength = 4;
-      maxStageLength = 6;
-    }
-  }
-  if (level == 4) {
-    if (progress > highProgress) {
-      minStageLength = 6;
-      maxStageLength = 9;
-      amountOfBigWords = 2;
-    } else if (progress > midProgress) {
-      minStageLength = 6;
-      maxStageLength = 8;
-    } else {
-      minStageLength = 5;
-      maxStageLength = 6;
-    }
-  }
-  if (level == 5) {
-    if (progress > highProgress) {
-      minStageLength = 7;
-      maxStageLength = 10;
-      amountOfBigWords = 2;
-    } else if (progress > midProgress) {
-      minStageLength = 6;
-      maxStageLength = 9;
-    } else {
-      minStageLength = 5;
-      maxStageLength = 7;
-    }
-  }
-  if (level == 6) {
-    if (progress > highProgress) {
-      minStageLength = 7;
-      maxStageLength = 10;
-      amountOfBigWords = 2;
-      smallWordsLength = 4;
-    } else if (progress > midProgress) {
-      minStageLength = 7;
-      maxStageLength = 9;
-    } else {
-      minStageLength = 6;
-      maxStageLength = 8;
-    }
-  }
-  if (level == 7) {
-    if (progress > highProgress) {
-      minStageLength = 8;
-      maxStageLength = 11;
-      amountOfBigWords = 2;
-      smallWordsLength = 4;
-    } else if (progress > midProgress) {
-      minStageLength = 7;
-      maxStageLength = 10;
-      smallWordsLength = 4;
-    } else {
-      minStageLength = 6;
-      maxStageLength = 8;
-      smallWordsLength = 4;
-    }
-  }
-  if (level == 8) {
-    if (progress > highProgress) {
-      minStageLength = 9;
-      maxStageLength = 12;
-      amountOfBigWords = 3;
-      smallWordsLength = 5;
-    } else if (progress > midProgress) {
-      minStageLength = 8;
-      maxStageLength = 11;
-      smallWordsLength = 4;
-    } else {
-      minStageLength = 7;
-      maxStageLength = 10;
-      smallWordsLength = 4;
-    }
-  }
+  String progressType = (progress > highProgress)
+      ? 'high'
+      : (progress > midProgress)
+          ? 'mid'
+          : 'low';
 
   return {
-    "minStageLength": minStageLength,
-    "maxStageLength": maxStageLength,
-    "amountOfBigWords": amountOfBigWords,
-    "smallWordsLength": smallWordsLength,
+    "minStageLength": rules[progressType]![0],
+    "maxStageLength": rules[progressType]![1],
+    "amountOfBigWords":
+        rules[progressType]!.length > 2 ? rules[progressType]![2] : 1,
+    "smallWordsLength":
+        rules[progressType]!.length > 3 ? rules[progressType]![3] : 3,
   };
 }

@@ -34,5 +34,12 @@ Future clearExtraWord() async {
 }
 
 int calculateExtraWordPoints(String extraWord) {
-  return 2;
+  if (extraWord.length < 4) {
+    return 1;
+  }
+  if (extraWord.length < 7) {
+    return 2;
+  }
+
+  return 3;
 }

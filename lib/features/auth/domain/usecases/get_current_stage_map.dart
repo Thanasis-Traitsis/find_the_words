@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 
 import '../../../../core/constants/constants.dart';
@@ -12,7 +11,7 @@ Future getCurrentStageMap() async {
 
   var stage = stageBox.get(currentStageBox);
 
-  if (stage == null) {
+  if (stage == null || stage.key == null) {
     stageBox.put(
       currentStageBox,
       CurrentStage(
@@ -23,27 +22,20 @@ Future getCurrentStageMap() async {
         allStageWords: [],
         tableList: [],
         wordPositions: [],
+        timerOfStage: 0,
       ),
     );
 
     stage = stageBox.get(currentStageBox);
-
-    currentStage = {
-      answeredPositions: stage!.answeredPositions,
-      answeredWords: stage.answeredWords,
-      unavailablePositions: stage.unavailablePositions,
-      key: stage.key,
-    };
-
-    return currentStage;
-  } else {
-    currentStage = {
-      answeredPositions: stage.answeredPositions,
-      answeredWords: stage.answeredWords,
-      unavailablePositions: stage.unavailablePositions,
-      key: stage.key,
-    };
-
-    return currentStage;
   }
+
+  currentStage = {
+    answeredPositions: stage!.answeredPositions,
+    answeredWords: stage.answeredWords,
+    unavailablePositions: stage.unavailablePositions,
+    key: stage.key,
+    currentTimer: stage.timerOfStage,
+  };
+
+  return currentStage;
 }

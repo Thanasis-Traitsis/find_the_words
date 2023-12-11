@@ -1,10 +1,9 @@
 import 'dart:math';
-
 import 'package:collection/collection.dart';
-import 'package:find_the_words/features/stage/domain/usecases/answer_usecases/get_common_positions.dart';
-import 'package:find_the_words/features/stage/domain/usecases/answer_usecases/update_stage_and_tablelist.dart';
 
 import '../../domain/repositories/answer_repositories.dart';
+import '../../domain/usecases/answer_usecases/get_common_positions.dart';
+import '../../domain/usecases/answer_usecases/update_stage_and_tablelist.dart';
 
 class AnswerRepositoriesImpl extends AnswerRepositories {
   @override
@@ -17,12 +16,12 @@ class AnswerRepositoriesImpl extends AnswerRepositories {
     required List answeredWords,
   }) async {
     if (!answeredWords.contains(answer)) {
-      print('The answer word is: $answer');
+      // print('The answer word is: $answer');
 
-      print('The word positions are: $wordPositions');
+      // print('The word positions are: $wordPositions');
 
-      print(
-          'The unavailable positions because of the answers are : $answeredPositions');
+      // print(
+      //     'The unavailable positions because of the answers are : $answeredPositions');
 
       List commonPositions = getCommonPositions(wordPositions);
 
@@ -40,7 +39,7 @@ class AnswerRepositoriesImpl extends AnswerRepositories {
             .toList();
 
         if (availableLists.isNotEmpty) {
-          print("Available Lists: $availableLists");
+          // print("Available Lists: $availableLists");
 
           // Check if the word is inside the crossword
           bool wordInsideCrossword = false;
@@ -60,7 +59,7 @@ class AnswerRepositoriesImpl extends AnswerRepositories {
           }
 
           if (wordInsideCrossword) {
-            print("Match found in available list: ${list}");
+            // print("Match found in available list: ${list}");
             return list;
           } else {
             var count = 0;
@@ -76,7 +75,7 @@ class AnswerRepositoriesImpl extends AnswerRepositories {
               }
 
               if (isMatch) {
-                print("Match found in available list: ${availableLists[i]}");
+                // print("Match found in available list: ${availableLists[i]}");
                 return availableLists[i];
               } else {
                 // This is where we can check, if its possible to set another word in this position
@@ -93,8 +92,8 @@ class AnswerRepositoriesImpl extends AnswerRepositories {
                   }
 
                   if (isPossible) {
-                    print(
-                        "Match found in available list: ${availableLists[i]}");
+                    // print(
+                    //     "Match found in available list: ${availableLists[i]}");
                     updateStageAndTablelist(
                       tblList: tableList,
                       positionsForChange: availableLists[i],
@@ -104,9 +103,9 @@ class AnswerRepositoriesImpl extends AnswerRepositories {
                   } else {
                     if (count == availableLists.length) {
                       // This is where we need to check for extra words
-                      print(
-                          "No match found in available list: ${availableLists[i]}");
-                      print("All the words from stage are: $allStageWords");
+                      // print(
+                      //     "No match found in available list: ${availableLists[i]}");
+                      // print("All the words from stage are: $allStageWords");
 
                       if (await searchForExtraWords(
                           allStageWords: allStageWords, word: answer)) {
@@ -120,8 +119,8 @@ class AnswerRepositoriesImpl extends AnswerRepositories {
           }
         } else {
           // This is where we need to check for extra words
-          print("No available lists found.");
-          print("All the words from stage are: $allStageWords");
+          // print("No available lists found.");
+          // print("All the words from stage are: $allStageWords");
 
           if (await searchForExtraWords(
               allStageWords: allStageWords, word: answer)) {
@@ -151,7 +150,7 @@ class AnswerRepositoriesImpl extends AnswerRepositories {
     var word = '';
     var randomPosition;
 
-    print('answeredPositions: $answeredPositions');
+    // print('answeredPositions: $answeredPositions');
 
     // Filter out positions that are already used in answeredPositions
     List availablePositions = wordPositions
@@ -162,7 +161,7 @@ class AnswerRepositoriesImpl extends AnswerRepositories {
     // Sort availablePositions by length in descending order to get the biggest list first
     availablePositions.sort((a, b) => b.length.compareTo(a.length));
 
-    print('availablePositions: $availablePositions');
+    // print('availablePositions: $availablePositions');
 
     // Select a random position from the biggest available list
     List selectedPositions = availablePositions.first;
@@ -174,7 +173,7 @@ class AnswerRepositoriesImpl extends AnswerRepositories {
       return; // No available spots in the selected list
     }
 
-    print('availableSpots: $availableSpots');
+    // print('availableSpots: $availableSpots');
 
     if (availableSpots.length == 1) {
       for (var i = 0; i < selectedPositions.length; i++) {

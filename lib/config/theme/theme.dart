@@ -18,6 +18,7 @@ class MainAppTheme {
     fontFamily: fontName,
     useMaterial3: true,
     colorScheme: ColorScheme.light(
+      error: colorTheme.errorColor,
       background: colorTheme.bgColor,
       primary: colorTheme.primaryColor,
       outline: colorTheme.black,

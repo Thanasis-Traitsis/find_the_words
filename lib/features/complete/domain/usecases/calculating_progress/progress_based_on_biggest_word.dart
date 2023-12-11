@@ -1,7 +1,7 @@
 double progressBasedOnBiggestWord(int num) {
   switch (num) {
     case 3:
-      return 0.015;
+      return 0.02;
     case 4:
       return 0.015;
     case 5:

@@ -1,7 +1,7 @@
-part of 'scrollable_bloc.dart';
+part of 'stage_scroll_bloc.dart';
 
-class ScrollableState extends Equatable {
-  ScrollableState({
+class StageScrollState extends Equatable {
+  StageScrollState({
     bool? scrollable,
   }) : scrollable = scrollable ?? true;
 
@@ -10,8 +10,8 @@ class ScrollableState extends Equatable {
   @override
   List<Object> get props => [scrollable];
 
-  ScrollableState copyWith({bool? scrollable}) {
-    return ScrollableState(
+  StageScrollState copyWith({bool? scrollable}) {
+    return StageScrollState(
       scrollable: scrollable ?? this.scrollable,
     );
   }

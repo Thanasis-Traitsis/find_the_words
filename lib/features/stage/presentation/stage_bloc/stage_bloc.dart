@@ -1,7 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:find_the_words/features/stage/presentation/widgets/table_container/table_box.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 
@@ -26,45 +25,69 @@ class StageBloc extends Bloc<StageEvent, StageState> {
   List<Widget> widgetList = [];
   String? key;
 
+  List bannedKeys = [];
+
   void _onStageButtonPressed(
       StageButtonPressed event, Emitter<StageState> emit) async {
     emit(StageLoading());
 
     var stageBox = Hive.box<CurrentStage>(currentStageBox);
-
     var stage = stageBox.get(currentStageBox);
 
     key = stage!.key;
 
     if (key == null || key == '') {
       var count = 0;
-
-      bool readyForCrossword;
-
+      bool readyForCrossword = true;
       bool readyForStageScreen = false;
 
       // Extract the key and the value
       String newKey = event.stageList.keys.first;
       List values = event.stageList[newKey];
 
-      while (!readyForStageScreen && count < 5) {
-        count++;
+      print(
+          '3. ======================================================================================================');
+      print('THIS IS WHERE THE FUN BEGINS');
+      print('KEY : $newKey');
+      print('WORDS : $values');
 
-        readyForCrossword = await stageRepo.createStage(
-          wordsList: values,
-          level: event.level,
-          progress: event.progress,
-        );
+      key = newKey;
 
-        key = newKey;
+      readyForCrossword = await stageRepo.createStage(
+        wordsList: values,
+        level: event.level,
+        progress: event.progress,
+      );
 
-        if (readyForCrossword) {
+      print(readyForCrossword);
+
+      if (readyForCrossword) {
+        while (!readyForStageScreen && count < 5) {
+          if (count != 0) {
+            await stageRepo.createStage(
+              wordsList: values,
+              level: event.level,
+              progress: event.progress,
+            );
+          }
+          count++;
+
+          if (count == 5) {
+            bannedKeys.add(key);
+
+            emit(StageFailedCreation(
+              bannedKeys: bannedKeys,
+            ));
+          }
+
           await stageRepo.createCrossword();
 
           readyForStageScreen = stageRepo.ready;
 
           if (readyForStageScreen) {
             widgetList = stageRepo.widgetList;
+
+            bannedKeys = [];
 
             stageBox.put(
               currentStageBox,
@@ -76,6 +99,7 @@ class StageBloc extends Bloc<StageEvent, StageState> {
                 allStageWords: values,
                 tableList: stageRepo.tableList,
                 wordPositions: stageRepo.wordPositions,
+                timerOfStage: stage.timerOfStage,
               ),
             );
 
@@ -87,12 +111,13 @@ class StageBloc extends Bloc<StageEvent, StageState> {
               allStageWords: values,
             ));
           }
-        } else {
-          emit(StageFailedCreation());
         }
-      }
-      if (count == 5) {
-        emit(StageFailedCreation());
+      } else {
+        bannedKeys.add(key);
+
+        emit(StageFailedCreation(
+          bannedKeys: bannedKeys,
+        ));
       }
     } else {
       widgetList = generateWidgetTable(stage.tableList!.length);
@@ -103,6 +128,11 @@ class StageBloc extends Bloc<StageEvent, StageState> {
         tbList: stage.tableList!,
         wdtList: widgetList,
       );
+
+      print(stage.unavailablePositions);
+      print(stage.wordPositions!);
+      print(stage.tableList!);
+      print(widgetList.length);
 
       emit(StageStarted(
         widgetList: widgetList,

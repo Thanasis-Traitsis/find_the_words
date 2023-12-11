@@ -22,6 +22,7 @@ Future saveAnswerWord({
       allStageWords: stage.allStageWords,
       tableList: stage.tableList,
       wordPositions: stage.wordPositions,
+      timerOfStage: stage.timerOfStage,
     ),
   );
 }

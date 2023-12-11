@@ -24,6 +24,7 @@ class CurrentStageAdapter extends TypeAdapter<CurrentStage> {
       allStageWords: (fields[7] as List?)?.cast<dynamic>(),
       tableList: (fields[5] as List?)?.cast<String>(),
       wordPositions: (fields[6] as List?)?.cast<dynamic>(),
+      timerOfStage: fields[8] as int?,
     );
   }
 

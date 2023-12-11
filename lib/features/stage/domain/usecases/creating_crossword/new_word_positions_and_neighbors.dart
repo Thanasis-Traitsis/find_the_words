@@ -1,6 +1,3 @@
-import 'dart:math';
-
-import 'check_direction.dart';
 import 'check_if_spots_available.dart';
 
 List? newWordPositionsAndNeighbors({

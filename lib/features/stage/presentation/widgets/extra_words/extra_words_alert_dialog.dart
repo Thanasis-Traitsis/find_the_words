@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../../../core/constants/styles.dart';
 import '../../../../../core/usecases/calculate_size.dart';
 import 'extra_word.dart';
 
@@ -31,9 +32,12 @@ AlertDialog ExtraWordsAlertDialog({
                 mainAxisSize: MainAxisSize.min,
                 children: extra.asMap().entries.map<Widget>(
                   (e) {
-                    return ExtraWord(
-                      context: context,
-                      text: e.value.toString(),
+                    return Container(
+                      margin: const EdgeInsets.only(bottom: gap / 2),
+                      child: ExtraWord(
+                        context: context,
+                        text: e.value.toString(),
+                      ),
                     );
                   },
                 ).toList(),

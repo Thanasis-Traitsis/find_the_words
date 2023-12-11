@@ -1,13 +1,13 @@
-part of 'scrollable_bloc.dart';
+part of 'stage_scroll_bloc.dart';
 
-sealed class ScrollableEvent extends Equatable {
-  const ScrollableEvent();
+sealed class StageScrollEvent extends Equatable {
+  const StageScrollEvent();
 
   @override
   List<Object> get props => [];
 }
 
-class UpdateScrollableStageScreen extends ScrollableEvent {
+class UpdateScrollableStageScreen extends StageScrollEvent {
   final bool scrollable;
 
   const UpdateScrollableStageScreen({

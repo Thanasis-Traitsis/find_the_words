@@ -56,26 +56,29 @@ class AuthRepositoriesImpl extends AuthRepositories {
       usersCollection = FirebaseFirestore.instance.collection('users');
 
       // Update the user data fields instead of setting them again
-      // usersCollection!.doc(userId).update({
-      //   'createdAt': time,
-      //   'level': level,
-      //   'stage': stage,
-      //   'points': points,
-      //   'progress': progress,
-      //   'words': words,
-      //   'usedStages': usedStages,
-      // });
+      usersCollection!.doc(userId).update({
+        'updatedAt': time,
+        'level': level,
+        'stage': stage,
+        'points': points,
+        'progress': progress,
+        'words': words,
+        'usedStages': usedStages,
+      });
 
       user = await updateUser(
         usersCollection: usersCollection!,
         userId: userId!,
       );
 
-      // final SharedPreferences prefs = await SharedPreferences.getInstance();
+      final SharedPreferences prefs = await SharedPreferences.getInstance();
 
-      // // Save an list of strings to 'items' key.
-      // await prefs.setStringList(allWords, user!.words!);
-      // await prefs.setInt(userPoints, user!.points!);
+      // Save an list of strings to 'items' key.
+      await prefs.setStringList(allWords, user!.words!);
+      await prefs.setInt(userPoints, user!.points!);
+
+      var stageBox = Hive.box<CurrentStage>(currentStageBox);
+      await stageBox.delete(currentStageBox);
 
       print(user);
     }

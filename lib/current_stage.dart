@@ -13,7 +13,21 @@ class CurrentStage {
     required this.allStageWords,
     required this.tableList,
     required this.wordPositions,
+    required this.timerOfStage,
   });
+
+  @override
+  String toString() {
+    return 'CurrentStage{'
+        'answeredPositions: $answeredPositions, '
+        'answeredWords: $answeredWords, '
+        'unavailablePositions: $unavailablePositions, '
+        'key: $key, '
+        'allStageWords: $allStageWords, '
+        'tableList: $tableList, '
+        'wordPositions: $wordPositions, '
+        'timerOfStage: $timerOfStage}';
+  }
 
   @HiveField(0)
   List answeredWords;
@@ -35,4 +49,7 @@ class CurrentStage {
 
   @HiveField(7)
   List? allStageWords;
+
+  @HiveField(8)
+  int? timerOfStage;
 }

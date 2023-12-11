@@ -3,10 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../core/constants/constants.dart';
+import '../../../../core/utils/breakpoints_utils.dart';
 import '../../../../core/utils/routes_utils.dart';
+import '../../../../core/widgets/absorb_pointer_container.dart';
 import '../../../auth/data/models/user_model.dart';
+
 import '../letters_bloc/letters_bloc.dart';
-import '../scrollable_bloc/scrollable_bloc.dart' as scroll;
+import '../stage_scroll_bloc/stage_scroll_bloc.dart';
 import '../widgets/appbar/points_container.dart';
 import '../widgets/appbar/title_of_appbar.dart';
 import '../widgets/buttons_with_circle_letters_section.dart';
@@ -30,7 +34,9 @@ class StageScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final deviceOrientation = getDeviceOrientation(context);
     String answer = '';
+    int timerValue = answeredPositions[currentTimer] ??= 0;
 
     return Scaffold(
       appBar: AppBar(
@@ -53,28 +59,61 @@ class StageScreen extends StatelessWidget {
 
           return false;
         },
-        child: SafeArea(
-          child: SingleChildScrollView(
-            physics: true
-                ? const NeverScrollableScrollPhysics()
-                : const PageScrollPhysics(),
-            child: Column(
-              children: [
-                CrosswordContainer(
-                  tableList: stageMap['tableList'],
-                ),
-                BlocBuilder<LettersBloc, LettersState>(
-                  builder: (context, state) {
-                    return ButtonsWithCircleLettersSection(
-                      letters: state.letters,
-                      answer: answer,
-                      stageMap: stageMap,
-                      answeredPositions: answeredPositions,
-                    );
-                  },
-                ),
-              ],
-            ),
+        child: AbsorbPointerContainer(
+          context: context,
+          child: SafeArea(
+            child: deviceOrientation == DeviceOrientation.portrait
+                ? BlocBuilder<StageScrollBloc, StageScrollState>(
+                    builder: (context, state) {
+                      return SingleChildScrollView(
+                        physics: state.scrollable
+                            ? const ScrollPhysics()
+                            : const NeverScrollableScrollPhysics(),
+                        child: Column(
+                          children: [
+                            CrosswordContainer(
+                              tableList: stageMap['tableList'],
+                            ),
+                            BlocBuilder<LettersBloc, LettersState>(
+                              builder: (context, state) {
+                                return ButtonsWithCircleLettersSection(
+                                  letters: state.letters,
+                                  answer: answer,
+                                  stageMap: stageMap,
+                                  answeredPositions: answeredPositions,
+                                  timerValue: timerValue,
+                                );
+                              },
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+                  )
+                : Row(
+                    children: [
+                      Expanded(
+                        child: SingleChildScrollView(
+                          child: CrosswordContainer(
+                            tableList: stageMap['tableList'],
+                          ),
+                        ),
+                      ),
+                      Expanded(
+                        child: BlocBuilder<LettersBloc, LettersState>(
+                          builder: (context, state) {
+                            return ButtonsWithCircleLettersSection(
+                              letters: state.letters,
+                              answer: answer,
+                              stageMap: stageMap,
+                              answeredPositions: answeredPositions,
+                              timerValue: timerValue,
+                            );
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
           ),
         ),
       ),

@@ -1,3 +1,4 @@
+import 'package:find_the_words/features/complete/domain/usecases/calculating_progress/progress_based_on_seconds_and_extra_words.dart';
 import 'package:find_the_words/features/complete/domain/usecases/calculating_progress/progress_based_on_simfona.dart';
 import 'package:find_the_words/features/complete/domain/usecases/calculating_progress/progress_based_on_smallest_word.dart';
 import 'package:find_the_words/features/complete/domain/usecases/calculating_progress/progress_based_on_stage_words.dart';
@@ -8,6 +9,7 @@ import 'progress_based_on_crossword_length.dart';
 import 'progress_based_on_extra_words.dart';
 
 Future<double> calculatingTheProgress({
+  required int secondsCount,
   required int stageWordsLength,
   required int biggestWordLength,
   required int smallestWordLength,
@@ -40,7 +42,16 @@ Future<double> calculatingTheProgress({
   // +
   double sum5 = await progressBasedOnSimfona(context, letters);
 
-  print(sum1 + sum2 + sum3 + sum4 + sum5 - min1);
+  // calculating seconds for stage completion and extra words
+  // -
+  double sec = progressBasedOnSecondsAndExtraWords(
+    seconds: secondsCount,
+    extraWords: extraWordsLength,
+  );
 
-  return sum1 + sum2 + sum3 + sum4 + sum5 - min1;
+  var result = (sum1 + sum2 + sum3 + sum4 + sum5 - min1) * sec;
+
+  print(result);
+
+  return result;
 }

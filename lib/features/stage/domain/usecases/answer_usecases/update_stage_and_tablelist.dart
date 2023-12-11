@@ -26,6 +26,7 @@ Future updateStageAndTablelist({
       allStageWords: stage.allStageWords,
       tableList: tblList,
       wordPositions: stage.wordPositions,
+      timerOfStage: stage.timerOfStage,
     ),
   );
 }

@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
+import '../../../../core/constants/sizes.dart';
+import '../../../../core/usecases/calculate_size.dart';
 import '../answer_bloc/answer_bloc.dart';
 import 'answer_container.dart';
 import 'game_buttons/game_button.dart';
@@ -17,6 +19,7 @@ class ShuffleAnswerHintContainer extends StatefulWidget {
   ) addWord;
   final Function hintFunction;
   final Function(String extra) callAnimation;
+  bool isPortrait;
 
   ShuffleAnswerHintContainer({
     Key? key,
@@ -26,6 +29,7 @@ class ShuffleAnswerHintContainer extends StatefulWidget {
     required this.addWord,
     required this.hintFunction,
     required this.callAnimation,
+    this.isPortrait = true,
   }) : super(key: key);
 
   @override
@@ -41,19 +45,23 @@ class _ShuffleAnswerHintContainerState
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        GameButton(
-          function: () {
-            widget.shuffleFunction();
-          },
-          context: context,
-          icon: FontAwesomeIcons.shuffle,
-        ),
+        widget.isPortrait
+            ? GameButton(
+                function: () {
+                  widget.shuffleFunction();
+                },
+                context: context,
+                icon: FontAwesomeIcons.shuffle,
+              )
+            : SizedBox(
+                height: calculateSize(context, AppValuesMain().gameButton),
+              ),
         BlocConsumer<AnswerBloc, AnswerState>(
           listener: (context, state) {
             if (state is AnswerCorrect) {
               widget.addWord(state.positions, state.word);
             }
-            if(state is AnswerIsExtraWord) {
+            if (state is AnswerIsExtraWord) {
               widget.callAnimation(state.word);
             }
           },
@@ -70,13 +78,15 @@ class _ShuffleAnswerHintContainerState
             );
           },
         ),
-        GameButton(
-          function: () {
-            widget.hintFunction();
-          },
-          context: context,
-          icon: FontAwesomeIcons.lightbulb,
-        ),
+        widget.isPortrait
+            ? GameButton(
+                function: () {
+                  widget.hintFunction();
+                },
+                context: context,
+                icon: FontAwesomeIcons.lightbulb,
+              )
+            : Container(),
       ],
     );
   }

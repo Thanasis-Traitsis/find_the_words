@@ -52,6 +52,7 @@ class CrosswordRepositoriesImpl extends CrosswordRepositories {
 
   @override
   Future fillTableWithWords(List listOfStartingPositions) async {
+    
     // VALE TIN PROTI LEKSI STO KENTRO TOY CROSSWORD
     int centerPosition = firstIsHotizontal
         ? positionWordCenterHorizontaly(
@@ -74,12 +75,6 @@ class CrosswordRepositoriesImpl extends CrosswordRepositories {
       tbList: tbList,
       colsAndRows: numRowsAndColumns,
     );
-
-    // wdtList = await applyChanges(
-    //   positions: wordsPositionList[0],
-    //   tbList: tbList,
-    //   wdtList: wdtList,
-    // );
 
     // GIA OLES TIS YPOLOIPES LEKSEIS
 

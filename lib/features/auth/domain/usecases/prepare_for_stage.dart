@@ -11,32 +11,37 @@ void prepareForStage({
   required BuildContext context,
   required UserModel user,
   required Map current,
+  required List? banned,
 }) async {
-  if (current[key] == null || current[key] == '') {
+  var returnStageList = {};
+
+  if (current[key]?.isEmpty ?? true) {
     String stageWordLength = translateLevelToStage(user.level!);
 
     List usedStages = user.usedStages!;
 
-    var returnStageList;
+    banned ??= [];
+
+    for (var i = 0; i < banned.length; i++) {
+      usedStages.add(banned[i]);
+    }
 
     do {
-      returnStageList = await navigateToStage(context, stageWordLength);
-    } while (usedStages.contains(returnStageList.keys.first));
+      returnStageList =
+          await navigateToStage(context, stageWordLength, usedStages);
 
-    BlocProvider.of<StageBloc>(context).add(
-      StageButtonPressed(
-        stageList: returnStageList,
-        level: user.level!,
-        progress: user.progress!,
-      ),
-    );
-  } else {
-    BlocProvider.of<StageBloc>(context).add(
-      StageButtonPressed(
-        stageList: const {},
-        level: user.level!,
-        progress: user.progress!,
-      ),
-    );
+      if (returnStageList.isEmpty) {
+        usedStages
+            .removeWhere((element) => element.length == (user.level! + 2));
+      }
+    } while (returnStageList.isEmpty);
   }
+
+  BlocProvider.of<StageBloc>(context).add(
+    StageButtonPressed(
+      stageList: returnStageList,
+      level: user.level!,
+      progress: user.progress!,
+    ),
+  );
 }

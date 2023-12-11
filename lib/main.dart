@@ -4,9 +4,10 @@ import 'package:find_the_words/core/constants/sizes.dart';
 import 'package:find_the_words/current_stage.dart';
 import 'package:find_the_words/features/auth/presentation/auth_bloc/auth_bloc.dart';
 import 'package:find_the_words/features/auth/presentation/points_bloc/points_bloc.dart';
+import 'package:find_the_words/features/stage/presentation/clickable_stage_bloc/clickable_stage_bloc.dart';
 import 'package:find_the_words/features/stage/presentation/letters_circle_bloc/letters_circle_bloc.dart';
-import 'package:find_the_words/features/stage/presentation/scrollable_bloc/scrollable_bloc.dart';
 import 'package:find_the_words/features/stage/presentation/stage_bloc/stage_bloc.dart';
+import 'package:find_the_words/features/stage/presentation/stage_scroll_bloc/stage_scroll_bloc.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -20,6 +21,7 @@ import 'features/stage/data/repositories/stage_repositories_impl.dart';
 import 'features/stage/presentation/answer_bloc/answer_bloc.dart';
 import 'features/stage/presentation/crossword_table_bloc/crossword_table_bloc.dart';
 import 'features/stage/presentation/letters_bloc/letters_bloc.dart';
+import 'features/stage/presentation/stage_timer_bloc/stage_timer_bloc.dart';
 import 'firebase_options.dart';
 
 Future<void> main() async {
@@ -60,9 +62,9 @@ Future<void> main() async {
             return LettersBloc();
           },
         ),
-        BlocProvider<ScrollableBloc>(
+        BlocProvider<StageScrollBloc>(
           create: (context) {
-            return ScrollableBloc();
+            return StageScrollBloc();
           },
         ),
         BlocProvider<CrosswordTableBloc>(
@@ -78,6 +80,16 @@ Future<void> main() async {
         BlocProvider<LettersCircleBloc>(
           create: (context) {
             return LettersCircleBloc();
+          },
+        ),
+        BlocProvider<ClickableStageBloc>(
+          create: (context) {
+            return ClickableStageBloc();
+          },
+        ),
+        BlocProvider<StageTimerBloc>(
+          create: (context) {
+            return StageTimerBloc();
           },
         ),
         BlocProvider<AnswerBloc>(

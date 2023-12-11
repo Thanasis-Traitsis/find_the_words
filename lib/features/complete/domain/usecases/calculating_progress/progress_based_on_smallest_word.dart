@@ -1,7 +1,7 @@
 double progressBasedOnSmallestWord(int num) {
   switch (num) {
     case 3:
-      return 0.012;
+      return 0.015;
     case 4:
       return 0.01;
     case 5:

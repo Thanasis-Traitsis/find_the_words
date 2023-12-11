@@ -40,6 +40,8 @@ class StageRepositoriesImpl extends StageRepositories {
       progress: progress,
     );
 
+    print('REQUIREMENTS : $requirements');
+
     List? firstFilterList = checkIfListMeetsRequirements(
       req: requirements,
       list: wordsList,
@@ -72,11 +74,10 @@ class StageRepositoriesImpl extends StageRepositories {
   @override
   Future createCrossword() async {
     print(
-        '======================================================================================');
-    print(
-        '========================= START OF THE CREATION OF CROSSWORD =========================');
-    print(
-        '======================================================================================');
+        '5. ======================================================================================================');
+    print('START OF THE CREATION OF CROSSWORD');
+    print('THE LIST OF WORDS THAT I TRY TO CREATE THE STAGE : $finalWordsList');
+
     ready = false;
     List errorWords = [];
 

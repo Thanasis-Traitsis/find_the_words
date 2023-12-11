@@ -42,6 +42,10 @@ class CrosswordContainer extends StatelessWidget {
                   delay: i,
                   isCorrect: true,
                 );
+
+                if(i == state.positions.length - 1){
+                  BlocProvider.of<AnswerBloc>(context).add(AnswerInitialize());
+                }
               }
             }
             return Padding(

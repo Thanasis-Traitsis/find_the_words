@@ -1,9 +1,7 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'package:find_the_words/features/auth/presentation/points_bloc/points_bloc.dart';
-import 'package:find_the_words/features/complete/presentation/pages/complete_stage_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../../core/usecases/listen_to_connectivity.dart';
 import '../auth_bloc/auth_bloc.dart';
 import 'home_screen.dart';
 
@@ -17,6 +15,10 @@ class AuthScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    listenToConnectivity(
+      scaffoldKey: scaffoldMessengerKey,
+      context: context,
+    );
     return Material(
       child: BlocBuilder<AuthBloc, AuthState>(
         builder: (context, state) {

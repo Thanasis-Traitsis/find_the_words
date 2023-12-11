@@ -24,6 +24,13 @@ Widget ResultsContainer({
         header: 'Ολοκλήρωση Σταδίου',
         stat: stage[completeStageStageCompletion],
       ),
+      stage[completeStageLevelUp]
+          ? TextWithResult(
+              context: context,
+              header: 'Ολοκλήρωση Επιπέδου',
+              stat: stage[completeStageLevelUpPoints],
+            )
+          : Container(),
       const Divider(
         thickness: 1,
       ),

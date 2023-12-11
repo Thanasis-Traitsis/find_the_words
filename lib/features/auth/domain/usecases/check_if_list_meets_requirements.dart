@@ -3,11 +3,9 @@ List? checkIfListMeetsRequirements({
   required List list,
 }) {
   print(
-      '======================================================================================');
-  print(
-      '========================= CHECK FOR REQUIREMENTS STARTS HERE =========================');
-  print(
-      '======================================================================================');
+      '4. ======================================================================================================');
+  print('CHECK FOR REQUIREMENTS STARTS HERE');
+
   // 1. Sort the list from the biggest to the smallest
   list.sort((a, b) => b.length.compareTo(a.length));
 

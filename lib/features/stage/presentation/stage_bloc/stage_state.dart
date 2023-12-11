@@ -41,4 +41,18 @@ final class StageStarted extends StageState {
       'Stage Started(widgetList: $widgetList, letters: $letters)';
 }
 
-final class StageFailedCreation extends StageState {}
+final class StageFailedCreation extends StageState {
+  final List bannedKeys;
+
+  const StageFailedCreation({
+    required this.bannedKeys,
+  });
+
+  @override
+  List<Object> get props => [
+        bannedKeys,
+      ];
+
+  @override
+  String toString() => 'StageFailedCreation( bannedKeys: $bannedKeys)';
+}

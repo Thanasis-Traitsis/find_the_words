@@ -35,20 +35,23 @@ class BlueHomeCard extends StatelessWidget {
       );
     }
 
+    void prepareForExtraWordsList() async {
+      final SharedPreferences prefs = await SharedPreferences.getInstance();
+
+      // Try reading data from the 'items' key. If it doesn't exist, returns null.
+      List<String>? words = prefs.getStringList(allWords);
+
+      words ??= [];
+      openDialogFunction(words);
+    }
+
     return isPorttrait
         ? Expanded(
             child: Material(
               color: Colors.transparent,
               child: GestureDetector(
-                onTap: () async {
-                  final SharedPreferences prefs =
-                      await SharedPreferences.getInstance();
-
-                  // Try reading data from the 'items' key. If it doesn't exist, returns null.
-                  List<String>? words = prefs.getStringList(allWords);
-
-                  words ??= [];
-                  openDialogFunction(words);
+                onTap: () {
+                  prepareForExtraWordsList();
                 },
                 child: CardWithOutline(
                   context: context,
@@ -97,15 +100,8 @@ class BlueHomeCard extends StatelessWidget {
             child: Material(
               color: Colors.transparent,
               child: GestureDetector(
-                onTap: () async {
-                  final SharedPreferences prefs =
-                      await SharedPreferences.getInstance();
-
-                  // Try reading data from the 'items' key. If it doesn't exist, returns null.
-                  List<String>? words = prefs.getStringList(allWords);
-
-                  words ??= [];
-                  openDialogFunction(words);
+                onTap: () {
+                  prepareForExtraWordsList();
                 },
                 child: CardWithOutline(
                   context: context,
@@ -116,7 +112,7 @@ class BlueHomeCard extends StatelessWidget {
                         constraints: BoxConstraints(minWidth: 100),
                         child: CardText(
                           context: context,
-                          text: 'Συν. Λέξεις :',
+                          text: 'Συνολικές Λέξεις',
                           color: Theme.of(context).colorScheme.outline,
                         ),
                       ),

@@ -11,4 +11,6 @@ class MainColors {
   final Color babyBlueColor = const Color(0xffDEECFE);
   final Color lightGreenColor = const Color.fromARGB(255, 185, 222, 181);
   final Color primaryColor = const Color.fromARGB(255, 51, 71, 120);
+
+  final Color errorColor = const Color.fromARGB(255, 158, 43, 34);
 }

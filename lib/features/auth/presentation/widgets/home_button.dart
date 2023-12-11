@@ -1,12 +1,14 @@
 import 'package:find_the_words/core/constants/sizes.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../core/constants/styles.dart';
 import '../../../../core/usecases/calculate_size.dart';
+import '../../../stage/presentation/stage_bloc/stage_bloc.dart';
 
 Widget HomeButton({
   required BuildContext context,
-  required Function function,
+  required VoidCallback function,
   required String stage,
 }) {
   return Center(
@@ -22,17 +24,49 @@ Widget HomeButton({
         ),
         Positioned(
           bottom: calculateSize(context, 30),
-          child: FilledButton(
-            onPressed: () => function(),
-            child: Text(
-              'Επόμενο Στάδιο',
-              style: TextStyle(
-                fontSize: calculateSize(
-                  context,
-                  Theme.of(context).textTheme.bodyLarge!.fontSize!,
+          child: BlocBuilder<StageBloc, StageState>(
+            builder: (context, state) {
+              return FilledButton(
+                style: ButtonStyle(
+                  padding: MaterialStateProperty.all<EdgeInsets>(
+                    const EdgeInsets.symmetric(
+                        horizontal: padding * 1.5, vertical: padding * 2),
+                  ),
                 ),
-              ),
-            ),
+                onPressed: function,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    SizedBox(
+                      width: calculateSize(context, 30),
+                      height: calculateSize(context, 30),
+                    ),
+                    Container(
+                      margin: const EdgeInsets.symmetric(horizontal: gap / 2),
+                      child: Text(
+                        'Επόμενο Στάδιο',
+                        style: TextStyle(
+                          fontSize: calculateSize(
+                            context,
+                            Theme.of(context).textTheme.bodyLarge!.fontSize!,
+                          ),
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      width: calculateSize(context, 30),
+                      height: calculateSize(context, 30),
+                      child: state is StageLoading
+                          ? CircularProgressIndicator.adaptive(
+                              backgroundColor:
+                                  Theme.of(context).colorScheme.surface,
+                            )
+                          : null,
+                    )
+                  ],
+                ),
+              );
+            },
           ),
         ),
         Positioned(

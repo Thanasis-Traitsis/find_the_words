@@ -1,6 +1,6 @@
 double progressBasedOnStageWords(int num) {
   if (num < 5) {
-    return 0.02;
+    return 0.03;
   }
   if (num < 10) {
     return 0.015;
