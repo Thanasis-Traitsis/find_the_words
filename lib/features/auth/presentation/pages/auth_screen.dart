@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../core/constants/styles.dart';
+import '../../../../core/usecases/listen_to_connectivity.dart';
 import '../../../stage/presentation/clickable_stage_bloc/clickable_stage_bloc.dart';
 import '../auth_bloc/auth_bloc.dart';
 import '../widgets/loading_section.dart';
@@ -19,6 +20,10 @@ class AuthScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    listenToConnectivity(
+      scaffoldKey: scaffoldMessengerKey,
+      context: context,
+    );
     return Material(
       child: BlocConsumer<AuthBloc, AuthState>(
         listener: (context, state) {

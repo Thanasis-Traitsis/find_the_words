@@ -77,7 +77,7 @@ Future clearStageAfterCompletion({
     allTheWords: words,
     userPoints: points,
     progress: prog,
-    levelUp: prog >= 1,
+    levelUp: oldLevel < maxLevel ? prog >= 1 : false,
   );
 
   user = authRepositoriesImpl.user;

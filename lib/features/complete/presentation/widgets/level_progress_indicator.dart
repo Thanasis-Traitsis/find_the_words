@@ -3,10 +3,12 @@ import 'package:flutter/material.dart';
 
 class LevelProgressIndicator extends StatefulWidget {
   final double endValue;
+  final bool lastLevel;
 
   const LevelProgressIndicator({
     Key? key,
     required this.endValue,
+    required this.lastLevel,
   }) : super(key: key);
 
   @override
@@ -21,7 +23,9 @@ class _LevelProgressIndicatorState extends State<LevelProgressIndicator>
   void initState() {
     controller = AnimationController(
       vsync: this,
-      duration: const Duration(seconds: 3),
+      duration: Duration(
+        seconds: ((widget.lastLevel) && (widget.endValue >= 1)) ? 0 : 3,
+      ),
     )..addListener(() {
         setState(() {});
       });

@@ -18,7 +18,49 @@ void prepareForStage({
   if (current[key]?.isEmpty ?? true) {
     String stageWordLength = translateLevelToStage(user.level!);
 
-    List usedStages = user.usedStages!;
+    // List usedStages = user.usedStages!;
+
+    List usedStages = [
+      "ΑΗΡ",
+      "ΑΕΛ",
+      "ΑΕΜ",
+      "ΑΕΠ",
+      "ΑΟΠ",
+      "ΑΠΩ",
+      "ΑΕΣ",
+      "ΑΒΙ",
+      "ΔΗΩ",
+      "ΑΕΝ",
+      "ΔΕΩ",
+      "ΕΝΤ",
+      "ΕΝΩ",
+      "ΕΞΩ",
+      "ΕΣΩ",
+      "ΖΟΩ",
+      "ΗΣΩ",
+      "ΕΘΟ",
+      "ΑΙΝ",
+      "ΙΟΣ",
+      "ΙΚΤ",
+      "ΚΟΥ",
+      "ΑΛΟ",
+      "ΑΜΤ",
+      "ΑΜΧ",
+      "ΑΜΩ",
+      "ΜΟΥ",
+      "ΝΟΩ",
+      "ΝΟΤ",
+      "ΗΟΡ",
+      "ΟΣΥ",
+      "ΟΥΦ",
+      "ΟΠΥ",
+      "ΠΣΩ",
+      "ΙΡΣ",
+      "ΕΣΤ",
+      "ΙΚΣ",
+      "ΑΣΤ",
+      "ΗΣΤ",
+    ];
 
     banned ??= [];
 
@@ -31,6 +73,7 @@ void prepareForStage({
           await navigateToStage(context, stageWordLength, usedStages);
 
       if (returnStageList.isEmpty) {
+        print('EINAI FULLLLLLLLLLLLLLLLLLLLLLLL');
         usedStages
             .removeWhere((element) => element.length == (user.level! + 2));
       }

@@ -78,6 +78,27 @@ class StageRepositoriesImpl extends StageRepositories {
     print('START OF THE CREATION OF CROSSWORD');
     print('THE LIST OF WORDS THAT I TRY TO CREATE THE STAGE : $finalWordsList');
 
+    // finalWordsList = [
+    //   'ΞΥΛΟΚΟΠΟΥΣ',
+    //   'ΣΚΟΥΠΟΞΥΛΟ',
+    //   'ΚΟΥΛΟΣ',
+    //   'ΚΟΠΟΥΣ',
+    //   'ΚΟΛΠΟΣ',
+    //   'ΠΟΛΟΥΣ',
+    //   'ΚΟΛΠΟΥ',
+    //   'ΠΟΛΥΣ',
+    //   'ΟΛΚΟΣ',
+    //   'ΚΛΟΥΞ',
+    //   'ΠΟΣΟΥ',
+    //   'ΞΥΛΟΥ',
+    //   'ΚΟΠΟΣ',
+    //   'ΠΛΟΥΣ',
+    //   'ΞΥΛΟ',
+    //   'ΟΛΟΣ',
+    //   'ΟΠΛΟ',
+    //   'ΟΞΥΣ',
+    // ];
+
     ready = false;
     List errorWords = [];
 
@@ -150,16 +171,19 @@ class StageRepositoriesImpl extends StageRepositories {
     if (!shouldContinueLoop) {
       ready = false;
       print("ΔΕ ΓΙΝΕΤΑΙ ΝΑ ΦΤΙΑΧΤΕΙ ΕΠΙΠΕΔΟ ΜΕ ΑΥΤΕΣ ΤΙΣ ΛΕΞΕΙΣ ΡΕ ΦΙΛΕ");
+
+      widgetList = generateWidgetTable(tableBoxes);
+      tableList = generateTableList(tableBoxes);
     } else {
       ready = true;
+
+      widgetList = returnList[0];
+      wordPositions = returnList[1];
+
+      // UNCOMMENT THIS PART FOR THE WHOLE EXPERIENCE
+      await centerTable();
+      widgetList = await makeTableSmaller(tableRnC);
     }
-
-    widgetList = returnList[0];
-    wordPositions = returnList[1];
-
-    // UNCOMMENT THIS PART FOR THE WHOLE EXPERIENCE
-    await centerTable();
-    widgetList = await makeTableSmaller(tableRnC);
 
     // UNCOMMENT THIS PART WHEN YOU WANT TO SEE THE RESULT WITHOUT CENTER AND SMALLERTABLE
     // widgetList = await applyChanges(

@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'progress_based_on_biggest_word.dart';
 import 'progress_based_on_crossword_length.dart';
 import 'progress_based_on_extra_words.dart';
+import 'progress_based_on_letters.dart';
 
 Future<double> calculatingTheProgress({
   required int secondsCount,
@@ -42,14 +43,19 @@ Future<double> calculatingTheProgress({
   // +
   double sum5 = await progressBasedOnSimfona(context, letters);
 
+  // calculating the rarity of letters
+  // +
+  double sum6 = progressBasedOnLetters(letters);
+
   // calculating seconds for stage completion and extra words
   // -
   double sec = progressBasedOnSecondsAndExtraWords(
     seconds: secondsCount,
     extraWords: extraWordsLength,
+    level: letters.length - 2,
   );
 
-  var result = (sum1 + sum2 + sum3 + sum4 + sum5 - min1) * sec;
+  var result = (sum1 + sum2 + sum3 + sum4 + sum5 + sum6 - min1) * sec;
 
   print(result);
 

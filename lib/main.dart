@@ -112,11 +112,6 @@ class MyApp extends StatelessWidget {
     final scaffoldKey = GlobalKey<ScaffoldMessengerState>();
     final navigatorKey = GlobalKey<NavigatorState>();
 
-    listenToConnectivity(
-      scaffoldKey: scaffoldKey,
-      context: context,
-    );
-
     return MaterialApp.router(
       debugShowCheckedModeBanner: false,
       scaffoldMessengerKey: scaffoldKey,

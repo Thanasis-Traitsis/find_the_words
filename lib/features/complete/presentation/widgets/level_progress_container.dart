@@ -1,6 +1,7 @@
 import 'package:find_the_words/features/complete/presentation/widgets/level_progress_indicator.dart';
 import 'package:flutter/material.dart';
 
+import '../../../../core/constants/constants.dart';
 import '../../../../core/constants/sizes.dart';
 import '../../../../core/constants/styles.dart';
 import '../../../../core/usecases/calculate_size.dart';
@@ -74,6 +75,7 @@ Widget LevelProgressContainer({
               ),
               LevelProgressIndicator(
                 endValue: progress,
+                lastLevel: level == maxLevel,
               ),
             ],
           ),

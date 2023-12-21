@@ -59,7 +59,7 @@ class StageBloc extends Bloc<StageEvent, StageState> {
         progress: event.progress,
       );
 
-      print(readyForCrossword);
+      print('THIS IS READY : $readyForCrossword');
 
       if (readyForCrossword) {
         while (!readyForStageScreen && count < 5) {
@@ -75,14 +75,16 @@ class StageBloc extends Bloc<StageEvent, StageState> {
           if (count == 5) {
             bannedKeys.add(key);
 
+            print('MIPOS FTAEI AYTO TO SHMEIOOOOO');
+
             emit(StageFailedCreation(
               bannedKeys: bannedKeys,
             ));
+          } else {
+            await stageRepo.createCrossword();
+
+            readyForStageScreen = stageRepo.ready;
           }
-
-          await stageRepo.createCrossword();
-
-          readyForStageScreen = stageRepo.ready;
 
           if (readyForStageScreen) {
             widgetList = stageRepo.widgetList;

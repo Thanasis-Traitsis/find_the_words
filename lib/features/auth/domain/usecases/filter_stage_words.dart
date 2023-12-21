@@ -10,11 +10,11 @@ List filterStageWords({
 
   // 1. First, make a list with all the big words
   // Find the length of the longest word in the original list
-  int maxLength =
+  int bigWordLength =
       list.fold(0, (max, word) => word.length > max ? word.length : max);
 
   // Add words from the original list to the empty list if their length is equal to the maxLength
-  bigWords.addAll(list.where((word) => word.length == maxLength));
+  bigWords.addAll(list.where((word) => word.length == bigWordLength));
 
   // 2. Add to the final list the min big words needed from the bigWords list
   // Pick random words from the bigWords list

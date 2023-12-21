@@ -135,7 +135,11 @@ class CompleteStageScreen extends StatelessWidget {
                                                       .canvasColor,
                                                   child: Center(
                                                     child: Text(
-                                                      'Συγχαρητήρια! Ανέβηκες Επίπεδο.',
+                                                      completeValues[
+                                                                  completeStageStageCompletion] ==
+                                                              maxLevel
+                                                          ? 'Έχεις φτάσει στο τελευταίο Επίπεδο.'
+                                                          : 'Συγχαρητήρια! Ανέβηκες Επίπεδο.',
                                                       style: TextStyle(
                                                         fontSize:
                                                             Theme.of(context)
@@ -177,7 +181,7 @@ class CompleteStageScreen extends StatelessWidget {
                                     context: context,
                                     nextStage: () async {
                                       currentStage = await getCurrentStageMap();
-                                      
+
                                       onStageButtonPressed(null);
                                     },
                                     backToHome: () {

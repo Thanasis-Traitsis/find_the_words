@@ -102,7 +102,7 @@ class StageScreen extends StatelessWidget {
                       Expanded(
                         child: BlocBuilder<LettersBloc, LettersState>(
                           builder: (context, state) {
-                            return ButtonsWithCircleLettersSection(
+                            return ButtonsWithCircleLettersSection(   
                               letters: state.letters,
                               answer: answer,
                               stageMap: stageMap,

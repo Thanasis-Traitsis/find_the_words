@@ -13,12 +13,13 @@ Widget ExtraWordButton({
   required BuildContext context,
   required double endOfAnimation,
   required VoidCallback onEnd,
+  bool isLandScape = false,
 }) {
   return Stack(
     alignment: Alignment.center,
     children: [
       SizedBox(
-        height: 100,
+        height: 150,
         width: calculateSize(context, AppValuesMain().gameButton),
       ),
       AnimatedPositioned(
@@ -33,11 +34,15 @@ Widget ExtraWordButton({
           ),
           width: calculateSize(
             context,
-            AppValuesMain().gameButton * .7,
+            isLandScape
+                ? AppValuesMain().gameButton * .6
+                : AppValuesMain().gameButton * .7,
           ),
           height: calculateSize(
             context,
-            AppValuesMain().gameButton * .7,
+            isLandScape
+                ? AppValuesMain().gameButton * .6
+                : AppValuesMain().gameButton * .7,
           ),
           child: Container(
             decoration: BoxDecoration(
@@ -63,7 +68,9 @@ Widget ExtraWordButton({
               color: Theme.of(context).colorScheme.background,
               size: calculateSize(
                 context,
-                Theme.of(context).primaryIconTheme.size! * .6,
+                isLandScape
+                    ? Theme.of(context).primaryIconTheme.size! * .5
+                    : Theme.of(context).primaryIconTheme.size! * .6,
               ),
             ),
           ),
@@ -72,6 +79,7 @@ Widget ExtraWordButton({
       Positioned(
         bottom: 0,
         child: GameButton(
+          isLandScape: isLandScape,
           context: context,
           icon: FontAwesomeIcons.boxOpen,
           function: () async {

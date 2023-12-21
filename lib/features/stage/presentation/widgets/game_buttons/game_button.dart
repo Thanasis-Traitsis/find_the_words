@@ -7,11 +7,20 @@ Widget GameButton({
   required BuildContext context,
   required IconData icon,
   required Function function,
+  bool isLandScape = false,
   bool isBox = false,
 }) {
   return SizedBox(
-    width: calculateSize(context, AppValuesMain().gameButton),
-    height: calculateSize(context, AppValuesMain().gameButton),
+    width: calculateSize(
+        context,
+        isLandScape
+            ? AppValuesMain().gameButton - 10
+            : AppValuesMain().gameButton),
+    height: calculateSize(
+        context,
+        isLandScape
+            ? AppValuesMain().gameButton - 10
+            : AppValuesMain().gameButton),
     child: FilledButton(
       onPressed: () {
         function();
@@ -28,7 +37,9 @@ Widget GameButton({
           color: Theme.of(context).colorScheme.surface,
           size: calculateSize(
             context,
-            Theme.of(context).primaryIconTheme.size! * .7,
+            isLandScape
+                ? Theme.of(context).primaryIconTheme.size! * .6
+                : Theme.of(context).primaryIconTheme.size! * .7,
           ),
         ),
       ),

@@ -353,6 +353,7 @@ class _ButtonsWithCircleLettersSectionState
                     Column(
                       children: [
                         GameButton(
+                          isLandScape: true,
                           function: () {
                             shuffleButtonPress();
                           },
@@ -363,6 +364,7 @@ class _ButtonsWithCircleLettersSectionState
                           height: gap,
                         ),
                         GameButton(
+                          isLandScape: true,
                           function: () {
                             hintButtonPress();
                           },
@@ -372,6 +374,7 @@ class _ButtonsWithCircleLettersSectionState
                       ],
                     ),
                     ExtraWordButton(
+                      isLandScape: true,
                       context: context,
                       endOfAnimation: animationEnd,
                       onEnd: () {
@@ -410,6 +413,9 @@ class _ButtonsWithCircleLettersSectionState
                               callAnimation: (extraWord) async {
                                 callAnimationForExtraWord(extraWord);
                               },
+                            ),
+                            const SizedBox(
+                              height: gap / 2,
                             ),
                             CircleContainer(
                               letters: widget.letters,
