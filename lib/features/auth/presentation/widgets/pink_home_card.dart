@@ -50,7 +50,7 @@ Widget PinkHomeCard({
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
                             border: Border.all(
-                              color: Theme.of(context).colorScheme.secondary,
+                              color: Theme.of(context).colorScheme.primaryContainer,
                               width: 2,
                             ),
                           ),

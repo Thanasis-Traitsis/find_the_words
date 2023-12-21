@@ -1,5 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:bloc/bloc.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:equatable/equatable.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -24,22 +25,32 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   void _onAppStarted(AppStarted event, Emitter<AuthState> emit) async {
     emit(AuthLoading());
 
-    await authRepo.getUser();
+    print('SEARCHINGGGG');
 
-    if (authRepo.user != null) {
-      // final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final connectivityResult = await (Connectivity().checkConnectivity());
 
-      // Save an list of strings to 'items' key.
-      // await prefs.setStringList(allWords, authRepo.user!.words!);
-      // await prefs.setInt(userPoints, authRepo.user!.points!);
-
-      emit(
-        AuthAuthenticated(
-          user: authRepo.user!,
-        ),
-      );
+    if (connectivityResult == ConnectivityResult.none) {
+      emit(AuthNoConnection());
     } else {
-      emit(AuthUnauthenticated());
+      await authRepo.getUser();
+
+      if (authRepo.user != null) {
+        // final SharedPreferences prefs = await SharedPreferences.getInstance();
+
+        // Save an list of strings to 'items' key.
+        // await prefs.setStringList(allWords, authRepo.user!.words!);
+        // await prefs.setInt(userPoints, authRepo.user!.points!);\
+
+        await Future.delayed(const Duration(seconds: 1), () {
+          emit(
+            AuthAuthenticated(
+              user: authRepo.user!,
+            ),
+          );
+        });
+      } else {
+        emit(AuthUnauthenticated());
+      }
     }
   }
 }

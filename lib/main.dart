@@ -15,6 +15,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 
 import 'config/routes/routes.dart';
 import 'core/constants/constants.dart';
+import 'core/usecases/listen_to_connectivity.dart';
 import 'features/auth/data/repositories/auth_repositories_impl.dart';
 import 'features/stage/data/repositories/answer_repositories_impl.dart';
 import 'features/stage/data/repositories/stage_repositories_impl.dart';
@@ -110,6 +111,11 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     final scaffoldKey = GlobalKey<ScaffoldMessengerState>();
     final navigatorKey = GlobalKey<NavigatorState>();
+
+    listenToConnectivity(
+      scaffoldKey: scaffoldKey,
+      context: context,
+    );
 
     return MaterialApp.router(
       debugShowCheckedModeBanner: false,
