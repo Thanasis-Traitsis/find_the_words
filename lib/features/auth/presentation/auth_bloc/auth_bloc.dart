@@ -2,11 +2,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:equatable/equatable.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-
-import 'package:find_the_words/features/auth/presentation/points_bloc/points_bloc.dart';
-
-import '../../../../core/constants/constants.dart';
 import '../../data/models/user_model.dart';
 import '../../data/repositories/auth_repositories_impl.dart';
 
@@ -25,8 +20,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   void _onAppStarted(AppStarted event, Emitter<AuthState> emit) async {
     emit(AuthLoading());
 
-    print('SEARCHINGGGG');
-
     final connectivityResult = await (Connectivity().checkConnectivity());
 
     if (connectivityResult == ConnectivityResult.none) {
@@ -35,12 +28,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       await authRepo.getUser();
 
       if (authRepo.user != null) {
-        // final SharedPreferences prefs = await SharedPreferences.getInstance();
-
-        // Save an list of strings to 'items' key.
-        // await prefs.setStringList(allWords, authRepo.user!.words!);
-        // await prefs.setInt(userPoints, authRepo.user!.points!);\
-
         await Future.delayed(const Duration(seconds: 1), () {
           emit(
             AuthAuthenticated(

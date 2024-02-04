@@ -69,6 +69,7 @@ Widget PinkHomeCard({
                         ),
                         BlocBuilder<PointsBloc, PointsState>(
                           builder: (context, state) {
+                            print(state.points);
                             return Text(
                               state.points.toString(),
                               style: TextStyle(

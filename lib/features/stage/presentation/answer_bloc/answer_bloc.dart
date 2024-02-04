@@ -29,7 +29,9 @@ class AnswerBloc extends Bloc<AnswerEvent, AnswerState> {
 
     answerWord = answer;
 
-    emit(AnswerComplete(answer: answer));
+    emit(AnswerComplete(
+      answer: answer,
+    ));
   }
 
   void onAnswerCompleted(
@@ -63,7 +65,9 @@ class AnswerBloc extends Bloc<AnswerEvent, AnswerState> {
     } else {
       answerWord = '';
 
-      emit(AnswerComplete(answer: answerWord));
+      emit(AnswerComplete(
+        answer: answerWord,
+      ));
     }
   }
 

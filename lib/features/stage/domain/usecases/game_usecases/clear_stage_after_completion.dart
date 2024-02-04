@@ -66,6 +66,8 @@ Future clearStageAfterCompletion({
   double prog = user.progress! + calcProg;
   int levelUpPoints = 0;
 
+  print(prog);
+
   if (prog >= 1 && (oldLevel < maxLevel)) {
     levelUpPoints = calculatingPointsForLevelUp(oldLevel);
   }

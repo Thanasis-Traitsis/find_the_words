@@ -19,7 +19,9 @@ final class AnswerComplete extends AnswerState {
   });
 
   @override
-  List<Object> get props => [answer];
+  List<Object> get props => [
+        answer,
+      ];
 
   @override
   String toString() => 'LettersCircleShuffle(answers: $answer)';

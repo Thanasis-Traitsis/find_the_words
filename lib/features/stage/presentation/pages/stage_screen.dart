@@ -38,29 +38,36 @@ class StageScreen extends StatelessWidget {
     String answer = '';
     int timerValue = answeredPositions[currentTimer] ??= 0;
 
-    return Scaffold(
-      appBar: AppBar(
-        title: TitleOfAppbar(
-          context: context,
-          stage: stage,
-        ),
-        actions: [
-          PointsContainer(
+    return AbsorbPointerContainer(
+      context: context,
+      child: Scaffold(
+        appBar: AppBar(
+          title: TitleOfAppbar(
             context: context,
+            stage: stage,
           ),
-        ],
-      ),
-      body: WillPopScope(
-        onWillPop: () async {
-          context.goNamed(
-            PAGES.home.screenName,
-            extra: user,
-          );
+          actions: [
+            PointsContainer(
+              context: context,
+            ),
+          ],
+        ),
+        body: WillPopScope(
+          //   canPop: true,
+          //   onPopInvoked: (didPop) {
+          //     context.goNamed(
+          //       PAGES.home.screenName,
+          //       extra: user,
+          //     );
+          //   },
+          onWillPop: () async {
+            context.goNamed(
+              PAGES.home.screenName,
+              extra: user,
+            );
 
-          return false;
-        },
-        child: AbsorbPointerContainer(
-          context: context,
+            return false;
+          },
           child: SafeArea(
             child: deviceOrientation == DeviceOrientation.portrait
                 ? BlocBuilder<StageScrollBloc, StageScrollState>(
@@ -102,7 +109,7 @@ class StageScreen extends StatelessWidget {
                       Expanded(
                         child: BlocBuilder<LettersBloc, LettersState>(
                           builder: (context, state) {
-                            return ButtonsWithCircleLettersSection(   
+                            return ButtonsWithCircleLettersSection(
                               letters: state.letters,
                               answer: answer,
                               stageMap: stageMap,

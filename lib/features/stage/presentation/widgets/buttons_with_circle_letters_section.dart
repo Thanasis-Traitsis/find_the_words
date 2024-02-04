@@ -1,4 +1,5 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -57,6 +58,8 @@ class ButtonsWithCircleLettersSection extends StatefulWidget {
 
 class _ButtonsWithCircleLettersSectionState
     extends State<ButtonsWithCircleLettersSection> {
+  final player = AudioPlayer();
+
   late int counterTimer = widget.timerValue;
 
   // Pick the correct list of positions from the list circlePositions
@@ -197,6 +200,9 @@ class _ButtonsWithCircleLettersSectionState
           key: widget.answeredPositions['key'],
         );
       });
+      player.play(AssetSource('sound/success.mp3'));
+    } else {
+      player.play(AssetSource('sound/correct.mp3'));
     }
   }
 

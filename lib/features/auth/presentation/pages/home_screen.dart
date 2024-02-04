@@ -58,8 +58,8 @@ class HomeScreen extends StatelessWidget {
         }
 
         if (state is StageFailedCreation) {
-          // var stageBox = Hive.box<CurrentStage>(currentStageBox);
-          // // stageBox.delete(currentStageBox);
+          var stageBox = Hive.box<CurrentStage>(currentStageBox);
+          stageBox.delete(currentStageBox);
 
           onStageButtonPressed(state.bannedKeys);
         }

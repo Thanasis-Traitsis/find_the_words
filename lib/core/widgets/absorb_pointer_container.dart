@@ -5,7 +5,7 @@ import '../../features/stage/presentation/clickable_stage_bloc/clickable_stage_b
 
 Widget AbsorbPointerContainer({
   required BuildContext context,
-  required Widget child,
+  required Scaffold child,
 }) {
   return BlocBuilder<ClickableStageBloc, ClickableStageState>(
     builder: (context, state) {

@@ -115,7 +115,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp.router(
       debugShowCheckedModeBanner: false,
       scaffoldMessengerKey: scaffoldKey,
-      title: 'Βρες τις λέξεις',
+      title: 'Βρες τις Λέξεις',
       routerConfig: AppRouter(
         scaffoldMessengerKey: scaffoldKey,
         rootNavigatorKey: navigatorKey,

@@ -55,7 +55,7 @@ class AuthRepositoriesImpl extends AuthRepositories {
       userId = FirebaseAuth.instance.currentUser!.uid;
       usersCollection = FirebaseFirestore.instance.collection('users');
 
-      // Update the user data fields instead of setting them again
+      // // Update the user data fields instead of setting them again
       // usersCollection!.doc(userId).update({
       //   'updatedAt': time,
       //   'level': level,

@@ -18,50 +18,8 @@ void prepareForStage({
   if (current[key]?.isEmpty ?? true) {
     String stageWordLength = translateLevelToStage(user.level!);
 
-    // List usedStages = user.usedStages!;
-
-    List usedStages = [
-      "ΑΗΡ",
-      "ΑΕΛ",
-      "ΑΕΜ",
-      "ΑΕΠ",
-      "ΑΟΠ",
-      "ΑΠΩ",
-      "ΑΕΣ",
-      "ΑΒΙ",
-      "ΔΗΩ",
-      "ΑΕΝ",
-      "ΔΕΩ",
-      "ΕΝΤ",
-      "ΕΝΩ",
-      "ΕΞΩ",
-      "ΕΣΩ",
-      "ΖΟΩ",
-      "ΗΣΩ",
-      "ΕΘΟ",
-      "ΑΙΝ",
-      "ΙΟΣ",
-      "ΙΚΤ",
-      "ΚΟΥ",
-      "ΑΛΟ",
-      "ΑΜΤ",
-      "ΑΜΧ",
-      "ΑΜΩ",
-      "ΜΟΥ",
-      "ΝΟΩ",
-      "ΝΟΤ",
-      "ΗΟΡ",
-      "ΟΣΥ",
-      "ΟΥΦ",
-      "ΟΠΥ",
-      "ΠΣΩ",
-      "ΙΡΣ",
-      "ΕΣΤ",
-      "ΙΚΣ",
-      "ΑΣΤ",
-      "ΗΣΤ",
-    ];
-
+    List usedStages = user.usedStages!;
+    
     banned ??= [];
 
     for (var i = 0; i < banned.length; i++) {
