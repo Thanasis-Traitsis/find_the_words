@@ -36,8 +36,6 @@ class PointsBloc extends Bloc<PointsEvent, PointsState> {
 
     int? points = prefs.getInt(userPoints);
 
-    print(points);
-
     points ??= 0;
 
     emit(

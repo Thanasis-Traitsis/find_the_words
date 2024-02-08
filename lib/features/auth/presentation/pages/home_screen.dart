@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:hive/hive.dart';
 
-import '../../../../core/constants/constants.dart';
 import '../../../../core/constants/styles.dart';
 import '../../../../core/utils/breakpoints_utils.dart';
 import '../../../../core/widgets/absorb_pointer_container.dart';
-import '../../../../current_stage.dart';
 import '../../../stage/presentation/stage_bloc/stage_bloc.dart';
 import '../../data/models/user_model.dart';
 import '../../domain/usecases/get_current_stage_map.dart';
@@ -23,11 +20,13 @@ import '../widgets/logo_container.dart';
 import '../widgets/pink_home_card.dart';
 
 class HomeScreen extends StatelessWidget {
+  final GlobalKey<ScaffoldMessengerState> scaffoldMessengerKey;
   UserModel user;
 
   HomeScreen({
     Key? key,
     required this.user,
+    required this.scaffoldMessengerKey,
   }) : super(key: key);
 
   @override
@@ -58,9 +57,6 @@ class HomeScreen extends StatelessWidget {
         }
 
         if (state is StageFailedCreation) {
-          var stageBox = Hive.box<CurrentStage>(currentStageBox);
-          stageBox.delete(currentStageBox);
-
           onStageButtonPressed(state.bannedKeys);
         }
       },

@@ -1,3 +1,4 @@
+import 'package:find_the_words/core/constants/initial_values.dart';
 import 'package:flutter/widgets.dart';
 
 import '../../domain/repositories/crossword_repositories.dart';
@@ -33,12 +34,18 @@ class CrosswordRepositoriesImpl extends CrosswordRepositories {
     wdtList = [];
     stageWords = [];
     numRowsAndColumns = 0;
+    errorWord = '';
 
     tbList = tableList;
     wdtList = widgetList;
     numRowsAndColumns = numberOfRowsAndColumns;
     firstWord = wordsList[0];
     stageWords = wordsList;
+
+    print('ΡΕ ΦΙΛΕ ΑΦΟΥ ΞΕΚΙΝΑΕΙ ΑΠΟ ΕΔΩ, ΠΡΕΠΕΙ ΝΑ ΕΙΝΑΙ ΟΛΑ ΑΔΕΙΑ');
+    print('Edw einai to table list : $tbList');
+    print('To mikos tou pinaka : $numRowsAndColumns');
+    print('Oi lekseis tou stage : $stageWords');
 
     bool completeCrossword = await fillTableWithWords(listOfStartingPositions);
 
@@ -52,7 +59,6 @@ class CrosswordRepositoriesImpl extends CrosswordRepositories {
 
   @override
   Future fillTableWithWords(List listOfStartingPositions) async {
-    
     // VALE TIN PROTI LEKSI STO KENTRO TOY CROSSWORD
     int centerPosition = firstIsHotizontal
         ? positionWordCenterHorizontaly(
@@ -60,6 +66,11 @@ class CrosswordRepositoriesImpl extends CrosswordRepositories {
             word: firstWord,
           )
         : 0;
+
+    print(
+        '======================================================================================================');
+    print(
+        'Prota, vazoume tin proti leksi sto kentriko shmeio tou pinaka: $centerPosition');
 
     wordsPositionList.add(
       placeFirstWord(
@@ -77,7 +88,6 @@ class CrosswordRepositoriesImpl extends CrosswordRepositories {
     );
 
     // GIA OLES TIS YPOLOIPES LEKSEIS
-
     for (var i = 1; i < stageWords.length; i++) {
       // TO COUNTER GIA NA VLEPW POSES LEKSEIS PISW PIGA MEXRI NA VRW KOINO GRAMMA
       int availableWord = 1;

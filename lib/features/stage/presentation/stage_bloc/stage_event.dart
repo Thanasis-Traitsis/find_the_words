@@ -12,11 +12,13 @@ class StageButtonPressed extends StageEvent {
   final Map stageList;
   final int level;
   final double progress;
+  final Map current;
 
   const StageButtonPressed({
     required this.stageList,
     required this.level,
     required this.progress,
+    required this.current,
   });
 
   @override

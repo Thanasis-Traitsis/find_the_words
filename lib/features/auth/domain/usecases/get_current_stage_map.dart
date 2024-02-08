@@ -37,5 +37,7 @@ Future getCurrentStageMap() async {
     currentTimer: stage.timerOfStage,
   };
 
+  print('Current Stage: $currentStage');
+
   return currentStage;
 }

@@ -55,30 +55,39 @@ class AuthRepositoriesImpl extends AuthRepositories {
       userId = FirebaseAuth.instance.currentUser!.uid;
       usersCollection = FirebaseFirestore.instance.collection('users');
 
-      // // Update the user data fields instead of setting them again
-      // usersCollection!.doc(userId).update({
-      //   'updatedAt': time,
-      //   'level': level,
-      //   'stage': stage,
-      //   'points': points,
-      //   'progress': progress,
-      //   'words': words,
-      //   'usedStages': usedStages,
-      // });
+      bool restart = false;
 
-      user = await updateUser(
-        usersCollection: usersCollection!,
-        userId: userId!,
-      );
+      if (restart) {
+        // Update the user data fields instead of setting them again
+        usersCollection!.doc(userId).update({
+          'updatedAt': time,
+          'level': level,
+          'stage': stage,
+          'points': points,
+          'progress': progress,
+          'words': words,
+          'usedStages': usedStages,
+        });
 
-      // final SharedPreferences prefs = await SharedPreferences.getInstance();
+        user = await updateUser(
+          usersCollection: usersCollection!,
+          userId: userId!,
+        );
 
-      // // Save an list of strings to 'items' key.
-      // await prefs.setStringList(allWords, user!.words!);
-      // await prefs.setInt(userPoints, user!.points!);
+        final SharedPreferences prefs = await SharedPreferences.getInstance();
 
-      // var stageBox = Hive.box<CurrentStage>(currentStageBox);
-      // await stageBox.delete(currentStageBox);
+        // Save an list of strings to 'items' key.
+        await prefs.setStringList(allWords, user!.words!);
+        await prefs.setInt(userPoints, user!.points!);
+
+        var stageBox = Hive.box<CurrentStage>(currentStageBox);
+        await stageBox.delete(currentStageBox);
+      } else {
+        user = await updateUser(
+          usersCollection: usersCollection!,
+          userId: userId!,
+        );
+      }
 
       print(user);
     }

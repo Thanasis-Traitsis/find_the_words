@@ -36,6 +36,7 @@ class AuthScreen extends StatelessWidget {
           if (state is AuthAuthenticated) {
             return HomeScreen(
               user: state.user,
+              scaffoldMessengerKey: scaffoldMessengerKey,
             );
           }
           return Scaffold(

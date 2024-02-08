@@ -3,8 +3,11 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:hive/hive.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:find_the_words/core/constants/game_values.dart';
+import 'package:find_the_words/core/constants/initial_values.dart';
 import 'package:find_the_words/core/constants/styles.dart';
 import 'package:find_the_words/features/auth/presentation/points_bloc/points_bloc.dart';
 import 'package:find_the_words/features/stage/domain/usecases/game_usecases/answer_repositories.dart';
@@ -12,7 +15,6 @@ import 'package:find_the_words/features/stage/domain/usecases/game_usecases/clea
 import 'package:find_the_words/features/stage/presentation/answer_bloc/answer_bloc.dart';
 import 'package:find_the_words/features/stage/presentation/clickable_stage_bloc/clickable_stage_bloc.dart';
 import 'package:find_the_words/features/stage/presentation/widgets/shuffle_answer_hint_container.dart';
-import 'package:hive/hive.dart';
 
 import '../../../../config/theme/colors.dart';
 import '../../../../core/constants/circle_positions.dart';
@@ -20,6 +22,7 @@ import '../../../../core/constants/constants.dart';
 import '../../../../core/constants/sizes.dart';
 import '../../../../core/usecases/calculate_size.dart';
 import '../../../../core/utils/breakpoints_utils.dart';
+import '../../../../core/utils/scaffold_message.dart';
 import '../../../../core/widgets/timer_stage_completion.dart';
 import '../../../../current_stage.dart';
 import '../../domain/usecases/game_usecases/all_words_repositories.dart';
@@ -39,6 +42,7 @@ class ButtonsWithCircleLettersSection extends StatefulWidget {
   String answer;
   String letters;
   final Map stageMap;
+  final GlobalKey<ScaffoldMessengerState> scaffoldMessengerKey;
   Map answeredPositions;
   int timerValue;
 
@@ -47,6 +51,7 @@ class ButtonsWithCircleLettersSection extends StatefulWidget {
     required this.answer,
     required this.letters,
     required this.stageMap,
+    required this.scaffoldMessengerKey,
     required this.answeredPositions,
     required this.timerValue,
   }) : super(key: key);
@@ -215,21 +220,42 @@ class _ButtonsWithCircleLettersSectionState
     );
 
     if (useHint) {
-      Future.delayed(const Duration(milliseconds: 300), () {
-        BlocProvider.of<AnswerBloc>(context).add(
-          HintCalled(
-            stageMap: widget.stageMap,
-            answeredPositions: widget.answeredPositions,
-          ),
-        );
+      final SharedPreferences prefs = await SharedPreferences.getInstance();
 
-        BlocProvider.of<PointsBloc>(context).add(
-          const ChangePoints(
-            points: hintCost,
-            isMinus: true,
+      int? points = prefs.getInt(userPoints);
+
+      points ??= 0;
+
+      if (points >= 10) {
+        Future.delayed(const Duration(milliseconds: 300), () {
+          BlocProvider.of<AnswerBloc>(context).add(
+            HintCalled(
+              stageMap: widget.stageMap,
+              answeredPositions: widget.answeredPositions,
+            ),
+          );
+
+          BlocProvider.of<PointsBloc>(context).add(
+            const ChangePoints(
+              points: hintCost,
+              isMinus: true,
+            ),
+          );
+        });
+      } else {
+        widget.scaffoldMessengerKey.currentState?.showSnackBar(
+          ScaffoldMessage(
+            context: context,
+            message:
+                'Δεν έχετε αρκετούς πόντους για να χρησιμοποιήσετε τη βοήθεια.',
+            onTap: () {
+              BlocProvider.of<ClickableStageBloc>(context)
+                  .add(const ChangeAbsorb(absorb: false));
+              widget.scaffoldMessengerKey.currentState?.hideCurrentSnackBar();
+            },
           ),
         );
-      });
+      }
     }
   }
 

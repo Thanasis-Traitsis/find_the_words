@@ -34,6 +34,8 @@ class CompleteStageScreen extends StatelessWidget {
     Map currentStage = {};
 
     onStageButtonPressed(List? bannedKeys) {
+      print(
+          "RE TI GINETAI MIPOS TREXEI APO EDW PARA POLLES FORESSSSSSSSS ???????????????");
       prepareForStage(
         context: context,
         user: completeValues[completeStageUser],
@@ -62,6 +64,8 @@ class CompleteStageScreen extends StatelessWidget {
           currentStage['key'] = state.letters;
 
           print(
+              '======================================================================================================');
+          print(
             completeValues[completeStageUser],
           );
           print(stageMap);
@@ -78,11 +82,9 @@ class CompleteStageScreen extends StatelessWidget {
           );
         }
 
-        if (state is StageFailedCreation) {
-          // var stageBox = Hive.box<CurrentStage>(currentStageBox);
-          // stageBox.delete(currentStageBox);
-          onStageButtonPressed(state.bannedKeys);
-        }
+        // if (state is StageFailedCreation) {
+        //   onStageButtonPressed(state.bannedKeys);
+        // }
       },
       child: AbsorbPointerContainer(
         context: context,

@@ -8,7 +8,6 @@ import '../../../../core/utils/breakpoints_utils.dart';
 import '../../../../core/utils/routes_utils.dart';
 import '../../../../core/widgets/absorb_pointer_container.dart';
 import '../../../auth/data/models/user_model.dart';
-
 import '../letters_bloc/letters_bloc.dart';
 import '../stage_scroll_bloc/stage_scroll_bloc.dart';
 import '../widgets/appbar/points_container.dart';
@@ -21,6 +20,7 @@ class StageScreen extends StatelessWidget {
   final String stage;
   final Map stageMap;
   final Map answeredPositions;
+  final GlobalKey<ScaffoldMessengerState> scaffoldMessengerKey;
 
   StageScreen({
     Key? key,
@@ -28,6 +28,7 @@ class StageScreen extends StatelessWidget {
     required this.stage,
     required this.stageMap,
     required this.answeredPositions,
+    required this.scaffoldMessengerKey,
   }) : super(key: key);
 
   bool creatingWord = false;
@@ -89,6 +90,7 @@ class StageScreen extends StatelessWidget {
                                   stageMap: stageMap,
                                   answeredPositions: answeredPositions,
                                   timerValue: timerValue,
+                                  scaffoldMessengerKey: scaffoldMessengerKey,
                                 );
                               },
                             ),
@@ -115,6 +117,7 @@ class StageScreen extends StatelessWidget {
                               stageMap: stageMap,
                               answeredPositions: answeredPositions,
                               timerValue: timerValue,
+                              scaffoldMessengerKey: scaffoldMessengerKey,
                             );
                           },
                         ),

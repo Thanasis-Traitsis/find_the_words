@@ -31,74 +31,190 @@ class StageBloc extends Bloc<StageEvent, StageState> {
       StageButtonPressed event, Emitter<StageState> emit) async {
     emit(StageLoading());
 
-    var stageBox = Hive.box<CurrentStage>(currentStageBox);
-    var stage = stageBox.get(currentStageBox);
+    bool newVersion = false;
 
-    key = stage!.key;
+    if (newVersion) {
+      var stageBox = Hive.box<CurrentStage>(currentStageBox);
+      var stage = stageBox.get(currentStageBox);
 
-    if (key == null || key == '') {
-      var count = 0;
-      bool readyForCrossword = true;
-      bool readyForStageScreen = false;
+      key = stage!.key;
 
-      // Extract the key and the value
-      String newKey = event.stageList.keys.first;
-      List values = event.stageList[newKey];
+      if (key == null || key == '') {
+        var count = 0;
+        bool readyForCrossword = true;
+        bool readyForStageScreen = false;
 
-      print(
-          '3. ======================================================================================================');
-      print('THIS IS WHERE THE FUN BEGINS');
-      print('KEY : $newKey');
-      print('WORDS : $values');
+        // Extract the key and the value
+        String newKey = event.stageList.keys.first;
+        List values = event.stageList[newKey];
 
-      key = newKey;
+        print(
+            '3. ======================================================================================================');
+        print('THIS IS WHERE THE FUN BEGINS');
+        print('EDW KSEKINAME ENA KAINOYRIO STAGE');
+        print('KEY : $newKey');
+        print('WORDS : $values');
 
-      readyForCrossword = await stageRepo.createStage(
-        wordsList: values,
-        level: event.level,
-        progress: event.progress,
-      );
+        key = newKey;
 
-      print('THIS IS READY : $readyForCrossword');
+        readyForCrossword = await stageRepo.createStage(
+          wordsList: values,
+          level: event.level,
+          progress: event.progress,
+        );
 
-      if (readyForCrossword) {
-        while (!readyForStageScreen && count < 5) {
-          if (count != 0) {
-            await stageRepo.createStage(
-              wordsList: values,
-              level: event.level,
-              progress: event.progress,
-            );
+        print('THIS IS READY : $readyForCrossword');
+
+        if (readyForCrossword) {
+          while (!readyForStageScreen && count < 5) {
+            if (count != 0) {
+              await stageRepo.createStage(
+                wordsList: values,
+                level: event.level,
+                progress: event.progress,
+              );
+            }
+            count++;
+
+            if (count == 5) {
+              print('MIPOS FTAEI AYTO TO SHMEIOOOOO');
+
+              bannedKeys.add(key);
+
+              emit(
+                StageFailedCreation(
+                  bannedKeys: bannedKeys,
+                ),
+              );
+            } else {
+              await stageRepo.createCrossword();
+
+              readyForStageScreen = stageRepo.ready;
+            }
+
+            if (readyForStageScreen) {
+              widgetList = stageRepo.widgetList;
+
+              bannedKeys = [];
+
+              stageBox.put(
+                currentStageBox,
+                CurrentStage(
+                  answeredPositions: stage.answeredPositions,
+                  answeredWords: stage.answeredWords,
+                  unavailablePositions: stage.unavailablePositions,
+                  key: key,
+                  allStageWords: values,
+                  tableList: stageRepo.tableList,
+                  wordPositions: stageRepo.wordPositions,
+                  timerOfStage: stage.timerOfStage,
+                ),
+              );
+
+              emit(StageStarted(
+                widgetList: widgetList,
+                letters: key!,
+                wordPostition: stageRepo.wordPositions,
+                tableList: stageRepo.tableList,
+                allStageWords: values,
+              ));
+            }
           }
-          count++;
+        } else {
+          bannedKeys.add(key);
 
-          if (count == 5) {
-            bannedKeys.add(key);
+          emit(StageFailedCreation(
+            bannedKeys: bannedKeys,
+          ));
+        }
+      } else {
+        widgetList = generateWidgetTable(stage.tableList!.length);
 
-            print('MIPOS FTAEI AYTO TO SHMEIOOOOO');
+        widgetList = await getCurrentWidgetList(
+          allUnavailablePositions: stage.unavailablePositions,
+          positions: stage.wordPositions!,
+          tbList: stage.tableList!,
+          wdtList: widgetList,
+        );
 
-            emit(StageFailedCreation(
-              bannedKeys: bannedKeys,
-            ));
-          } else {
-            await stageRepo.createCrossword();
+        print("YPARXEI STADIO POU DEN EXEI OLOKLIROTHEI");
+        print(stage.unavailablePositions);
+        print(stage.wordPositions!);
+        print(stage.tableList!);
+        print(widgetList.length);
 
-            readyForStageScreen = stageRepo.ready;
-          }
+        emit(StageStarted(
+          widgetList: widgetList,
+          letters: key!,
+          wordPostition: stage.wordPositions!,
+          tableList: stage.tableList!,
+          allStageWords: stage.allStageWords!,
+        ));
+      }
+    } else {
+      bannedKeys = [];
+      key = event.current['key'];
+      if (key == null || key == '') {
+        key = event.stageList.keys.first;
+        List allWords = event.stageList[key];
 
-          if (readyForStageScreen) {
+        print(
+            '======================================================================================================');
+        print('Pame na ksekinisoume ena neo stage');
+        print('To KEY tou stage: $key');
+        print('Oles oi lekseis tou stage: $allWords');
+
+        bool wordsMeetRequirements = true;
+
+        wordsMeetRequirements = await stageRepo.createStage(
+          wordsList: allWords,
+          level: event.level,
+          progress: event.progress,
+        );
+
+        print(
+            'The words meet the requirements, and now we can try to create the crossword: $wordsMeetRequirements');
+
+        if (wordsMeetRequirements) {
+          int count = 0;
+          do {
+            if (count != 0) {
+              print(
+                  '======================================================================================================');
+              print(stageRepo.ready);
+              print('Pame na prospathisoume me allo sindiasmo leksewn');
+              await stageRepo.createStage(
+                wordsList: allWords,
+                level: event.level,
+                progress: event.progress,
+              );
+            }
+            if (count < 6) {
+              await stageRepo.testing();
+
+              count++;
+            } else {
+              bannedKeys.add(key);
+
+              emit(StageFailedCreation(
+                bannedKeys: bannedKeys,
+              ));
+            }
+          } while (!stageRepo.ready);
+
+          if (stageRepo.ready) {
             widgetList = stageRepo.widgetList;
-
-            bannedKeys = [];
+            var stageBox = Hive.box<CurrentStage>(currentStageBox);
+            var stage = stageBox.get(currentStageBox);
 
             stageBox.put(
               currentStageBox,
               CurrentStage(
-                answeredPositions: stage.answeredPositions,
+                answeredPositions: stage!.answeredPositions,
                 answeredWords: stage.answeredWords,
                 unavailablePositions: stage.unavailablePositions,
                 key: key,
-                allStageWords: values,
+                allStageWords: allWords,
                 tableList: stageRepo.tableList,
                 wordPositions: stageRepo.wordPositions,
                 timerOfStage: stage.timerOfStage,
@@ -110,39 +226,43 @@ class StageBloc extends Bloc<StageEvent, StageState> {
               letters: key!,
               wordPostition: stageRepo.wordPositions,
               tableList: stageRepo.tableList,
-              allStageWords: values,
+              allStageWords: allWords,
             ));
           }
+        } else {
+          bannedKeys.add(key);
+
+          emit(StageFailedCreation(
+            bannedKeys: bannedKeys,
+          ));
         }
       } else {
-        bannedKeys.add(key);
+        var stageBox = Hive.box<CurrentStage>(currentStageBox);
+        var stage = stageBox.get(currentStageBox);
 
-        emit(StageFailedCreation(
-          bannedKeys: bannedKeys,
+        widgetList = generateWidgetTable(stage!.tableList!.length);
+
+        widgetList = await getCurrentWidgetList(
+          allUnavailablePositions: stage.unavailablePositions,
+          positions: stage.wordPositions!,
+          tbList: stage.tableList!,
+          wdtList: widgetList,
+        );
+
+        print("YPARXEI STADIO POU DEN EXEI OLOKLIROTHEI");
+        print(stage.unavailablePositions);
+        print(stage.wordPositions!);
+        print(stage.tableList!);
+        print(widgetList.length);
+
+        emit(StageStarted(
+          widgetList: widgetList,
+          letters: key!,
+          wordPostition: stage.wordPositions!,
+          tableList: stage.tableList!,
+          allStageWords: stage.allStageWords!,
         ));
       }
-    } else {
-      widgetList = generateWidgetTable(stage.tableList!.length);
-
-      widgetList = await getCurrentWidgetList(
-        allUnavailablePositions: stage.unavailablePositions,
-        positions: stage.wordPositions!,
-        tbList: stage.tableList!,
-        wdtList: widgetList,
-      );
-
-      print(stage.unavailablePositions);
-      print(stage.wordPositions!);
-      print(stage.tableList!);
-      print(widgetList.length);
-
-      emit(StageStarted(
-        widgetList: widgetList,
-        letters: key!,
-        wordPostition: stage.wordPositions!,
-        tableList: stage.tableList!,
-        allStageWords: stage.allStageWords!,
-      ));
     }
   }
 }

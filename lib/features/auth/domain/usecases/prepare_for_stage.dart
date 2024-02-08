@@ -31,7 +31,7 @@ void prepareForStage({
           await navigateToStage(context, stageWordLength, usedStages);
 
       if (returnStageList.isEmpty) {
-        print('EINAI FULLLLLLLLLLLLLLLLLLLLLLLL');
+        print('The banned list with the word length of ${user.level! + 2} is full. We need to clear the list and create new stages with already used words, but with different combinations.');
         usedStages
             .removeWhere((element) => element.length == (user.level! + 2));
       }
@@ -43,6 +43,7 @@ void prepareForStage({
       stageList: returnStageList,
       level: user.level!,
       progress: user.progress!,
+      current: current,
     ),
   );
 }

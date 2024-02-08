@@ -40,6 +40,7 @@ class AppRouter {
           UserModel user = state.extra as UserModel;
           return HomeScreen(
             user: user,
+            scaffoldMessengerKey: scaffoldMessengerKey,
           );
         },
       ),
@@ -54,6 +55,7 @@ class AppRouter {
             stageMap: stageVariables[1],
             answeredPositions: stageVariables[2],
             user: stageVariables[3],
+            scaffoldMessengerKey: scaffoldMessengerKey,
           );
         },
       ),

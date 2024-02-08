@@ -40,7 +40,9 @@ class StageRepositoriesImpl extends StageRepositories {
       progress: progress,
     );
 
-    print('REQUIREMENTS : $requirements');
+    print(
+        '======================================================================================================');
+    print('For this level, we have these REQUIREMENTS: $requirements');
 
     List? firstFilterList = checkIfListMeetsRequirements(
       req: requirements,
@@ -65,7 +67,10 @@ class StageRepositoriesImpl extends StageRepositories {
 
     finalWordsList.sort((a, b) => b.length.compareTo(a.length));
 
-    print('THE FINAL LIST IS : $finalWordsList');
+    print(
+        '======================================================================================================');
+    print(
+        'After clearing the words that cannot be part of this stage, this is the final word list: $finalWordsList');
 
     return true;
   }
@@ -74,9 +79,9 @@ class StageRepositoriesImpl extends StageRepositories {
   @override
   Future createCrossword() async {
     print(
-        '5. ======================================================================================================');
-    print('START OF THE CREATION OF CROSSWORD');
-    print('THE LIST OF WORDS THAT I TRY TO CREATE THE STAGE : $finalWordsList');
+        '======================================================================================================');
+    print('The creation of the crossword starts here');
+    print('This is the list of words: $finalWordsList');
 
     // finalWordsList = [
     //   'ΞΥΛΟΚΟΠΟΥΣ',
@@ -185,12 +190,77 @@ class StageRepositoriesImpl extends StageRepositories {
       widgetList = await makeTableSmaller(tableRnC);
     }
 
-    // UNCOMMENT THIS PART WHEN YOU WANT TO SEE THE RESULT WITHOUT CENTER AND SMALLERTABLE
+    // UNCOMMENT THIS PART WHEN YOU WANT TO SEE THE RESULT WITHOUT CENTER AND SMALLER TABLE
     // widgetList = await applyChanges(
     //   positions: wordPositions,
     //   tbList: tableList,
     //   wdtList: widgetList,
     // );
+  }
+
+  // TESTING TESTING TESTING TESTING
+  // TESTING TESTING TESTING TESTING
+  // TESTING TESTING TESTING TESTING
+  // TESTING TESTING TESTING TESTING
+  // TESTING TESTING TESTING TESTING
+  Future testing() async {
+    print(
+        '======================================================================================================');
+    print('The creation of the crossword starts here');
+    print('This is the list of words: $finalWordsList');
+
+    ready = false;
+    List errorWords = [];
+
+    int tableBoxes = tableLength;
+    int tableRnC = tableRowsAndColumns;
+
+    List<int> listOfStartingPositions =
+        List.generate(finalWordsList.length, (index) => 0);
+
+    bool shouldContinueLoop = true;
+    var returnList;
+
+    do {
+      widgetList = generateWidgetTable(tableBoxes);
+      tableList = generateTableList(tableBoxes);
+
+      returnList = await CrosswordRepositoriesImpl().placeWords(
+        widgetList: widgetList,
+        tableList: tableList,
+        numberOfRowsAndColumns: tableRnC,
+        wordsList: finalWordsList,
+        listOfStartingPositions: listOfStartingPositions,
+      );
+
+      errorWords.add(returnList[3]);
+      shouldContinueLoop = !hasTooManyErrors(errorWords);
+
+      // Change the position where the connection between two words is going to happen
+      if (!returnList[2]) {
+        for (int i = 0; i < finalWordsList.length; i++) {
+          if (listOfStartingPositions[i] < finalWordsList[i].length - 1) {
+            listOfStartingPositions[i] += 1;
+            break;
+          } else {
+            listOfStartingPositions[i] = 0;
+          }
+        }
+
+        print(
+            'Etsi tha einai h nea lista pou tha ginei h enosi twn leksewn: $listOfStartingPositions');
+      }
+    } while (!returnList[2] && shouldContinueLoop);
+
+    if (returnList[2]) {
+      ready = true;
+      widgetList = returnList[0];
+      wordPositions = returnList[1];
+
+      // UNCOMMENT THIS PART FOR THE WHOLE EXPERIENCE
+      await centerTable();
+      widgetList = await makeTableSmaller(tableRnC);
+    }
   }
 
   @override
@@ -257,6 +327,9 @@ class StageRepositoriesImpl extends StageRepositories {
   @override
   Future makeTableSmaller(int rowLength) async {
     List tableDirections = [0, 0, 0, 0];
+
+    // print(tableList);
+    // print(tableList.length);
 
     for (var i = 0; i < tableDirections.length; i++) {
       tableDirections = listDirectionSmall(
@@ -441,5 +514,21 @@ class StageRepositoriesImpl extends StageRepositories {
     }
 
     return widgetList;
+  }
+
+  // Error handling
+
+  // Check if a word causes a massive problem
+  bool hasTooManyErrors(List errors) {
+    for (var i = 0; i < errors.length; i++) {
+      int occurrences = errors.where((str) => str == errors[i]).length;
+
+      if (occurrences >= 5) {
+        print('Den ginetai na ftiaxtei epipedo me auti ti leksi: ${errors[i]}');
+        return true;
+      }
+    }
+
+    return false;
   }
 }
