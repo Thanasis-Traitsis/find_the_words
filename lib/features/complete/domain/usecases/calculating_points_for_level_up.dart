@@ -1,18 +1,18 @@
 int calculatingPointsForLevelUp(int lvl) {
   switch (lvl) {
     case 1:
-      return 20;
+      return 10;
     case 2:
-      return 25;
+      return 15;
     case 3:
-      return 30;
+      return 20;
     case 4:
-      return 50;
+      return 40;
     case 5:
-      return 75;
+      return 55;
     case 6:
-      return 100;
+      return 70;
     default:
-      return 150;
+      return 85;
   }
 }

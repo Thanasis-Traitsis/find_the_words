@@ -37,7 +37,7 @@ int calculateExtraWordPoints(String extraWord) {
   if (extraWord.length < 4) {
     return 1;
   }
-  if (extraWord.length < 7) {
+  if (extraWord.length < 8) {
     return 2;
   }
 

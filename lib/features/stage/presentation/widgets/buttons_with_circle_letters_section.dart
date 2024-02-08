@@ -226,7 +226,7 @@ class _ButtonsWithCircleLettersSectionState
 
       points ??= 0;
 
-      if (points >= 10) {
+      if (points >= hintCost) {
         Future.delayed(const Duration(milliseconds: 300), () {
           BlocProvider.of<AnswerBloc>(context).add(
             HintCalled(
