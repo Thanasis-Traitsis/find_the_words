@@ -1,5 +1,16 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'dart:math';
+
+import 'package:find_the_words/features/auth/presentation/widgets/end_drawer/drawer_container.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+
+import 'package:find_the_words/core/constants/sizes.dart';
+import 'package:find_the_words/core/usecases/calculate_size.dart';
+import 'package:find_the_words/core/widgets/card_with_outline.dart';
+import 'package:find_the_words/features/auth/presentation/widgets/end_drawer/menu_item.dart';
+import 'package:find_the_words/features/auth/presentation/widgets/simple_icon_button.dart';
 
 import '../../../../core/constants/styles.dart';
 import '../../../../core/utils/breakpoints_utils.dart';
@@ -7,9 +18,13 @@ import '../../../../core/widgets/absorb_pointer_container.dart';
 import '../../../stage/presentation/stage_bloc/stage_bloc.dart';
 import '../../data/models/user_model.dart';
 import '../../domain/usecases/get_current_stage_map.dart';
+import '../../domain/usecases/get_instructions.dart';
 import '../../domain/usecases/prepare_for_stage.dart';
 import '../../domain/usecases/stage_created_successful.dart';
 import '../widgets/blue_home_card.dart';
+import '../widgets/earn_points_card.dart';
+import '../widgets/end_drawer/custom_drawer_header.dart';
+import '../widgets/end_drawer/drawer_section_header.dart';
 import '../widgets/green_home_card.dart';
 import '../widgets/home_background.dart';
 import '../widgets/home_button.dart';
@@ -19,27 +34,49 @@ import '../widgets/home_landscape_container.dart';
 import '../widgets/logo_container.dart';
 import '../widgets/pink_home_card.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   final GlobalKey<ScaffoldMessengerState> scaffoldMessengerKey;
   UserModel user;
 
   HomeScreen({
     Key? key,
-    required this.user,
     required this.scaffoldMessengerKey,
+    required this.user,
   }) : super(key: key);
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  final scaffoldKey = GlobalKey<ScaffoldState>();
+
+  Map currentStage = {};
+  Map inst = {};
+
+  void initializeInstructions() async {
+    Map details = await getInstructions();
+
+    setState(() {
+      inst = details;
+    });
+  }
+
+  @override
+  void initState() {
+    initializeInstructions();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     final deviceOrientation = getDeviceOrientation(context);
 
-    Map currentStage = {};
-
     onStageButtonPressed(List? bannedKeys) {
       // Get current stage lists
       prepareForStage(
         context: context,
-        user: user,
+        user: widget.user,
         current: currentStage,
         banned: bannedKeys,
       );
@@ -52,7 +89,7 @@ class HomeScreen extends StatelessWidget {
             context: context,
             currentStage: currentStage,
             state: state,
-            user: user,
+            user: widget.user,
           );
         }
 
@@ -63,17 +100,32 @@ class HomeScreen extends StatelessWidget {
       child: AbsorbPointerContainer(
         context: context,
         child: Scaffold(
+          key: scaffoldKey,
+          endDrawer: DrawerContainer(
+            context: context,
+            scaffoldKey: scaffoldKey,
+            inst: inst,
+          ),
+          appBar: AppBar(
+            actions: [
+              SimpleIconButton(
+                context: context,
+                function: () => scaffoldKey.currentState!.openEndDrawer(),
+                icon: FontAwesomeIcons.gear,
+              ),
+            ],
+          ),
           body: deviceOrientation == DeviceOrientation.portrait
               ? HomeBackground(
                   child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       LogoContainer(
                         context: context,
                       ),
                       HomeCardsContainer(
                         context: context,
-                        level: user.level.toString(),
+                        level: widget.user.level.toString(),
                       ),
                       HomeButton(
                         context: context,
@@ -82,7 +134,7 @@ class HomeScreen extends StatelessWidget {
 
                           onStageButtonPressed(null);
                         },
-                        stage: user.stage.toString(),
+                        stage: widget.user.stage.toString(),
                       ),
                     ],
                   ),
@@ -108,8 +160,12 @@ class HomeScreen extends StatelessWidget {
                           ),
                           GreenHomeCard(
                             context: context,
-                            level: user.level.toString(),
+                            level: widget.user.level.toString(),
                           ),
+                          // const SizedBox(
+                          //   height: gap / 2,
+                          // ),
+                          // EarnPointsCard(context: context),
                         ],
                       ),
                     ),
@@ -126,7 +182,7 @@ class HomeScreen extends StatelessWidget {
 
                               onStageButtonPressed(null);
                             },
-                            stage: user.stage.toString(),
+                            stage: widget.user.stage.toString(),
                           ),
                         ],
                       ),

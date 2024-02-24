@@ -46,6 +46,7 @@ Widget HomeButton({
                       child: Text(
                         'Επόμενο Στάδιο',
                         style: TextStyle(
+                          fontWeight: FontWeight.bold,
                           fontSize: calculateSize(
                             context,
                             Theme.of(context).textTheme.bodyLarge!.fontSize!,

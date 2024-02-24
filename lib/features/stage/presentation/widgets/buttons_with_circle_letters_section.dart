@@ -29,6 +29,7 @@ import '../../domain/usecases/game_usecases/all_words_repositories.dart';
 import '../../domain/usecases/game_usecases/extra_words_repositories.dart';
 import '../../domain/usecases/game_usecases/shuffle_letters.dart';
 import '../letters_bloc/letters_bloc.dart';
+import '../sound_bloc/sound_bloc.dart';
 import '../stage_scroll_bloc/stage_scroll_bloc.dart';
 import '../stage_timer_bloc/stage_timer_bloc.dart';
 import 'circle_container_with_letters/circle_container.dart';
@@ -64,6 +65,7 @@ class ButtonsWithCircleLettersSection extends StatefulWidget {
 class _ButtonsWithCircleLettersSectionState
     extends State<ButtonsWithCircleLettersSection> {
   final player = AudioPlayer();
+  bool hasSound = true;
 
   late int counterTimer = widget.timerValue;
 
@@ -133,6 +135,7 @@ class _ButtonsWithCircleLettersSectionState
   @override
   void initState() {
     positionLettersCircle(widget.letters);
+    hasSound = BlocProvider.of<SoundBloc>(context).state.hasSound;
     super.initState();
   }
 
@@ -198,16 +201,16 @@ class _ButtonsWithCircleLettersSectionState
         const ChangeAbsorb(absorb: true),
       );
 
-      Future.delayed(const Duration(seconds: 3), () {
-        // This block will be executed after a delay of 3 seconds
+      Future.delayed(const Duration(seconds: 2), () {
+        // This block will be executed after a delay of 2 seconds
         clearStageAfterCompletion(
           context: context,
           key: widget.answeredPositions['key'],
         );
       });
-      player.play(AssetSource('sound/success.mp3'));
+      hasSound ? player.play(AssetSource('sound/success.mp3')) : null;
     } else {
-      player.play(AssetSource('sound/correct.mp3'));
+      hasSound ? player.play(AssetSource('sound/correct.mp3')) : null;
     }
   }
 
@@ -227,7 +230,7 @@ class _ButtonsWithCircleLettersSectionState
       points ??= 0;
 
       if (points >= hintCost) {
-        Future.delayed(const Duration(milliseconds: 300), () {
+        Future.delayed(const Duration(milliseconds: 200), () {
           BlocProvider.of<AnswerBloc>(context).add(
             HintCalled(
               stageMap: widget.stageMap,
@@ -260,18 +263,22 @@ class _ButtonsWithCircleLettersSectionState
   }
 
   void callAnimationForExtraWord(String extraWord) async {
-    await addExtraWordRepository(extraWord);
+    var extraResult = await addExtraWordRepository(extraWord);
 
-    togglePositionedAnimation();
+    print(extraResult);
 
-    addAllWordsRepository(extraWord);
+    if (extraResult) {
+      togglePositionedAnimation();
 
-    BlocProvider.of<PointsBloc>(context).add(
-      ChangePoints(
-        points: calculateExtraWordPoints(extraWord),
-        isMinus: false,
-      ),
-    );
+      addAllWordsRepository(extraWord);
+
+      BlocProvider.of<PointsBloc>(context).add(
+        ChangePoints(
+          points: calculateExtraWordPoints(extraWord),
+          isMinus: false,
+        ),
+      );
+    }
   }
 
   @override

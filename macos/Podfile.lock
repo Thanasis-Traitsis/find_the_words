@@ -629,7 +629,7 @@ PODS:
     - abseil/base/config
     - abseil/meta/type_traits
   - audioplayers_darwin (0.0.1):
-    - Flutter
+    - FlutterMacOS
   - BoringSSL-GRPC (0.0.24):
     - BoringSSL-GRPC/Implementation (= 0.0.24)
     - BoringSSL-GRPC/Interface (= 0.0.24)
@@ -637,12 +637,13 @@ PODS:
     - BoringSSL-GRPC/Interface (= 0.0.24)
   - BoringSSL-GRPC/Interface (0.0.24)
   - cloud_firestore (4.12.0):
-    - Firebase/Firestore (= 10.16.0)
+    - Firebase/CoreOnly (~> 10.16.0)
+    - Firebase/Firestore (~> 10.16.0)
     - firebase_core
-    - Flutter
+    - FlutterMacOS
     - nanopb (< 2.30910.0, >= 2.30908.0)
   - connectivity_plus (0.0.1):
-    - Flutter
+    - FlutterMacOS
     - ReachabilitySwift
   - Firebase/Auth (10.16.0):
     - Firebase/CoreOnly
@@ -653,12 +654,13 @@ PODS:
     - Firebase/CoreOnly
     - FirebaseFirestore (~> 10.16.0)
   - firebase_auth (4.12.0):
-    - Firebase/Auth (= 10.16.0)
+    - Firebase/Auth (~> 10.16.0)
+    - Firebase/CoreOnly (~> 10.16.0)
     - firebase_core
-    - Flutter
+    - FlutterMacOS
   - firebase_core (2.20.0):
-    - Firebase/CoreOnly (= 10.16.0)
-    - Flutter
+    - Firebase/CoreOnly (~> 10.16.0)
+    - FlutterMacOS
   - FirebaseAppCheckInterop (10.21.0)
   - FirebaseAuth (10.16.0):
     - FirebaseAppCheckInterop (~> 10.0)
@@ -686,7 +688,7 @@ PODS:
     - "gRPC-C++ (~> 1.49.1)"
     - leveldb-library (~> 1.22)
     - nanopb (< 2.30910.0, >= 2.30908.0)
-  - Flutter (1.0.0)
+  - FlutterMacOS (1.0.0)
   - GoogleUtilities/AppDelegateSwizzler (7.12.0):
     - GoogleUtilities/Environment
     - GoogleUtilities/Logger
@@ -775,20 +777,19 @@ PODS:
     - FlutterMacOS
   - PromisesObjC (2.3.1)
   - ReachabilitySwift (5.0.0)
-  - RecaptchaInterop (100.0.0)
   - shared_preferences_foundation (0.0.1):
     - Flutter
     - FlutterMacOS
 
 DEPENDENCIES:
-  - audioplayers_darwin (from `.symlinks/plugins/audioplayers_darwin/ios`)
-  - cloud_firestore (from `.symlinks/plugins/cloud_firestore/ios`)
-  - connectivity_plus (from `.symlinks/plugins/connectivity_plus/ios`)
-  - firebase_auth (from `.symlinks/plugins/firebase_auth/ios`)
-  - firebase_core (from `.symlinks/plugins/firebase_core/ios`)
-  - Flutter (from `Flutter`)
-  - path_provider_foundation (from `.symlinks/plugins/path_provider_foundation/darwin`)
-  - shared_preferences_foundation (from `.symlinks/plugins/shared_preferences_foundation/darwin`)
+  - audioplayers_darwin (from `Flutter/ephemeral/.symlinks/plugins/audioplayers_darwin/macos`)
+  - cloud_firestore (from `Flutter/ephemeral/.symlinks/plugins/cloud_firestore/macos`)
+  - connectivity_plus (from `Flutter/ephemeral/.symlinks/plugins/connectivity_plus/macos`)
+  - firebase_auth (from `Flutter/ephemeral/.symlinks/plugins/firebase_auth/macos`)
+  - firebase_core (from `Flutter/ephemeral/.symlinks/plugins/firebase_core/macos`)
+  - FlutterMacOS (from `Flutter/ephemeral`)
+  - path_provider_foundation (from `Flutter/ephemeral/.symlinks/plugins/path_provider_foundation/darwin`)
+  - shared_preferences_foundation (from `Flutter/ephemeral/.symlinks/plugins/shared_preferences_foundation/darwin`)
 
 SPEC REPOS:
   trunk:
@@ -808,41 +809,40 @@ SPEC REPOS:
     - nanopb
     - PromisesObjC
     - ReachabilitySwift
-    - RecaptchaInterop
 
 EXTERNAL SOURCES:
   audioplayers_darwin:
-    :path: ".symlinks/plugins/audioplayers_darwin/ios"
+    :path: Flutter/ephemeral/.symlinks/plugins/audioplayers_darwin/macos
   cloud_firestore:
-    :path: ".symlinks/plugins/cloud_firestore/ios"
+    :path: Flutter/ephemeral/.symlinks/plugins/cloud_firestore/macos
   connectivity_plus:
-    :path: ".symlinks/plugins/connectivity_plus/ios"
+    :path: Flutter/ephemeral/.symlinks/plugins/connectivity_plus/macos
   firebase_auth:
-    :path: ".symlinks/plugins/firebase_auth/ios"
+    :path: Flutter/ephemeral/.symlinks/plugins/firebase_auth/macos
   firebase_core:
-    :path: ".symlinks/plugins/firebase_core/ios"
-  Flutter:
-    :path: Flutter
+    :path: Flutter/ephemeral/.symlinks/plugins/firebase_core/macos
+  FlutterMacOS:
+    :path: Flutter/ephemeral
   path_provider_foundation:
-    :path: ".symlinks/plugins/path_provider_foundation/darwin"
+    :path: Flutter/ephemeral/.symlinks/plugins/path_provider_foundation/darwin
   shared_preferences_foundation:
-    :path: ".symlinks/plugins/shared_preferences_foundation/darwin"
+    :path: Flutter/ephemeral/.symlinks/plugins/shared_preferences_foundation/darwin
 
 SPEC CHECKSUMS:
   abseil: 926fb7a82dc6d2b8e1f2ed7f3a718bce691d1e46
-  audioplayers_darwin: 877d9a4d06331c5c374595e46e16453ac7eafa40
+  audioplayers_darwin: dcad41de4fbd0099cb3749f7ab3b0cb8f70b810c
   BoringSSL-GRPC: 3175b25143e648463a56daeaaa499c6cb86dad33
-  cloud_firestore: 843f8a06ac49a1177b73a2a2475cc3918593478e
-  connectivity_plus: bf0076dd84a130856aa636df1c71ccaff908fa1d
+  cloud_firestore: d29e04610ac2a38793258aa925feb465c51021d8
+  connectivity_plus: 18d3c32514c886e046de60e9c13895109866c747
   Firebase: 25899099b77d255a636e3579c3d9dce10ec150d5
-  firebase_auth: 015dab4ffe9e4d97f7d84a3373ad4c8a7712c5c7
-  firebase_core: 2e0e89436a00b664a23bebb08859e5fede7215e9
+  firebase_auth: 3772a5d55ff9fc6209b32fef2c4104035f04bfca
+  firebase_core: 844b9a36afc5874a395699929626d594a448183d
   FirebaseAppCheckInterop: 69fc7d8f6a1cbfa973efb8d1723651de30d12525
   FirebaseAuth: 3862d87d4d58deff08f705d471896a2f66e8bbf0
   FirebaseCore: 65a801af84cca84361ef9eac3fd868656968a53b
   FirebaseCoreInternal: 43c1788eaeee9d1b97caaa751af567ce11010d00
   FirebaseFirestore: 17bd5c8a0ea4be0fcae5a6f95f817983623adb4a
-  Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
+  FlutterMacOS: 8f6f14fa908a6fb3fba0cd85dbd81ec4b251fb24
   GoogleUtilities: 0759d1a57ebb953965c2dfe0ba4c82e95ccc2e34
   "gRPC-C++": 2df8cba576898bdacd29f0266d5236fa0e26ba6a
   gRPC-Core: a21a60aefc08c68c247b439a9ef97174b0c54f96
@@ -852,9 +852,8 @@ SPEC CHECKSUMS:
   path_provider_foundation: 29f094ae23ebbca9d3d0cec13889cd9060c0e943
   PromisesObjC: c50d2056b5253dadbd6c2bea79b0674bd5a52fa4
   ReachabilitySwift: 985039c6f7b23a1da463388634119492ff86c825
-  RecaptchaInterop: 7d1a4a01a6b2cb1610a47ef3f85f0c411434cb21
   shared_preferences_foundation: 5b919d13b803cadd15ed2dc053125c68730e5126
 
-PODFILE CHECKSUM: 7be2f5f74864d463a8ad433546ed1de7e0f29aef
+PODFILE CHECKSUM: 236401fc2c932af29a9fcf0e97baeeb2d750d367
 
 COCOAPODS: 1.13.0

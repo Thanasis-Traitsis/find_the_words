@@ -79,6 +79,7 @@ class AuthRepositoriesImpl extends AuthRepositories {
         // Save an list of strings to 'items' key.
         await prefs.setStringList(allWords, user!.words!);
         await prefs.setInt(userPoints, user!.points!);
+        prefs.setStringList(extraWordsList, []);
 
         var stageBox = Hive.box<CurrentStage>(currentStageBox);
         await stageBox.delete(currentStageBox);

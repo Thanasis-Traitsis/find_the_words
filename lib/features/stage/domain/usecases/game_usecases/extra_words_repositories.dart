@@ -9,10 +9,17 @@ Future addExtraWordRepository(String extraWord) async {
   List<String>? extraWords = prefs.getStringList(extraWordsList);
 
   extraWords ??= [];
-  extraWords.add(extraWord);
 
-  // Save an list of strings to 'items' key.
-  await prefs.setStringList(extraWordsList, extraWords);
+  if (extraWords.contains(extraWord)) {
+    return false;
+  } else {
+    extraWords.add(extraWord);
+
+    // Save an list of strings to 'items' key.
+    await prefs.setStringList(extraWordsList, extraWords);
+
+    return true;
+  }
 }
 
 Future<List> getExtraWordsRepository() async {

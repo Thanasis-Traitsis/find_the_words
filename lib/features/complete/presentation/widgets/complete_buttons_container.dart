@@ -16,7 +16,8 @@ Widget CompleteButtonsContainer({
           return Container(
             width: MediaQuery.of(context).size.width * .8,
             constraints: const BoxConstraints(
-              minWidth: 450, maxWidth: 550,
+              minWidth: 450,
+              maxWidth: 550,
             ),
             child: FilledButton(
               onPressed: nextStage,
@@ -30,6 +31,7 @@ Widget CompleteButtonsContainer({
                   Text(
                     'Επόμενο Στάδιο',
                     style: TextStyle(
+                      fontWeight: FontWeight.bold,
                       fontSize: calculateSize(
                         context,
                         Theme.of(context).textTheme.bodyLarge!.fontSize!,

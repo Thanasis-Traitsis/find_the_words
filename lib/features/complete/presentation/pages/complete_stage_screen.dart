@@ -47,6 +47,10 @@ class CompleteStageScreen extends StatelessWidget {
     return BlocListener<StageBloc, StageState>(
       listener: (context, state) {
         if (state is StageStarted) {
+          print(
+              '================================================================================');
+          print(state.widgetList);
+
           BlocProvider.of<AnswerBloc>(context).add(AnswerInitialize());
 
           BlocProvider.of<CrosswordTableBloc>(context)

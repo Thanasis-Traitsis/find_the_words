@@ -19,6 +19,7 @@ import 'features/stage/presentation/clickable_stage_bloc/clickable_stage_bloc.da
 import 'features/stage/presentation/crossword_table_bloc/crossword_table_bloc.dart';
 import 'features/stage/presentation/letters_bloc/letters_bloc.dart';
 import 'features/stage/presentation/letters_circle_bloc/letters_circle_bloc.dart';
+import 'features/stage/presentation/sound_bloc/sound_bloc.dart';
 import 'features/stage/presentation/stage_bloc/stage_bloc.dart';
 import 'features/stage/presentation/stage_scroll_bloc/stage_scroll_bloc.dart';
 import 'features/stage/presentation/stage_timer_bloc/stage_timer_bloc.dart';
@@ -95,6 +96,11 @@ Future<void> main() async {
         BlocProvider<AnswerBloc>(
           create: (context) {
             return AnswerBloc(answerRepo: answerRepositoriesImpl);
+          },
+        ),
+        BlocProvider<SoundBloc>(
+          create: (context) {
+            return SoundBloc();
           },
         )
       ],
