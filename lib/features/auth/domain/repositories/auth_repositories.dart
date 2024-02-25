@@ -11,4 +11,6 @@ abstract class AuthRepositories {
     required double progress,
     required bool levelUp,
   });
+
+  Future deleteUser();
 }

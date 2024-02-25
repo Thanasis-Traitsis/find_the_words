@@ -125,4 +125,57 @@ class AuthRepositoriesImpl extends AuthRepositories {
       userId: userId!,
     );
   }
+
+  @override
+  Future deleteUser() async {
+    try {
+      UserCredential userCredential =
+          await FirebaseAuth.instance.signInAnonymously();
+
+      userId = userCredential.user!.uid;
+
+      // Store user data in the "users" collection
+      usersCollection = FirebaseFirestore.instance.collection('users');
+
+      // ===============================================
+      // DELETE THE DOCUMENT
+      usersCollection!.doc(userId).delete();
+
+      // ===============================================
+      // DELETE THE USER
+      await FirebaseAuth.instance.currentUser!.delete();
+
+      // ===============================================
+      // DELETE THE LOCAL VARIABLES
+      final SharedPreferences prefs = await SharedPreferences.getInstance();
+
+      prefs.setStringList(extraWordsList, []);
+
+      var stageBox = Hive.box<CurrentStage>(currentStageBox);
+      await stageBox.delete(currentStageBox);
+    } on FirebaseAuthException catch (e) {
+      print(e);
+
+      if (e.code == "requires-recent-login") {
+        await reauthenticateAndDelete();
+      } else {
+        // Handle other Firebase exceptions
+      }
+    } catch (e) {
+      print(e);
+
+      // Handle general exception
+    }
+  }
+
+  Future reauthenticateAndDelete() async {
+    try {
+      UserCredential userCredential =
+          await FirebaseAuth.instance.signInAnonymously();
+
+      await FirebaseAuth.instance.currentUser?.delete();
+    } catch (e) {
+      // Handle exceptions
+    }
+  }
 }

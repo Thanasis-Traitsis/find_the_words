@@ -1,18 +1,17 @@
+import 'package:find_the_words/features/auth/data/repositories/auth_repositories_impl.dart';
+import 'package:find_the_words/features/auth/presentation/widgets/end_drawer/alert_delete_account_dialog.dart';
 import 'package:find_the_words/features/auth/presentation/widgets/end_drawer/alert_stage_dialog.dart';
 import 'package:find_the_words/features/auth/presentation/widgets/end_drawer/drawer_section.dart';
 import 'package:find_the_words/features/stage/presentation/sound_bloc/sound_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:hive/hive.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:url_launcher/url_launcher.dart';
 
-import '../../../../../core/constants/constants.dart';
 import '../../../../../core/constants/styles.dart';
 import '../../../../../core/usecases/calculate_size.dart';
-import '../../../../../current_stage.dart';
+import '../../version_bloc/version_bloc.dart';
 import 'custom_drawer_header.dart';
-import 'drawer_section_header.dart';
 import 'menu_item.dart';
 
 Widget DrawerContainer({
@@ -104,29 +103,50 @@ Widget DrawerContainer({
                                 hasIcon: true,
                                 text: 'Πολιτική Απορρίτου',
                                 icon: FontAwesomeIcons.shieldHalved,
-                                function: () {},
+                                function: () async {
+                                  if (!await launchUrl(Uri.parse(
+                                      'https://github.com/Thanasis-Traitsis/find_the_words/blob/main/privacy_policy.md'))) {
+                                    throw Exception(
+                                        'Could not launch privacy policye');
+                                  }
+                                },
                               ),
                               MenuItem(
                                 context: context,
                                 hasIcon: true,
                                 text: 'Διαγραφή Λογαριασμού',
                                 icon: FontAwesomeIcons.userXmark,
-                                function: () {},
+                                function: () {
+                                  showDialog<void>(
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return AlertDeleteAccountDialog(
+                                          context: context);
+                                    },
+                                  );
+                                },
                               ),
                             ],
                           ),
                         ],
                       ),
                       const Spacer(),
-                      Text(
-                        'Version: 1.0.1',
-                        style: TextStyle(
-                          fontStyle: FontStyle.italic,
-                          fontSize: calculateSize(
-                            context,
-                            Theme.of(context).textTheme.bodySmall!.fontSize!,
-                          ),
-                        ),
+                      BlocBuilder<VersionBloc, VersionState>(
+                        builder: (context, state) {
+                          return Text(
+                            'Version: ${state.version}',
+                            style: TextStyle(
+                              fontStyle: FontStyle.italic,
+                              fontSize: calculateSize(
+                                context,
+                                Theme.of(context)
+                                    .textTheme
+                                    .bodySmall!
+                                    .fontSize!,
+                              ),
+                            ),
+                          );
+                        },
                       ),
                     ],
                   ),

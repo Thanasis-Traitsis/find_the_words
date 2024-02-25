@@ -215,14 +215,14 @@ class _ButtonsWithCircleLettersSectionState
   }
 
   void hintButtonPress() async {
-    bool useHint = await showDialog(
+    bool? useHint = await showDialog(
       context: context,
       builder: (BuildContext context) {
         return HintButtonAlertDialog(context: context);
       },
     );
 
-    if (useHint) {
+    if (useHint != null && useHint) {
       final SharedPreferences prefs = await SharedPreferences.getInstance();
 
       int? points = prefs.getInt(userPoints);
