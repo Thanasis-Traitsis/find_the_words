@@ -7,12 +7,12 @@ int calculatingPointsForLevelUp(int lvl) {
     case 3:
       return 20;
     case 4:
-      return 40;
+      return 30;
     case 5:
-      return 55;
+      return 40;
     case 6:
-      return 70;
+      return 55;
     default:
-      return 85;
+      return 70;
   }
 }

@@ -9,7 +9,7 @@ double progressBasedOnCrosswordLength(int num) {
     return 0.008;
   }
   if (num < 10) {
-    return 0.007;
+    return 0.006;
   }
   return 0.005;
 }
