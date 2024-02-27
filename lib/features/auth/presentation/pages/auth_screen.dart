@@ -6,6 +6,7 @@ import '../../../../core/usecases/listen_to_connectivity.dart';
 import '../../../stage/presentation/clickable_stage_bloc/clickable_stage_bloc.dart';
 import '../../domain/usecases/get_instructions.dart';
 import '../auth_bloc/auth_bloc.dart';
+import '../connection_bloc/connection_bloc.dart';
 import '../widgets/loading_section.dart';
 import '../widgets/loading_text.dart';
 import '../widgets/logo_container.dart';
@@ -22,29 +23,24 @@ class AuthScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     int startingCount = 0;
+    bool connected = false;
 
-    listenToConnectivity(
-      scaffoldKey: scaffoldMessengerKey,
-      context: context,
-    );
-
-    return BlocListener<ClickableStageBloc, ClickableStageState>(
+    return BlocListener<ConnectivityBloc, ConnectivityState>(
       listener: (context, state) {
-        if (!state.absorb && startingCount > 0) {
+        if (state.hasConnection) {
+          connected = true;
+        } else {
+          connected = false;
+        }
+        if (state.hasConnection && startingCount > 0) {
           BlocProvider.of<AuthBloc>(context).add(AppStarted());
         }
       },
       child: Material(
-        child: BlocConsumer<AuthBloc, AuthState>(
-          listener: (context, state) {
-            if (state is AuthNoConnection) {
-              startingCount++;
-              BlocProvider.of<ClickableStageBloc>(context)
-                  .add(const ChangeAbsorb(absorb: true));
-            }
-          },
+        child: BlocBuilder<AuthBloc, AuthState>(
           builder: (context, state) {
-            if (state is AuthAuthenticated) {
+            startingCount++;
+            if (state is AuthAuthenticated && connected) {
               return HomeScreen(
                 user: state.user,
                 scaffoldMessengerKey: scaffoldMessengerKey,
@@ -63,7 +59,6 @@ class AuthScreen extends StatelessWidget {
                     ),
                     LoadingSection(
                       context: context,
-                      state: state,
                     ),
                     const SizedBox(
                       height: gap * 2,

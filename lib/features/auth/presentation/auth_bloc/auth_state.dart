@@ -26,5 +26,3 @@ final class AuthAuthenticated extends AuthState {
 }
 
 final class AuthUnauthenticated extends AuthState {}
-
-final class AuthNoConnection extends AuthState {}

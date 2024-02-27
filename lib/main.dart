@@ -1,4 +1,3 @@
-import 'package:find_the_words/features/auth/presentation/version_bloc/version_bloc.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -9,10 +8,14 @@ import 'config/theme/colors.dart';
 import 'config/theme/theme.dart';
 import 'core/constants/constants.dart';
 import 'core/constants/sizes.dart';
+import 'core/usecases/listen_to_connectivity.dart';
+import 'core/utils/scaffold_message.dart';
 import 'current_stage.dart';
 import 'features/auth/data/repositories/auth_repositories_impl.dart';
 import 'features/auth/presentation/auth_bloc/auth_bloc.dart';
+import 'features/auth/presentation/connection_bloc/connection_bloc.dart';
 import 'features/auth/presentation/points_bloc/points_bloc.dart';
+import 'features/auth/presentation/version_bloc/version_bloc.dart';
 import 'features/stage/data/repositories/answer_repositories_impl.dart';
 import 'features/stage/data/repositories/stage_repositories_impl.dart';
 import 'features/stage/presentation/answer_bloc/answer_bloc.dart';
@@ -104,6 +107,11 @@ Future<void> main() async {
             return SoundBloc();
           },
         ),
+        BlocProvider<ConnectivityBloc>(
+          create: (context) {
+            return ConnectivityBloc();
+          },
+        ),
         BlocProvider<VersionBloc>(
           create: (context) {
             return VersionBloc()..add(GetVersion());
@@ -123,18 +131,45 @@ class MyApp extends StatelessWidget {
     final scaffoldKey = GlobalKey<ScaffoldMessengerState>();
     final navigatorKey = GlobalKey<NavigatorState>();
 
-    return MaterialApp.router(
-      debugShowCheckedModeBanner: false,
-      scaffoldMessengerKey: scaffoldKey,
-      title: 'Βρες τις Λέξεις',
-      routerConfig: AppRouter(
+    listenToConnectivity(scaffoldKey: scaffoldKey, context: context);
+
+    return BlocListener<ConnectivityBloc, ConnectivityState>(
+      listener: (context, state) {
+        if (state.hasConnection) {
+          BlocProvider.of<ClickableStageBloc>(context)
+                    .add(const ChangeAbsorb(absorb: false));
+          scaffoldKey.currentState?.hideCurrentSnackBar();
+        } else {
+          BlocProvider.of<ClickableStageBloc>(context)
+              .add(const ChangeAbsorb(absorb: true));
+
+          scaffoldKey.currentState?.showSnackBar(
+            ScaffoldMessage(
+              context: context,
+              message: 'Δε βρέθηκε σύνδεση. Παρακαλώ συνδεθείτε στο διαδίκτυο.',
+              noError: false,
+              onTap: () {
+                BlocProvider.of<ClickableStageBloc>(context)
+                    .add(const ChangeAbsorb(absorb: false));
+                scaffoldKey.currentState?.hideCurrentSnackBar();
+              },
+            ),
+          );
+        }
+      },
+      child: MaterialApp.router(
+        debugShowCheckedModeBanner: false,
         scaffoldMessengerKey: scaffoldKey,
-        rootNavigatorKey: navigatorKey,
-      ).router,
-      theme: MainAppTheme(
-        MainColors(),
-        AppValuesMain(),
-      ).mainTheme,
+        title: 'Βρες τις Λέξεις',
+        routerConfig: AppRouter(
+          scaffoldMessengerKey: scaffoldKey,
+          rootNavigatorKey: navigatorKey,
+        ).router,
+        theme: MainAppTheme(
+          MainColors(),
+          AppValuesMain(),
+        ).mainTheme,
+      ),
     );
   }
 }

@@ -2,14 +2,14 @@ import 'package:find_the_words/core/constants/styles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../stage/presentation/clickable_stage_bloc/clickable_stage_bloc.dart';
+import '../connection_bloc/connection_bloc.dart';
 
 Widget LoadingText() {
   return Padding(
     padding: const EdgeInsets.all(padding),
-    child: BlocBuilder<ClickableStageBloc, ClickableStageState>(
+    child: BlocBuilder<ConnectivityBloc, ConnectivityState>(
       builder: (context, state) {
-        return state.absorb
+        return !state.hasConnection
             ? Text(
                 'Δεν έχετε συνδεθεί στο διαδίκτυο. Συνδεθείτε για να ξεκινήσετε το παιχνίδι!',
                 style: TextStyle(

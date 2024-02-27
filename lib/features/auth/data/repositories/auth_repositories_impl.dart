@@ -17,7 +17,20 @@ class AuthRepositoriesImpl extends AuthRepositories {
 
   @override
   Future getUser() async {
-    if (FirebaseAuth.instance.currentUser == null) {
+    bool useridExists = false;
+
+    String? newID = FirebaseAuth.instance.currentUser?.uid;
+    usersCollection = FirebaseFirestore.instance.collection('users');
+    var idList = await usersCollection!.get();
+
+    idList.docs.forEach((doc) {
+      if (newID == doc.id) {
+        useridExists = true;
+      }
+    });
+
+    if (FirebaseAuth.instance.currentUser == null || !useridExists) {
+
       // Create an anonymous user
       UserCredential userCredential =
           await FirebaseAuth.instance.signInAnonymously();

@@ -20,24 +20,18 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   void _onAppStarted(AppStarted event, Emitter<AuthState> emit) async {
     emit(AuthLoading());
 
-    final connectivityResult = await (Connectivity().checkConnectivity());
-
-    if (connectivityResult == ConnectivityResult.none) {
-      emit(AuthNoConnection());
+    await authRepo.getUser();
+    
+    if (authRepo.user != null) {
+      await Future.delayed(const Duration(seconds: 1), () {
+        emit(
+          AuthAuthenticated(
+            user: authRepo.user!,
+          ),
+        );
+      });
     } else {
-      await authRepo.getUser();
-
-      if (authRepo.user != null) {
-        await Future.delayed(const Duration(seconds: 1), () {
-          emit(
-            AuthAuthenticated(
-              user: authRepo.user!,
-            ),
-          );
-        });
-      } else {
-        emit(AuthUnauthenticated());
-      }
+      emit(AuthUnauthenticated());
     }
   }
 }
