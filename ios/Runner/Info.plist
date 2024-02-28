@@ -26,6 +26,8 @@
 	<true/>
 	<key>FLTEnableImpeller</key>
 	<false />
+	<key>GADApplicationIdentifier</key>
+	<string>ca-app-pub-4519784875288313~3853882818</string>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>

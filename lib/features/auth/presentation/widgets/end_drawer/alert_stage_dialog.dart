@@ -3,6 +3,7 @@ import 'package:hive/hive.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../../../core/constants/constants.dart';
+import '../../../../../core/constants/styles.dart';
 import '../../../../../core/usecases/calculate_size.dart';
 import '../../../../../current_stage.dart';
 
@@ -47,18 +48,21 @@ AlertDialog AlertStageDialog({
           Navigator.of(context).pop();
         },
       ),
-      TextButton(
+      FilledButton(
         style: TextButton.styleFrom(
+          padding: const EdgeInsets.symmetric(
+              horizontal: padding * 1.5, vertical: padding / 2),
+          backgroundColor: Theme.of(context).colorScheme.primary,
           textStyle: Theme.of(context).textTheme.labelLarge,
         ),
         child: Text(
           'Διαγραφή',
           style: TextStyle(
+            fontWeight: FontWeight.bold,
             fontSize: calculateSize(
               context,
               Theme.of(context).textTheme.bodyMedium!.fontSize!,
             ),
-            fontWeight: FontWeight.bold,
           ),
         ),
         onPressed: () async {
@@ -68,6 +72,8 @@ AlertDialog AlertStageDialog({
 
           var stageBox = Hive.box<CurrentStage>(currentStageBox);
           await stageBox.delete(currentStageBox);
+
+          Navigator.of(context).pop();
         },
       ),
     ],

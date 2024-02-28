@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import '../../../../core/constants/styles.dart';
 import '../../../../core/usecases/calculate_size.dart';
 import 'blue_home_card.dart';
-import 'earn_points_card.dart';
 import 'green_home_card.dart';
 import 'pink_home_card.dart';
 
@@ -37,10 +36,6 @@ Widget HomeCardsContainer({
         context: context,
         level: level,
       ),
-      // const SizedBox(
-      //   height: gap / 2,
-      // ),
-      // EarnPointsCard(context: context),
     ],
   );
 }

@@ -1,5 +1,7 @@
 const String fontName = 'Manrope';
 
+const String myEmail = 'thanasiswd@gmail.com';
+
 const double midProgress = 0.4;
 const double highProgress = 0.8;
 

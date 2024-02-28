@@ -1,6 +1,9 @@
+import 'dart:async';
+
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 import 'config/routes/routes.dart';
@@ -14,6 +17,7 @@ import 'current_stage.dart';
 import 'features/auth/data/repositories/auth_repositories_impl.dart';
 import 'features/auth/presentation/auth_bloc/auth_bloc.dart';
 import 'features/auth/presentation/connection_bloc/connection_bloc.dart';
+import 'features/auth/presentation/earn_points_bloc/earn_points_bloc.dart';
 import 'features/auth/presentation/points_bloc/points_bloc.dart';
 import 'features/auth/presentation/version_bloc/version_bloc.dart';
 import 'features/stage/data/repositories/answer_repositories_impl.dart';
@@ -36,6 +40,7 @@ Future<void> main() async {
   await Hive.openBox<CurrentStage>(currentStageBox);
 
   WidgetsFlutterBinding.ensureInitialized();
+  unawaited(MobileAds.instance.initialize());
 
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
@@ -112,6 +117,11 @@ Future<void> main() async {
             return ConnectivityBloc();
           },
         ),
+        BlocProvider<EarnPointsBloc>(
+          create: (context) {
+            return EarnPointsBloc();
+          },
+        ),
         BlocProvider<VersionBloc>(
           create: (context) {
             return VersionBloc()..add(GetVersion());
@@ -137,7 +147,7 @@ class MyApp extends StatelessWidget {
       listener: (context, state) {
         if (state.hasConnection) {
           BlocProvider.of<ClickableStageBloc>(context)
-                    .add(const ChangeAbsorb(absorb: false));
+              .add(const ChangeAbsorb(absorb: false));
           scaffoldKey.currentState?.hideCurrentSnackBar();
         } else {
           BlocProvider.of<ClickableStageBloc>(context)

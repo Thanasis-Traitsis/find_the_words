@@ -31,27 +31,6 @@ AlertDialog AlertDeleteAccountDialog({
       ),
     ),
     actions: <Widget>[
-      FilledButton(
-        style: TextButton.styleFrom(
-          padding: const EdgeInsets.symmetric(
-              horizontal: padding * 1.5, vertical: padding / 2),
-          backgroundColor: Theme.of(context).colorScheme.primary,
-          textStyle: Theme.of(context).textTheme.labelLarge,
-        ),
-        child: Text(
-          'Άκυρο',
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: calculateSize(
-              context,
-              Theme.of(context).textTheme.bodyMedium!.fontSize!,
-            ),
-          ),
-        ),
-        onPressed: () {
-          Navigator.of(context).pop();
-        },
-      ),
       TextButton(
         style: TextButton.styleFrom(
           textStyle: Theme.of(context).textTheme.labelLarge,
@@ -73,6 +52,27 @@ AlertDialog AlertDeleteAccountDialog({
           } else if (Platform.isIOS) {
             exit(0);
           }
+        },
+      ),
+      FilledButton(
+        style: TextButton.styleFrom(
+          padding: const EdgeInsets.symmetric(
+              horizontal: padding * 1.5, vertical: padding / 2),
+          backgroundColor: Theme.of(context).colorScheme.primary,
+          textStyle: Theme.of(context).textTheme.labelLarge,
+        ),
+        child: Text(
+          'Άκυρο',
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: calculateSize(
+              context,
+              Theme.of(context).textTheme.bodyMedium!.fontSize!,
+            ),
+          ),
+        ),
+        onPressed: () {
+          Navigator.of(context).pop();
         },
       ),
     ],
