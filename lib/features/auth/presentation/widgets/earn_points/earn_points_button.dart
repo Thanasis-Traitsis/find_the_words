@@ -4,6 +4,7 @@ import 'package:find_the_words/features/auth/presentation/points_bloc/points_blo
 import 'package:find_the_words/features/auth/presentation/widgets/earn_points/reward_alert_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 import '../../../../../core/constants/game_values.dart';
@@ -23,8 +24,8 @@ class _EarnPointsButtonState extends State<EarnPointsButton> {
   RewardedAd? _rewardedAd;
 
   final adUnitId = Platform.isAndroid
-      ? 'ca-app-pub-3940256099942544/5224354917'
-      : 'ca-app-pub-3940256099942544/1712485313';
+      ? dotenv.env["androidRewardAd"]!
+      : dotenv.env["iosRewardAd"]!;
 
   void createRewardedAd() {
     RewardedAd.load(
@@ -65,6 +66,33 @@ class _EarnPointsButtonState extends State<EarnPointsButton> {
         giveReward();
       });
       _rewardedAd = null;
+    } else {
+      showDialog<void>(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text(
+              'Κάτι πήγε στραβά',
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: calculateSize(
+                  context,
+                  Theme.of(context).textTheme.headlineLarge!.fontSize!,
+                ),
+              ),
+            ),
+            content: Text(
+              'Δε βρέθηκε διαφήμιση.',
+              style: TextStyle(
+                fontSize: calculateSize(
+                  context,
+                  Theme.of(context).textTheme.bodyLarge!.fontSize!,
+                ),
+              ),
+            ),
+          );
+        },
+      );
     }
   }
 
