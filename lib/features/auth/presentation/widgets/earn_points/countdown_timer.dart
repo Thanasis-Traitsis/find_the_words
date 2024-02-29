@@ -32,7 +32,7 @@ class _CountdownTimerState extends State<CountdownTimer> {
 
   @override
   void initState() {
-    countdownDuration = Duration(hours: earnPointsTimer) - widget.timeRemaining;
+    countdownDuration = const Duration(hours: earnPointsTimer) - widget.timeRemaining;
     startTimer();
     reset();
     super.initState();

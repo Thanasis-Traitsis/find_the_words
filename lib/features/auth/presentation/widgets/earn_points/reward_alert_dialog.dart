@@ -27,7 +27,7 @@ AlertDialog RewardAlertDialog({
       ),
     ),
     content: Text(
-      'Μόλις κέρδισες $earnPoints πόντους! Θα προστεθούν στο λογαριασμό σου αμέσως για, να σε βοηθήσουν στο επόμενο στάδιο.',
+      'Μόλις κέρδισες $earnPoints πόντους! Θα προστεθούν στο λογαριασμό σου αμέσως, για να σε βοηθήσουν στο επόμενο στάδιο.',
       style: TextStyle(
         color: Theme.of(context).colorScheme.surface,
         fontSize: calculateSize(
