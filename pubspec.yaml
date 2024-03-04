@@ -47,6 +47,7 @@ dependencies:
   hive: null
   hive_flutter: null
   package_info_plus: ^5.0.1
+  rename: ^3.0.1
   shared_preferences: ^2.2.2
   url_launcher: ^6.2.5
 

@@ -15,11 +15,24 @@ void prepareForStage({
 }) async {
   var returnStageList = {};
 
+  if (banned != null) {
+    current = {
+      answeredPositions: [],
+      answeredWords: [],
+      unavailablePositions: [],
+      key: null,
+      currentTimer: 0,
+    };
+  }
+
+  print(current);
+  print(current[key]?.isEmpty ?? true);
+
   if (current[key]?.isEmpty ?? true) {
     String stageWordLength = translateLevelToStage(user.level!);
 
     List usedStages = user.usedStages!;
-    
+
     banned ??= [];
 
     for (var i = 0; i < banned.length; i++) {
@@ -31,12 +44,16 @@ void prepareForStage({
           await navigateToStage(context, stageWordLength, usedStages);
 
       if (returnStageList.isEmpty) {
-        print('The banned list with the word length of ${user.level! + 2} is full. We need to clear the list and create new stages with already used words, but with different combinations.');
+        print(
+            'The banned list with the word length of ${user.level! + 2} is full. We need to clear the list and create new stages with already used words, but with different combinations.');
         usedStages
             .removeWhere((element) => element.length == (user.level! + 2));
       }
     } while (returnStageList.isEmpty);
   }
+
+  print("TO STAGELIST EINAI:");
+  print(returnStageList);
 
   BlocProvider.of<StageBloc>(context).add(
     StageButtonPressed(
@@ -44,6 +61,7 @@ void prepareForStage({
       level: user.level!,
       progress: user.progress!,
       current: current,
+      user: user,
     ),
   );
 }

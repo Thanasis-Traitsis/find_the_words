@@ -26,6 +26,8 @@ class CrosswordContainer extends StatelessWidget {
     return BlocBuilder<CrosswordTableBloc, CrosswordTableState>(
       builder: (context, state) {
         List<Widget> wgtList = state.widgetList;
+        print("gia na doume kai edw");
+        print(wgtList.length);
 
         return BlocBuilder<AnswerBloc, AnswerState>(
           builder: (context, state) {

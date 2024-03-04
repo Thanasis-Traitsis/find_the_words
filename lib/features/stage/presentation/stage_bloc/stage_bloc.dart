@@ -6,6 +6,7 @@ import 'package:hive/hive.dart';
 
 import '../../../../core/constants/constants.dart';
 import '../../../../current_stage.dart';
+import '../../../auth/data/models/user_model.dart';
 import '../../data/repositories/stage_repositories_impl.dart';
 import '../../domain/usecases/creating_crossword/apply_changes.dart';
 import '../../domain/usecases/creating_crossword/generate_widget_table.dart';
@@ -84,6 +85,7 @@ class StageBloc extends Bloc<StageEvent, StageState> {
               emit(
                 StageFailedCreation(
                   bannedKeys: bannedKeys,
+                  user: event.user,
                 ),
               );
             } else {
@@ -125,6 +127,7 @@ class StageBloc extends Bloc<StageEvent, StageState> {
 
           emit(StageFailedCreation(
             bannedKeys: bannedKeys,
+            user: event.user,
           ));
         }
       } else {
@@ -198,6 +201,7 @@ class StageBloc extends Bloc<StageEvent, StageState> {
 
               emit(StageFailedCreation(
                 bannedKeys: bannedKeys,
+                user: event.user,
               ));
             }
           } while (!stageRepo.ready);
@@ -234,9 +238,11 @@ class StageBloc extends Bloc<StageEvent, StageState> {
 
           emit(StageFailedCreation(
             bannedKeys: bannedKeys,
+            user: event.user,
           ));
         }
       } else {
+        print(key);
         var stageBox = Hive.box<CurrentStage>(currentStageBox);
         var stage = stageBox.get(currentStageBox);
 

@@ -34,8 +34,6 @@ class CompleteStageScreen extends StatelessWidget {
     Map currentStage = {};
 
     onStageButtonPressed(List? bannedKeys) {
-      print(
-          "RE TI GINETAI MIPOS TREXEI APO EDW PARA POLLES FORESSSSSSSSS ???????????????");
       prepareForStage(
         context: context,
         user: completeValues[completeStageUser],
@@ -87,123 +85,135 @@ class CompleteStageScreen extends StatelessWidget {
         }
 
         // if (state is StageFailedCreation) {
+        //   print("trexei edw");
         //   onStageButtonPressed(state.bannedKeys);
         // }
       },
       child: AbsorbPointerContainer(
         context: context,
         child: Scaffold(
-          body: SafeArea(
-            child: Center(
-              child: ConstrainedBox(
-                constraints:
-                    BoxConstraints(maxWidth: calculateSize(context, 500)),
-                child: Container(
-                  alignment: Alignment.center,
-                  width: double.infinity,
-                  padding: EdgeInsets.all(AppValuesMain().padding),
-                  child: Center(
-                    child: LayoutBuilder(
-                      builder: (context, constraint) {
-                        return SingleChildScrollView(
-                          child: ConstrainedBox(
-                            constraints:
-                                BoxConstraints(minHeight: constraint.maxHeight),
-                            child: IntrinsicHeight(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  LevelProgressContainer(
-                                    context: context,
-                                    level: completeValues[completeStageLevel],
-                                    progress:
-                                        completeValues[completeStageProgress],
-                                    stage: completeValues[completeStageStage],
-                                  ),
-                                  const SizedBox(
-                                    height: gap,
-                                  ),
-                                  SizedBox(
-                                    width: double.infinity,
-                                    child: Column(
-                                      children: [
-                                        completeValues[completeStageLevelUp]
-                                            ? Container(
-                                                width: double.infinity,
-                                                margin: const EdgeInsets.only(
-                                                  bottom: gap / 2,
-                                                ),
-                                                child: CardWithOutline(
-                                                  context: context,
-                                                  color: Theme.of(context)
-                                                      .canvasColor,
-                                                  child: Center(
-                                                    child: Text(
-                                                      completeValues[
-                                                                  completeStageStageCompletion] ==
-                                                              maxLevel
-                                                          ? 'Έχεις φτάσει στο τελευταίο Επίπεδο.'
-                                                          : 'Συγχαρητήρια! Ανέβηκες Επίπεδο.',
-                                                      style: TextStyle(
-                                                        fontSize:
-                                                            Theme.of(context)
-                                                                .textTheme
-                                                                .bodyMedium!
-                                                                .fontSize,
-                                                        fontWeight:
-                                                            FontWeight.bold,
+          body: WillPopScope(
+            onWillPop: () async {
+              context.goNamed(
+                PAGES.home.screenName,
+                extra: completeValues[completeStageUser],
+              );
+
+              return false;
+            },
+            child: SafeArea(
+              child: Center(
+                child: ConstrainedBox(
+                  constraints:
+                      BoxConstraints(maxWidth: calculateSize(context, 500)),
+                  child: Container(
+                    alignment: Alignment.center,
+                    width: double.infinity,
+                    padding: EdgeInsets.all(AppValuesMain().padding),
+                    child: Center(
+                      child: LayoutBuilder(
+                        builder: (context, constraint) {
+                          return SingleChildScrollView(
+                            child: ConstrainedBox(
+                              constraints: BoxConstraints(
+                                  minHeight: constraint.maxHeight),
+                              child: IntrinsicHeight(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    LevelProgressContainer(
+                                      context: context,
+                                      level: completeValues[completeStageLevel],
+                                      progress:
+                                          completeValues[completeStageProgress],
+                                      stage: completeValues[completeStageStage],
+                                    ),
+                                    const SizedBox(
+                                      height: gap,
+                                    ),
+                                    SizedBox(
+                                      width: double.infinity,
+                                      child: Column(
+                                        children: [
+                                          completeValues[completeStageLevelUp]
+                                              ? Container(
+                                                  width: double.infinity,
+                                                  margin: const EdgeInsets.only(
+                                                    bottom: gap / 2,
+                                                  ),
+                                                  child: CardWithOutline(
+                                                    context: context,
+                                                    color: Theme.of(context)
+                                                        .canvasColor,
+                                                    child: Center(
+                                                      child: Text(
+                                                        completeValues[
+                                                                    completeStageStageCompletion] ==
+                                                                maxLevel
+                                                            ? 'Έχεις φτάσει στο τελευταίο Επίπεδο.'
+                                                            : 'Συγχαρητήρια! Ανέβηκες Επίπεδο.',
+                                                        style: TextStyle(
+                                                          fontSize:
+                                                              Theme.of(context)
+                                                                  .textTheme
+                                                                  .bodyMedium!
+                                                                  .fontSize,
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                        ),
                                                       ),
                                                     ),
                                                   ),
+                                                )
+                                              : Container(),
+                                          CardWithOutline(
+                                            context: context,
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .surface,
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                StatsHeader(context: context),
+                                                ResultsContainer(
+                                                  context: context,
+                                                  stage: completeValues,
                                                 ),
-                                              )
-                                            : Container(),
-                                        CardWithOutline(
-                                          context: context,
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .surface,
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              StatsHeader(context: context),
-                                              ResultsContainer(
-                                                context: context,
-                                                stage: completeValues,
-                                              ),
-                                            ],
+                                              ],
+                                            ),
                                           ),
-                                        ),
-                                      ],
+                                        ],
+                                      ),
                                     ),
-                                  ),
-                                  const SizedBox(
-                                    height: gap,
-                                  ),
-                                  CompleteButtonsContainer(
-                                    context: context,
-                                    nextStage: () async {
-                                      currentStage = await getCurrentStageMap();
+                                    const SizedBox(
+                                      height: gap,
+                                    ),
+                                    CompleteButtonsContainer(
+                                      context: context,
+                                      nextStage: () async {
+                                        currentStage =
+                                            await getCurrentStageMap();
 
-                                      onStageButtonPressed(null);
-                                    },
-                                    backToHome: () {
-                                      context.goNamed(
-                                        PAGES.home.screenName,
-                                        extra:
-                                            completeValues[completeStageUser],
-                                      );
-                                    },
-                                  )
-                                ],
+                                        onStageButtonPressed(null);
+                                      },
+                                      backToHome: () {
+                                        context.goNamed(
+                                          PAGES.home.screenName,
+                                          extra:
+                                              completeValues[completeStageUser],
+                                        );
+                                      },
+                                    )
+                                  ],
+                                ),
                               ),
                             ),
-                          ),
-                        );
-                      },
+                          );
+                        },
+                      ),
                     ),
                   ),
                 ),

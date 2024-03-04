@@ -64,11 +64,11 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     final deviceOrientation = getDeviceOrientation(context);
 
-    onStageButtonPressed(List? bannedKeys) {
+    onStageButtonPressed(List? bannedKeys, UserModel? user) {
       // Get current stage lists
       prepareForStage(
         context: context,
-        user: widget.user,
+        user: user ?? widget.user,
         current: currentStage,
         banned: bannedKeys,
       );
@@ -86,7 +86,7 @@ class _HomeScreenState extends State<HomeScreen> {
         }
 
         if (state is StageFailedCreation) {
-          onStageButtonPressed(state.bannedKeys);
+          onStageButtonPressed(state.bannedKeys, state.user);
         }
       },
       child: AbsorbPointerContainer(
@@ -126,7 +126,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         function: () async {
                           currentStage = await getCurrentStageMap();
 
-                          onStageButtonPressed(null);
+                          onStageButtonPressed(null, null);
                         },
                         stage: widget.user.stage.toString(),
                       ),
@@ -170,7 +170,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             function: () async {
                               currentStage = await getCurrentStageMap();
 
-                              onStageButtonPressed(null);
+                              onStageButtonPressed(null, null);
                             },
                             stage: widget.user.stage.toString(),
                           ),

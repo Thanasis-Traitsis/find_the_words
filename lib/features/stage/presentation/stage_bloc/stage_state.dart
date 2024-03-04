@@ -43,14 +43,17 @@ final class StageStarted extends StageState {
 
 final class StageFailedCreation extends StageState {
   final List bannedKeys;
+  final UserModel user;
 
   const StageFailedCreation({
     required this.bannedKeys,
+    required this.user,
   });
 
   @override
   List<Object> get props => [
         bannedKeys,
+        user,
       ];
 
   @override
