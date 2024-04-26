@@ -9,3 +9,6 @@ As you advance through the game and level up, be prepared for increasing complex
 | Home Screen    | Stage Screen |
 | -------- | ------- |
 | ![Home](https://github.com/Thanasis-Traitsis/find_the_words/blob/main/photos/homepage.png?raw=true)  | ![Stage](https://github.com/Thanasis-Traitsis/find_the_words/blob/main/photos/stagescreen.png?raw=true)    |
+
+### Delete your account
+If you want to delete your account, you can go to app settings and by clicking the "Διαγραφή Λογαριασμού" button, your request for account deletion will be completed.
