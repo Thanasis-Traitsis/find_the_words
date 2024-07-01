@@ -12,3 +12,6 @@ As you advance through the game and level up, be prepared for increasing complex
 
 ### Delete your account
 If you want to delete your account, you can go to app settings and by clicking the "Διαγραφή Λογαριασμού" button, your request for account deletion will be completed.
+
+### Support
+Need Help? For assistance with the app or any related questions about the game, feel free to email us at **thanasiswd@gmail.com**.
