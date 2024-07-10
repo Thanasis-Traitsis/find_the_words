@@ -52,6 +52,7 @@ class _EarnPointsButtonState extends State<EarnPointsButton> {
   }
 
   void loadRewardedAd() {
+    print(_rewardedAd);
     if (_rewardedAd != null) {
       _rewardedAd!.fullScreenContentCallback =
           FullScreenContentCallback(onAdDismissedFullScreenContent: (ad) {

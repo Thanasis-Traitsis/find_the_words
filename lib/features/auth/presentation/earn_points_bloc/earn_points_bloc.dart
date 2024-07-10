@@ -35,6 +35,8 @@ class EarnPointsBloc extends Bloc<EarnPointsEvent, EarnPointsState> {
           .add(const Duration(hours: earnPointsTimer))
           .isBefore(DateTime.now())) {
         emit(EarnPointsCanWatch());
+
+        prefs.setString('startTime', DateTime.now().toString());
       } else {
         emit(EarnPointsTooEarly(
           timer: timeLeft,
