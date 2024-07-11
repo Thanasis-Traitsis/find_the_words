@@ -7,4 +7,13 @@ sealed class EarnPointsEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class WatchAd extends EarnPointsEvent {}
+class WatchAd extends EarnPointsEvent { 
+  final bool loadedAd;
+
+  const WatchAd({
+    required this.loadedAd,
+  });
+
+  @override
+  List<Object> get props => [loadedAd];
+ }

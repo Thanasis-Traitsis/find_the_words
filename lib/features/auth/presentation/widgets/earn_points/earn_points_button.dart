@@ -52,49 +52,19 @@ class _EarnPointsButtonState extends State<EarnPointsButton> {
   }
 
   void loadRewardedAd() {
-    print(_rewardedAd);
-    if (_rewardedAd != null) {
-      _rewardedAd!.fullScreenContentCallback =
-          FullScreenContentCallback(onAdDismissedFullScreenContent: (ad) {
-        ad.dispose();
-        createRewardedAd();
-      }, onAdFailedToShowFullScreenContent: ((ad, error) {
-        ad.dispose();
-        createRewardedAd();
-      }));
+    _rewardedAd!.fullScreenContentCallback =
+        FullScreenContentCallback(onAdDismissedFullScreenContent: (ad) {
+      ad.dispose();
+      createRewardedAd();
+    }, onAdFailedToShowFullScreenContent: ((ad, error) {
+      ad.dispose();
+      createRewardedAd();
+    }));
 
-      _rewardedAd!.show(onUserEarnedReward: (ad, reward) {
-        giveReward();
-      });
-      _rewardedAd = null;
-    } else {
-      showDialog<void>(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: Text(
-              'Κάτι πήγε στραβά',
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: calculateSize(
-                  context,
-                  Theme.of(context).textTheme.headlineLarge!.fontSize!,
-                ),
-              ),
-            ),
-            content: Text(
-              'Δε βρέθηκε διαφήμιση.',
-              style: TextStyle(
-                fontSize: calculateSize(
-                  context,
-                  Theme.of(context).textTheme.bodyLarge!.fontSize!,
-                ),
-              ),
-            ),
-          );
-        },
-      );
-    }
+    _rewardedAd!.show(onUserEarnedReward: (ad, reward) {
+      giveReward();
+    });
+    _rewardedAd = null;
   }
 
   void giveReward() {
@@ -134,13 +104,43 @@ class _EarnPointsButtonState extends State<EarnPointsButton> {
               );
             },
           );
+        } else if (state is EarnPointsFailed) {
+          showDialog<void>(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                title: Text(
+                  'Κάτι πήγε στραβά',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: calculateSize(
+                      context,
+                      Theme.of(context).textTheme.headlineLarge!.fontSize!,
+                    ),
+                  ),
+                ),
+                content: Text(
+                  'Δε βρέθηκε διαφήμιση.',
+                  style: TextStyle(
+                    fontSize: calculateSize(
+                      context,
+                      Theme.of(context).textTheme.bodyLarge!.fontSize!,
+                    ),
+                  ),
+                ),
+              );
+            },
+          );
+
+          createRewardedAd();
         }
       },
       child: Transform.scale(
         scale: 0.8,
         child: GestureDetector(
           onTap: () {
-            BlocProvider.of<EarnPointsBloc>(context).add(WatchAd());
+            BlocProvider.of<EarnPointsBloc>(context)
+                .add(WatchAd(loadedAd: _rewardedAd != null));
           },
           child: Container(
             decoration: BoxDecoration(
@@ -156,38 +156,40 @@ class _EarnPointsButtonState extends State<EarnPointsButton> {
                 borderRadius,
               ),
             ),
-            child: Center(child: BlocBuilder<EarnPointsBloc, EarnPointsState>(
-              builder: (context, state) {
-                return state is EarnPointsLoading
-                    ? SizedBox(
-                        width: calculateSize(context, 30),
-                        height: calculateSize(context, 30),
-                        child: CircularProgressIndicator(
-                          color: Theme.of(context).colorScheme.surface,
-                        ),
-                      )
-                    : Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            '+ $earnPoints ',
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: Theme.of(context).colorScheme.surface,
-                            ),
-                          ),
-                          Icon(
-                            Icons.star_rounded,
+            child: Center(
+              child: BlocBuilder<EarnPointsBloc, EarnPointsState>(
+                builder: (context, state) {
+                  return state is EarnPointsLoading
+                      ? SizedBox(
+                          width: calculateSize(context, 30),
+                          height: calculateSize(context, 30),
+                          child: CircularProgressIndicator(
                             color: Theme.of(context).colorScheme.surface,
-                            size: calculateSize(
-                              context,
-                              Theme.of(context).primaryIconTheme.size! * .8,
-                            ),
                           ),
-                        ],
-                      );
-              },
-            )),
+                        )
+                      : Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              '+ $earnPoints ',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Theme.of(context).colorScheme.surface,
+                              ),
+                            ),
+                            Icon(
+                              Icons.star_rounded,
+                              color: Theme.of(context).colorScheme.surface,
+                              size: calculateSize(
+                                context,
+                                Theme.of(context).primaryIconTheme.size! * .8,
+                              ),
+                            ),
+                          ],
+                        );
+                },
+              ),
+            ),
           ),
         ),
       ),

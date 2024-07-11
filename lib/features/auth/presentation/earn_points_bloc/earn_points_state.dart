@@ -13,6 +13,8 @@ final class EarnPointsLoading extends EarnPointsState {}
 
 final class EarnPointsCanWatch extends EarnPointsState {}
 
+final class EarnPointsFailed extends EarnPointsState {}
+
 final class EarnPointsTooEarly extends EarnPointsState {
   final Duration timer;
 

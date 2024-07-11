@@ -21,7 +21,7 @@ class CountdownTimer extends StatefulWidget {
 
 class _CountdownTimerState extends State<CountdownTimer> {
   Duration? countdownDuration;
-  Duration duration = Duration();
+  Duration duration = const Duration();
   Timer? timer;
 
   @override
