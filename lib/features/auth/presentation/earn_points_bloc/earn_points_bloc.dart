@@ -23,10 +23,10 @@ class EarnPointsBloc extends Bloc<EarnPointsEvent, EarnPointsState> {
       isFirstTime ??= true;
 
       if (isFirstTime) {
-        emit(EarnPointsCanWatch());
-
         prefs.setString('startTime', DateTime.now().toString());
         prefs.setBool('firstAd', false);
+
+        emit(EarnPointsCanWatch());
       } else {
         DateTime startTime = DateTime.parse(prefs.getString('startTime')!);
         DateTime now = DateTime.now();
@@ -35,9 +35,9 @@ class EarnPointsBloc extends Bloc<EarnPointsEvent, EarnPointsState> {
         if (startTime
             .add(const Duration(hours: earnPointsTimer))
             .isBefore(DateTime.now())) {
-          emit(EarnPointsCanWatch());
-
           prefs.setString('startTime', DateTime.now().toString());
+
+          emit(EarnPointsCanWatch());
         } else {
           emit(EarnPointsTooEarly(
             timer: timeLeft,

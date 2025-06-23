@@ -139,8 +139,10 @@ class _EarnPointsButtonState extends State<EarnPointsButton> {
         scale: 0.8,
         child: GestureDetector(
           onTap: () {
-            BlocProvider.of<EarnPointsBloc>(context)
-                .add(WatchAd(loadedAd: _rewardedAd != null));
+            _rewardedAd != null
+                ? BlocProvider.of<EarnPointsBloc>(context)
+                    .add(WatchAd(loadedAd: _rewardedAd != null))
+                : null;
           },
           child: Container(
             decoration: BoxDecoration(
@@ -159,33 +161,43 @@ class _EarnPointsButtonState extends State<EarnPointsButton> {
             child: Center(
               child: BlocBuilder<EarnPointsBloc, EarnPointsState>(
                 builder: (context, state) {
-                  return state is EarnPointsLoading
-                      ? SizedBox(
+                  return _rewardedAd != null
+                      ? state is EarnPointsLoading
+                          ? SizedBox(
+                              width: calculateSize(context, 30),
+                              height: calculateSize(context, 30),
+                              child: CircularProgressIndicator(
+                                color: Theme.of(context).colorScheme.surface,
+                              ),
+                            )
+                          : Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  '+ $earnPoints ',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    color:
+                                        Theme.of(context).colorScheme.surface,
+                                  ),
+                                ),
+                                Icon(
+                                  Icons.star_rounded,
+                                  color: Theme.of(context).colorScheme.surface,
+                                  size: calculateSize(
+                                    context,
+                                    Theme.of(context).primaryIconTheme.size! *
+                                        .8,
+                                  ),
+                                )
+                              ],
+                            )
+                      : SizedBox(
                           width: calculateSize(context, 30),
                           height: calculateSize(context, 30),
                           child: CircularProgressIndicator(
                             color: Theme.of(context).colorScheme.surface,
                           ),
-                        )
-                      : Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              '+ $earnPoints ',
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: Theme.of(context).colorScheme.surface,
-                              ),
-                            ),
-                            Icon(
-                              Icons.star_rounded,
-                              color: Theme.of(context).colorScheme.surface,
-                              size: calculateSize(
-                                context,
-                                Theme.of(context).primaryIconTheme.size! * .8,
-                              ),
-                            ),
-                          ],
                         );
                 },
               ),
