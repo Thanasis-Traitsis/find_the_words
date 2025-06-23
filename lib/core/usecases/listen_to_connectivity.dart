@@ -7,7 +7,8 @@ void listenToConnectivity({
   required GlobalKey<ScaffoldMessengerState> scaffoldKey,
   required BuildContext context,
 }) {
-  Connectivity().onConnectivityChanged.listen((ConnectivityResult result) {
+  Connectivity().onConnectivityChanged.listen((List<ConnectivityResult> results) {
+    final result = results.isNotEmpty ? results.first : ConnectivityResult.none;
     BlocProvider.of<ConnectivityBloc>(context)
         .add(CheckConnection(hasConnection: result != ConnectivityResult.none));
   });
